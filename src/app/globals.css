@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #f97316; /* Orange-500 */
+  --primary-hover: #ea580c; /* Orange-600 */
+  --secondary: #ec4899; /* Pink-500 */
+  --secondary-hover: #db2777; /* Pink-600 */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Custom utilities */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+/* Make sure all text is dark enough for readability */
+.text-gray-600 {
+  color: #4b5563 !important; /* Darker than default gray-600 */
+}
+
+.text-gray-500 {
+  color: #6b7280 !important; /* Darker than default gray-500 */
+}
+
+.text-gray-700 {
+  color: #374151 !important; /* Ensure strong contrast */
+}
+
+/* Making sure text on light backgrounds is always readable */
+.bg-white p, .bg-orange-50 p, .bg-orange-100 p, .bg-gray-100 p {
+  color: #1f2937 !important; /* Very dark gray, close to black */
+}
+
+/* Ensure list items are readable */
+.bg-white li, .bg-orange-50 li, .bg-orange-100 li, .bg-gray-100 li {
+  color: #1f2937 !important;
+}
+
+/* Custom heading styles with strong contrast */
+h3.text-xl {
+  color: #000000 !important;
+}
+
+.bg-gray-100 h3, .bg-orange-50 h3, .bg-white h3 {
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+/* Fix for Rules page - ensure headings inside bg-orange-50 are visible */
+.bg-orange-50 h4 {
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+/* Fix for FAQ page - ensure questions are readable */
+.text-orange-500 {
+  color: #f97316 !important;
+}
+
+/* Make sure all headings in the FAQ section are visible */
+.border-gray-200 h3 {
+  color: #f97316 !important;
+}
+
+/* Special fix for paragraphs in certain sections */
+.bg-orange-50 p, .bg-white p {
+  color: #1f2937 !important;
+}
+
+/* Make all font-bold text elements dark on light backgrounds */
+.bg-orange-50 .font-bold, .bg-white .font-bold, .bg-gray-100 .font-bold, .bg-orange-100 .font-bold {
+  color: #000000 !important;
+}
