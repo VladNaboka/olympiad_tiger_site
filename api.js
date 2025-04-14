@@ -1,5 +1,5 @@
 // TODO: Change to render or from VPS-host
-const API_URL = "https://tigerbackend.onrender.com:8080";
+const API_URL = "https://tigerbackend.onrender.com";
 
 /**
  * Вспомогательная функция для отправки запросов к API.
