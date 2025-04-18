@@ -2,10 +2,21 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  
+  // Функция для определения активности ссылки
+  const isActive = (path) => {
+    return pathname === path;
+  };
+  
+  // Стиль для активного пункта меню
+  const activeStyle = "text-orange-500 font-semibold";
+  const defaultStyle = "hover:text-orange-500 transition-colors font-medium";
 
   return (
     <nav className="bg-[#fffbf2] text-gray-800 py-4 shadow-sm sticky top-0 z-50">
@@ -17,8 +28,8 @@ export default function Navbar() {
               <Image 
                 src="/image/logonavbar.png" 
                 alt="Tigers Logo" 
-                width={120} 
-                height={50} 
+                width={186} 
+                height={67} 
                 className="h-10 w-auto"
               />
             </Link>
@@ -26,28 +37,28 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="hover:text-orange-500 transition-colors font-medium">
+            <Link href="/" className={isActive('/') ? activeStyle : defaultStyle}>
               Home
             </Link>
-            <Link href="/rules" className="hover:text-orange-500 transition-colors font-medium">
+            <Link href="/rules" className={isActive('/rules') ? activeStyle : defaultStyle}>
               Rules
             </Link>
-            <Link href="/register" className="hover:text-orange-500 transition-colors font-medium">
+            <Link href="/register" className={isActive('/register') ? activeStyle : defaultStyle}>
               Registration
             </Link>
-            <Link href="/gallery" className="hover:text-orange-500 transition-colors font-medium">
+            <Link href="/gallery" className={isActive('/gallery') ? activeStyle : defaultStyle}>
               Gallery
             </Link>
-            <Link href="/faq" className="hover:text-orange-500 transition-colors font-medium">
+            <Link href="/faq" className={isActive('/faq') ? activeStyle : defaultStyle}>
               FAQ
             </Link>
-            <Link href="/tasks" className="hover:text-orange-500 transition-colors font-medium">
+            <Link href="/tasks" className={isActive('/tasks') ? activeStyle : defaultStyle}>
               Tasks
             </Link>
-            <Link href="/representatives" className="hover:text-orange-500 transition-colors font-medium">
+            <Link href="/representatives" className={isActive('/representatives') ? activeStyle : defaultStyle}>
               Representatives
             </Link>
-            <Link href="/contacts" className="hover:text-orange-500 transition-colors font-medium">
+            <Link href="/contacts" className={isActive('/contacts') ? activeStyle : defaultStyle}>
               Contacts
             </Link>
           </div>
@@ -91,56 +102,56 @@ export default function Navbar() {
           <div className="flex flex-col space-y-2">
             <Link 
               href="/" 
-              className="px-3 py-2 rounded hover:bg-gray-100 transition-colors font-medium"
+              className={`px-3 py-2 rounded ${isActive('/') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Home
             </Link>
             <Link 
               href="/rules" 
-              className="px-3 py-2 rounded hover:bg-gray-100 transition-colors font-medium"
+              className={`px-3 py-2 rounded ${isActive('/rules') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Rules
             </Link>
             <Link 
               href="/register" 
-              className="px-3 py-2 rounded hover:bg-gray-100 transition-colors font-medium"
+              className={`px-3 py-2 rounded ${isActive('/register') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Registration
             </Link>
             <Link 
               href="/gallery" 
-              className="px-3 py-2 rounded hover:bg-gray-100 transition-colors font-medium"
+              className={`px-3 py-2 rounded ${isActive('/gallery') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Gallery
             </Link>
             <Link 
               href="/faq" 
-              className="px-3 py-2 rounded hover:bg-gray-100 transition-colors font-medium"
+              className={`px-3 py-2 rounded ${isActive('/faq') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               FAQ
             </Link>
             <Link 
               href="/tasks" 
-              className="px-3 py-2 rounded hover:bg-gray-100 transition-colors font-medium"
+              className={`px-3 py-2 rounded ${isActive('/tasks') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Tasks
             </Link>
             <Link 
               href="/representatives" 
-              className="px-3 py-2 rounded hover:bg-gray-100 transition-colors font-medium"
+              className={`px-3 py-2 rounded ${isActive('/representatives') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Representatives
             </Link>
             <Link 
               href="/contacts" 
-              className="px-3 py-2 rounded hover:bg-gray-100 transition-colors font-medium"
+              className={`px-3 py-2 rounded ${isActive('/contacts') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Contacts
