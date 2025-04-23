@@ -96,6 +96,20 @@ function loginUser(credentials) {
 }
 
 /**
+ * Аутентификация по токену.
+ * 
+ * @param {string} token - Токен пользователя.
+ * @returns {object} - Данные пользователя при успешной аутентификации.
+ * @example
+ * const user = await authWithToken('your_token_here');
+ * console.log(user);
+ */
+function authWithToken(token) {
+    return apiRequest("/auth", "POST", { token });
+}
+
+
+/**
  * Удалить пользователя по его ID.
  * 
  * @param {number} userId - ID пользователя, которого нужно удалить.
@@ -134,6 +148,31 @@ function addStudent(studentData) {
 function getStudentsBySchool(schoolName) {
     return apiRequest("/students/school", "POST", { school: schoolName });
 }
+
+/**
+ * Получить студентов по стране.
+ * 
+ * @param {string} country - Название страны.
+ * @returns {object[]} - Список студентов из указанной страны.
+ * @example
+ * const students = await getStudentsByCountry("Казахстан");
+ */
+function getStudentsByCountry(country) {
+    return apiRequest(`/students/country?country=${encodeURIComponent(country)}`);
+}
+
+/**
+ * Получить студентов по курсу.
+ * 
+ * @param {number} courseId - ID курса.
+ * @returns {object[]} - Список студентов, записанных на курс.
+ * @example
+ * const students = await getStudentsByCourse(2);
+ */
+function getStudentsByCourse(courseId) {
+    return apiRequest(`/students/course?course_id=${encodeURIComponent(courseId)}`);
+}
+
 
 /**
  * Обновить данные студента.
