@@ -1,4 +1,3 @@
-// TODO: Change to render or from VPS-host
 const API_URL = "http://195.49.212.237:8080";
 
 /**
