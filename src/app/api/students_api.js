@@ -1,4 +1,4 @@
-import { apiRequest } from "./baseApi"; // вынеси apiRequest в baseApi.js или оставь здесь, если не модульный проект
+import { apiRequest } from "./base_api"; // вынеси apiRequest в baseApi.js или оставь здесь, если не модульный проект
 
 /**
  * Добавить нового ученика

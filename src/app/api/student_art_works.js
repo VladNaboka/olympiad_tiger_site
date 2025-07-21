@@ -1,4 +1,4 @@
-import { apiRequest } from "./baseApi";
+import { apiRequest } from "./base_api";
 
 /**
  * Загрузка художественной работы

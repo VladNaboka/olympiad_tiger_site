@@ -61,6 +61,16 @@ export default function Navbar() {
             <Link href="/contacts" className={isActive('/contacts') ? activeStyle : defaultStyle}>
               Contacts
             </Link>
+            <Link 
+              href="/admin" 
+              className={`px-4 py-2 rounded-full border-2 transition-all duration-200 ${
+                isActive('/admin') 
+                  ? 'bg-orange-500 text-white border-orange-500 shadow-md' 
+                  : 'text-orange-500 border-orange-500 hover:bg-orange-500 hover:!text-black hover:shadow-md'
+              }`}
+            >
+              Login
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -155,6 +165,17 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Contacts
+            </Link>
+            <Link 
+              href="/admin" 
+              className={`px-4 py-2 rounded-full border-2 transition-all duration-200 text-center ${
+                isActive('/admin') 
+                  ? 'bg-orange-500 text-white border-orange-500 shadow-md' 
+                  : 'text-orange-500 border-orange-500 hover:bg-orange-500 hover:!text-black hover:shadow-md'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Login
             </Link>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { apiRequest } from "./baseApi";
+import { apiRequest } from "./base_api";
 
 /**
  * Получить всех пользователей, у которых роль не 'owner'
