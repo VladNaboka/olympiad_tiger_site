@@ -1,5 +1,5 @@
 // const API_URL = "http://195.49.212.237:8080";
-const API_URL = "https://tigersedu.com";
+const API_URL = "http://195.49.212.237:8080";
 
 /**
  * Вспомогательная функция для отправки запросов к API.
