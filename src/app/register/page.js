@@ -59,15 +59,15 @@ export default function Registration() {
             {/* Left Content - Centered text aligned with image */}
             <div className="lg:w-1/2 flex flex-col justify-center">
               <p className="text-xl mb-6 text-gray-800">
-                To participate in the International Tigers Olympiad, students 
-                must register through an official national representative in 
-                their country.
+                To participate in the International Tigers Olympiad, 
+                students must register through an official 
+                Country Representative in their home country.
               </p>
               
               <p className="text-xl mb-6 text-gray-800">
-                Each country has a designated representative organization 
-                that manages registration, provides information, and 
-                coordinates the National Round locally.
+                Each participating country is supported by a designated representative organization. 
+                These trusted partners manage local registration, 
+                provide guidance, and coordinate the National Round in your region.
               </p>
             </div>
             
@@ -99,8 +99,7 @@ export default function Registration() {
               <div className="bg-pink-400 p-6 text-white rounded-tl-lg rounded-bl-lg">
                 <div className="text-4xl font-bold mb-4">01</div>
                 <p>
-                  Find your country's representative in the 
-                  Representatives section of this website.
+                  Visit the Representatives section on this website to find your country’s official representative.
                 </p>
               </div>
               
@@ -108,10 +107,7 @@ export default function Registration() {
               <div className="bg-pink-400 p-6 text-white">
                 <div className="text-4xl font-bold mb-4">02</div>
                 <p>
-                  Contact the representative directly to 
-                  receive detailed registration instructions, 
-                  local deadlines, participation fees and 
-                  venue information.
+                  Contact the representative directly to receive details on registration steps, deadlines, participation fees, and local venue information.
                 </p>
               </div>
               
@@ -119,8 +115,7 @@ export default function Registration() {
               <div className="bg-pink-400 p-6 text-white rounded-tr-lg rounded-br-lg">
                 <div className="text-4xl font-bold mb-4">03</div>
                 <p>
-                  Complete your registration through the 
-                  representative's official process.
+                  Complete your registration through the official local process.
                 </p>
               </div>
             </div>
@@ -128,28 +123,24 @@ export default function Registration() {
           
           {/* Please Note Section */}
           <div className="mb-12">
-            <h3 className="text-xl font-bold mb-4">Please note:</h3>
+            <h3 className="text-xl font-bold mb-4">🛑 Important Notes:</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
               <div className="bg-orange-600 p-6 text-white rounded-tl-lg rounded-bl-lg">
                 <p>
-                  Registration is not available through the 
-                  international website.
+                  Registration is not available through the international website.
                 </p>
               </div>
               
               <div className="bg-orange-600 p-6 text-white">
                 <p>
-                  Each national representative sets 
-                  registration procedures based on local 
-                  context.
+                  Each Country Representative follows local guidelines for registration and participation.
                 </p>
               </div>
               
               <div className="bg-orange-600 p-6 text-white rounded-tr-lg rounded-br-lg">
                 <p>
-                  All participants must take the Olympiad 
-                  in English.
+                  All students must participate in the Olympiad in English, regardless of location.
                 </p>
               </div>
             </div>

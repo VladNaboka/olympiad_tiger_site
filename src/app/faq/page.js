@@ -10,60 +10,73 @@ const faqItems = [
   {
     id: 1,
     question: "Who can participate in the Tigers Olympiad?",
-    answer: "The Tigers Olympiad is open to school students worldwide in grades 5-12. Students from any country may participate. Whether you are passionate about Mathematics, Drawing, or both, this Olympiad provides a platform to showcase your talents on an international level."
+    answer: "Any student aged 6–17 from anywhere in the world is welcome! Whether you're a creative soul with a passion for Art 🎨, a problem solver who loves Mathematics 🧠, or both — the Tigers Olympiad is your gateway to shine on an international stage."
   },
   {
     id: 2,
-    question: "How do I register and what is the deadline?",
-    answer: "Registration is handled only through official national representatives in each participating country. To register, visit the Representatives section of our website and contact the representative in your country. They will provide you with all registration instructions, deadlines, and participation details. Please note: Registration is not available through the international website, and deadlines may vary by country."
+    question: "How can I register, and what are the deadlines?",
+    answer: "Registration is handled exclusively through official Country Representatives. Visit the “Representatives” section on our website, find your country, and connect with your local coordinator. They’ll guide you through every step — from deadlines to payment and participation. <br /><br />Please note: registration is not available directly through the international website, and timelines may differ by country."
   },
   {
     id: 3,
-    question: "In what language is the Olympiad conducted?",
-    answer: "The Olympiad is conducted entirely in English. All test materials, instructions, drawing themes, and communications are provided only in English. Participants are expected to complete all tasks in English. No other language versions are available."
+    question: "What language is the Olympiad conducted in?",
+    answer: "All aspects of the Olympiad — tests, themes, instructions, and communication — are conducted entirely in English. No translations or alternate versions are provided. This is your chance to use English in a real-world, inspiring context!"
   },
   {
     id: 4,
-    question: "How do I register and what is the deadline?",
-    answer: "Registration is handled only through official national representatives in each participating country. To register, visit the Representatives section of our website and contact the representative in your country. They will provide you with all registration instructions, deadlines, and participation details. Please note: Registration is not available through the international website, and deadlines may vary by country."
+    question: "Is there a participation fee?",
+    answer: "Yes. Each country sets its own participation fee based on local conditions and services. Please contact your Country Representative for exact pricing and payment instructions."
   },
   {
     id: 5,
-    question: "Is there a participation fee?",
-    answer: "Participation is paid. The exact fee is determined by the national representative in each country and may vary depending on local conditions and services. Please contact your country's representative for detailed information about registration fees and payment methods."
+    question: "What subjects can I compete in? Do I have to choose both?",
+    answer: `You can choose to participate in: <br />📐 Mathematics <br />🎨 Art <br />...or both! <br /><br />The schedule is designed to ensure that students choosing both tracks can complete each part without conflict.`
   },
   {
     id: 6,
-    question: "What subjects can I compete in? Do I have to choose both?",
-    answer: "You can choose to participate in one or both subject tracks: Mathematics or Drawing. Participation in both is optional. The schedule is arranged so that students who choose both can fully complete each part without overlap."
+    question: "What does the competition format look like?",
+    answer: `📐 Mathematics:<br />
+• National Round: Offline, paper-based test with up to 30 questions in 60 minutes, held under exam conditions.<br />
+• Global Final: Advanced paper-based assessment conducted in person during the final event.<br /><br />
+🎨 Art:<br />
+• National Round: Participants create their artwork independently at home or school and submit it online to their Country Representative.<br />
+• Global Final: Finalist artworks are exhibited at the international finals in Prague, where they are evaluated by a panel of professional artists.<br /><br />
+All tasks and themes are in English.<br />
+Judging focuses on creativity, originality, clarity, and problem-solving.`
   },
   {
     id: 7,
-    question: "What is the format of the competition?",
-    answer: "Mathematics: National Round - Offline, on paper — 30 questions in 60 minutes, held under exam conditions at a local venue. Final Round: Offline, in the USA — advanced paper-based test during the final event. Drawing: National Round - Participants create their artwork independently at home or school and submit it online to their country's representative. Final Round: The same artworks are presented at an international exhibition during the final in the USA and are evaluated by a jury of artists and professionals. All tasks and themes are provided in English. Evaluation is based on creativity, problem-solving, originality, and clarity."
+    question: "Will I receive a certificate or award if I don’t win?",
+    answer: `Absolutely!<br />
+• All participants in the National Round receive a Certificate of Participation.<br />
+• 🏆 All Global Finalists receive a Certificate of Achievement.<br /><br />
+Top performers will win exciting prizes such as:<br />
+o Tablets<br />
+o Art kits<br />
+o Summer camp experiences<br />
+o And more!`
   },
   {
     id: 8,
-    question: "Will I receive a certificate or award even if I don't win?",
-    answer: "Yes. At the National Round, all participants receive a Certificate of Participation. Top performers are awarded Gold (top 10%), Silver (next 15%), and Bronze (next 20%) Certificates. At the Final Round, all finalists receive a Certificate of Achievement. The best performers receive international prizes — including university scholarships (Grades 10-12) and valuable prizes or global educational camp scholarships (Grades 5-9), as well as medals and international recognition."
+    question: "How should I prepare?",
+    answer: `For Mathematics: review your school curriculum, study the topics listed in our Syllabus section, and practice time management during timed tests.<br />
+For Art: explore different creative styles, practice themed drawings, and work on expressing your unique vision.<br /><br />
+And don’t forget — the entire Olympiad is in English, so practicing subject-specific vocabulary is a great idea!<br />
+Above all — stay curious, stay inspired, and enjoy the journey!`
   },
   {
     id: 9,
-    question: "How should I prepare for the Olympiad?",
-    answer: "For Mathematics: review your school curriculum, solve sample Olympiad questions, and practice time management for 60-minute tests. For Drawing: practice creating original artworks based on themes, develop your technique, and explore creative composition. Make sure you are comfortable working in English, especially with subject-specific vocabulary and instructions. Most importantly — stay inspired, curious, and enjoy the process!"
+    question: "When and how will I receive my results?",
+    answer: `• National Round results are announced by your Country Representative and also published on our website.<br />
+• Global Final results are revealed during the Awards Ceremony and shared on our website and official social media platforms.`
   },
-  {
-    id: 10,
-    question: "How and when will I get the results?",
-    answer: "Results of the National Round are announced by your country's representative. Final Round results and international winners are announced during the Awards Ceremony in the USA and published on our website and social media channels. Winners and their schools receive direct communication from the organizing team."
-  }
 ];
 
 // Компонент для одного FAQ вопроса с анимацией
 const FaqItem = ({ item, isOpen, toggleQuestion }) => {
   const contentRef = useRef(null);
   const [height, setHeight] = useState(0);
-  
+
   useEffect(() => {
     if (isOpen) {
       const contentEl = contentRef.current;
@@ -72,7 +85,7 @@ const FaqItem = ({ item, isOpen, toggleQuestion }) => {
       setHeight(0);
     }
   }, [isOpen]);
-  
+
   return (
     <div className="border border-gray-200 rounded-lg bg-white overflow-hidden mb-4">
       <button
@@ -84,13 +97,17 @@ const FaqItem = ({ item, isOpen, toggleQuestion }) => {
           +
         </span>
       </button>
-      
-      <div 
+
+      <div
         className="overflow-hidden transition-all duration-300 ease-in-out"
         style={{ maxHeight: `${height}px` }}
       >
         <div ref={contentRef} className="px-6 pb-6">
-          <p className="text-gray-800">{item.answer}</p>
+          <p
+            className="text-gray-800"
+            dangerouslySetInnerHTML={{ __html: item.answer }}
+          />
+
         </div>
       </div>
     </div>
@@ -100,16 +117,16 @@ const FaqItem = ({ item, isOpen, toggleQuestion }) => {
 export default function FAQ() {
   // Состояние для открытых/закрытых вопросов
   const [openQuestionId, setOpenQuestionId] = useState(1);
-  
+
   return (
-    <div 
+    <div
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
       style={{
-        backgroundImage: 'url("/image/fonmain1.png")', 
+        backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
       <Navbar />
-      
+
       {/* Hero Section - центрированный дизайн */}
       <div className="py-24 px-4 relative">
         <div className="container mx-auto">
@@ -123,7 +140,7 @@ export default function FAQ() {
                 Find answers to common questions about the International Tigers Olympiad
               </p>
             </div>
-            
+
             {/* Right - Logo "WE ARE TIGERS" */}
             <div className="md:w-1/2 flex justify-center mt-8 md:mt-0">
               <div className="relative w-80 h-80">
@@ -142,13 +159,13 @@ export default function FAQ() {
           </div>
         </div>
       </div>
-      
+
       {/* FAQ Accordion */}
       <div className="px-4 pb-16">
         <div className="container mx-auto max-w-4xl">
           <div>
             {faqItems.map((item) => (
-              <FaqItem 
+              <FaqItem
                 key={item.id}
                 item={item}
                 isOpen={openQuestionId === item.id}
@@ -156,17 +173,17 @@ export default function FAQ() {
               />
             ))}
           </div>
-          
+
           {/* Still have questions */}
           <div className="mt-16 bg-white p-8 rounded-lg text-center">
             <h2 className="text-2xl font-bold text-orange-700 mb-4">Still have questions?</h2>
             <p className="mb-6">
-              Have more questions? Feel free to reach out to us via the Contacts provided. 
-              We're happy to clarify any doubts.
-              <br />Good luck, and we look forward to your participation!
+              No problem — we’re here for you!<br />
+              Reach out through the Contacts page or your local representative.<br />
+              We’ll be happy to help you take the next step toward your Tigers adventure.
             </p>
-            <Link 
-              href="/contacts" 
+            <Link
+              href="/contacts"
               className="inline-block bg-orange-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors"
             >
               Contact Us
@@ -174,7 +191,7 @@ export default function FAQ() {
           </div>
         </div>
       </div>
-      
+
       <div className="mt-auto">
         <Footer />
       </div>

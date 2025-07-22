@@ -83,10 +83,12 @@ export default function Representatives() {
             
             <div className="relative z-10 text-center">
               <p className="text-lg mb-4">
-                The International Tigers Olympiad has a network of regional representatives and coordinators around the globe.
+                The Tigers Olympiad is supported by a global team of passionate coordinators and educators who guide students in their home countries.
               </p>
               <p className="text-lg">
-                These representatives serve as local points of contact for schools and students, helping to promote the Olympiad and assist participants in their region. You can reach out to them for country-specific queries, guidance on registration, or information about any local meet-ups or training sessions.
+                These representatives are your personal connection to everything Tigers — from registration to local events and support.
+                <br />They help grow the spirit of academic excellence and creativity in every corner of the world.
+
               </p>
             </div>
           </div>
@@ -133,7 +135,7 @@ export default function Representatives() {
           <div className="bg-white p-8 rounded-xl shadow-sm text-center">
             <h2 className="text-3xl font-bold text-orange-600 mb-6">Become a Representative</h2>
             <p className="text-gray-700 mb-8 max-w-3xl mx-auto">
-              If your country is not listed and you're interested in becoming a Tigers Olympiad representative, we'd love to hear from you! Help us bring this enriching experience to students in your region.
+              If your country is not yet represented or you have general questions, please reach out to the International Coordination Team — we're here to help!
             </p>
             <Link 
               href="/contacts" 

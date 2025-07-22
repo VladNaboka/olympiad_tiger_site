@@ -55,11 +55,11 @@ export default function Home() {
       {/* Orange info block */}
       <div className="px-4 pb-8">
         <div className="container mx-auto max-w-6xl bg-orange-600 text-white py-12 px-8 rounded-lg">
-          <h2 className="text-3xl font-bold mb-6 text-center">Welcome to the International Tigers Olympiad</h2>
+          <h2 className="text-3xl font-bold mb-6 text-center">Welcome to the International Tigers Olympiad — a prestigious global event where the brightest young minds meet challenge, creativity, and innovation.</h2>
           <p className="text-2xl text-center">
-            This elite academic competition is open to students in grades 5-12 from all 
-            countries and offers a unique opportunity to showcase excellence in Mathematics 
-            and/or Drawing — two disciplines that reflect the full spectrum of human intellect.
+            Open to students aged 6 to 17 from all countries, the Olympiad 
+            offers a unique opportunity to shine in Mathematics and Art — two disciplines 
+            that together reflect the full spectrum of human intelligence and expression.
           </p>
         </div>
       </div>
@@ -98,15 +98,18 @@ export default function Home() {
           
           <div className="lg:w-1/2 order-1 lg:order-2">
             <h2 className="text-4xl font-bold mb-4 text-black">
-              At Tigers are<br />
-              empowered <span className="text-orange-500">to choose</span><br />
-              their path
+              At Tigers,<br />
+              every student <span className="text-orange-500">chooses</span><br />
+              their own path
             </h2>
             <p className="text-lg text-gray-700 mb-8">
-              Whether to compete in Mathematics, Drawing, or both. 
-              Participation in one or both subject tracks is entirely 
-              optional – and fully encouraged. This flexible format 
-              allows students to pursue their own terms.
+              -Compete in Mathematics<br />
+-Compete in Art<br />
+-Or embrace both!<br /><br />
+Participation in either or both categories is entirely optional — and warmly encouraged. 
+This flexible format lets students build on their strengths, 
+try something new, and experience the Olympiad in a way that’s truly their own.
+
             </p>
             <Link 
               href="/register" 
@@ -123,16 +126,11 @@ export default function Home() {
         <div className="flex flex-col lg:flex-row items-center gap-8">
           <div className="lg:w-1/2">
             <h2 className="text-4xl font-bold mb-4 text-black">
-              But Tigers is more than a<br />
-              competition - it's a<br />
-              <span className="text-orange-500">global stage</span>
+              But Tigers is more than just <br />a competition — it’s a 
+              <span className="text-orange-500"> global stage</span> <br />for discovery and connection.
             </h2>
             <p className="text-lg text-gray-700 mb-8">
-              Conducted exclusively in English, the Olympiad brings 
-              together ambitious students from across the globe to think, 
-              create, and connect. It culminates in an unforgettable final 
-              round in the United States, where national winners meet for 
-              an inspiring celebration of talent, culture, and achievement.
+              Held entirely in English, the Olympiad brings together ambitious students from every corner of the world — to think, create, and grow together.
             </p>
             <Link 
               href="/register" 
@@ -274,8 +272,9 @@ export default function Home() {
             <div className="max-w-3xl mx-auto text-center relative z-10">
               <h2 className="text-4xl font-bold text-white mb-6">Join the movement</h2>
               <p className="text-xl text-white mb-8">
-                Challenge your mind. Express your vision. And become part of an 
-                international community that dares to think differently.
+                Challenge your mind. Express your vision.<br />
+  And become part of a global community that celebrates your creativity — and showcases your talent to the world.
+
               </p>
               
               <div className="flex bg-white rounded-full overflow-hidden max-w-lg mx-auto text-black">
