@@ -27,7 +27,7 @@ export default function Rules() {
             {/* Center - Title and Description */}
             <div className="md:w-2/4 text-center my-6 md:my-0">
               <h1 className="text-4xl md:text-5xl font-bold text-orange-600 mb-4 md:mb-6">
-                Rules and Structure
+                Regulations and Structure
               </h1>
               <p className="text-lg text-gray-600 max-w-xl mx-auto px-2">
                 The Tigers Olympiad is a two-stage international competition that combines academic excellence with creative expression

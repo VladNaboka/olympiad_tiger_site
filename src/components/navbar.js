@@ -9,12 +9,12 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   
-  // Функция для определения активности ссылки
+  // Function to determine link activity
   const isActive = (path) => {
     return pathname === path;
   };
   
-  // Стиль для активного пункта меню
+  // Style for active menu item
   const activeStyle = "text-orange-500 font-semibold";
   const defaultStyle = "hover:text-orange-500 transition-colors font-medium";
 
@@ -41,7 +41,7 @@ export default function Navbar() {
               Home
             </Link>
             <Link href="/rules" className={isActive('/rules') ? activeStyle : defaultStyle}>
-              Rules
+              Regulations and Structure
             </Link>
             <Link href="/register" className={isActive('/register') ? activeStyle : defaultStyle}>
               Registration
@@ -122,7 +122,7 @@ export default function Navbar() {
               className={`px-3 py-2 rounded ${isActive('/rules') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
-              Rules
+              Regulations and Structure
             </Link>
             <Link 
               href="/register" 
