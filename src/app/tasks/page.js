@@ -11,7 +11,7 @@ export default function Tasks() {
     >
       <Navbar />
       
-      {/* Header Section с изображением вместо текста */}
+      {/* Header Section with image instead of text */}
       <div className="py-12 px-2 relative">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col items-center justify-center">
@@ -37,19 +37,19 @@ export default function Tasks() {
         </div>
       </div>
       
-      {/* Mathematics Examples Section - заголовок и блоки-карточки */}
+      {/* Mathematics Examples Section - title and card blocks */}
       <div className="px-2 pb-12">
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-4xl font-bold text-center mb-10 text-gray-900">
-            Mathematics Examples
+            📐 Mathematics Examples
           </h2>
           
-          {/* Junior Level - в карточке */}
+          {/* Junior Level - in card format */}
           <div className="mb-12">
             <div className="bg-white rounded-xl shadow-sm p-8 relative">
               <div className="flex flex-col md:flex-row justify-between">
                 <div className="md:w-3/4 pr-4">
-                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Junior Level (Grades 5-6)</h3>
+                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Junior Level (Ages 6-10)</h3>
                   
                   <div className="mb-6">
                     <p className="font-medium mb-1 text-gray-900">Task: Logic Sequence</p>
@@ -72,12 +72,12 @@ export default function Tasks() {
             </div>
           </div>
           
-          {/* Middle Level - в карточке */}
+          {/* Middle Level - in card format */}
           <div className="mb-12">
             <div className="bg-white rounded-xl shadow-sm p-8 relative">
               <div className="flex flex-col md:flex-row justify-between">
                 <div className="md:w-3/4 pr-4">
-                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Middle Level (Grades 7-9)</h3>
+                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Middle Level (Ages 11-14)</h3>
                   
                   <div className="mb-6">
                     <p className="font-medium mb-1 text-gray-900">Task: Geometric Problem</p>
@@ -98,19 +98,19 @@ export default function Tasks() {
                 
                 <div className="md:w-1/4 flex justify-center items-start">
                   <div className="w-32 h-32 rounded-full border-2 border-orange-500 flex items-center justify-center bg-white">
-                    <span className="text-5xl font-bold text-black">42</span>
+                    <span className="text-3xl font-bold text-black">18√2</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           
-          {/* Senior Level - в карточке */}
+          {/* Senior Level - in card format */}
           <div className="mb-12">
             <div className="bg-white rounded-xl shadow-sm p-8 relative">
               <div className="flex flex-col md:flex-row justify-between">
                 <div className="md:w-3/4 pr-4">
-                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Senior Level (Grades 10-12)</h3>
+                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Senior Level (Ages 15-17)</h3>
                   
                   <div className="mb-6">
                     <p className="font-medium mb-1 text-gray-900">Task: Probability Challenge</p>
@@ -134,24 +134,24 @@ export default function Tasks() {
                 
                 <div className="md:w-1/4 flex justify-center items-start">
                   <div className="w-32 h-32 rounded-full border-2 border-orange-500 flex items-center justify-center bg-white">
-                    <span className="text-5xl font-bold text-black">42</span>
+                    <span className="text-4xl font-bold text-black">1/8</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           
-          {/* Drawing Examples Section - также в карточках */}
+          {/* Art Examples Section - also in card format */}
           <h2 className="text-4xl font-bold text-center mb-10 text-gray-900 pt-8">
-            Drawing Examples
+            🎨 Art Examples
           </h2>
           
-          {/* Junior Theme - в карточке */}
+          {/* Junior Theme - in card format */}
           <div className="mb-12">
             <div className="bg-white rounded-xl shadow-sm p-8 relative">
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-3/5 pr-4">
-                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Junior Theme: "My Dreamworld"</h3>
+                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Junior Theme: "My Dreamworld" (Ages 6-10)</h3>
                   
                   <div className="mb-6">
                     <p className="font-medium mb-1 text-gray-900">Task Description:</p>
@@ -178,24 +178,24 @@ export default function Tasks() {
                 </div>
                 
                 <div className="md:w-2/5 mt-4 md:mt-0">
-                  <div className="rounded-lg overflow-hidden h-64">
-                    <img
-                      src="/image/drawing-junior.jpg"
-                      alt="Junior Drawing Example"
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="rounded-lg overflow-hidden h-64 bg-gradient-to-br from-purple-200 to-pink-200 flex items-center justify-center">
+                    <div className="text-center text-gray-600">
+                      <div className="text-4xl mb-2">🎨</div>
+                      <p>Sample Artwork</p>
+                      <p className="text-sm">Dreamworld Theme</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           
-          {/* Middle Theme - в карточке */}
+          {/* Middle Theme - in card format */}
           <div className="mb-12">
             <div className="bg-white rounded-xl shadow-sm p-8 relative">
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-3/5 pr-4">
-                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Middle Theme: "Connection Between Cultures"</h3>
+                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Middle Theme: "Connection Between Cultures" (Ages 11-14)</h3>
                   
                   <div className="mb-6">
                     <p className="font-medium mb-1 text-gray-900">Task Description:</p>
@@ -222,24 +222,24 @@ export default function Tasks() {
                 </div>
                 
                 <div className="md:w-2/5 mt-4 md:mt-0">
-                  <div className="rounded-lg overflow-hidden h-64">
-                    <img
-                      src="/image/drawing-middle.jpg"
-                      alt="Middle Drawing Example"
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="rounded-lg overflow-hidden h-64 bg-gradient-to-br from-blue-200 to-green-200 flex items-center justify-center">
+                    <div className="text-center text-gray-600">
+                      <div className="text-4xl mb-2">🌍</div>
+                      <p>Sample Artwork</p>
+                      <p className="text-sm">Cultural Connection Theme</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           
-          {/* Senior Theme - в карточке */}
+          {/* Senior Theme - in card format */}
           <div className="mb-12">
             <div className="bg-white rounded-xl shadow-sm p-8 relative">
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-3/5 pr-4">
-                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Senior Theme: "Innovation and Tradition"</h3>
+                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Senior Theme: "Innovation and Tradition" (Ages 15-17)</h3>
                   
                   <div className="mb-6">
                     <p className="font-medium mb-1 text-gray-900">Task Description:</p>
@@ -266,12 +266,12 @@ export default function Tasks() {
                 </div>
                 
                 <div className="md:w-2/5 mt-4 md:mt-0">
-                  <div className="rounded-lg overflow-hidden h-64">
-                    <img
-                      src="/image/drawing-senior.jpg"
-                      alt="Senior Drawing Example"
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="rounded-lg overflow-hidden h-64 bg-gradient-to-br from-yellow-200 to-orange-200 flex items-center justify-center">
+                    <div className="text-center text-gray-600">
+                      <div className="text-4xl mb-2">⚡</div>
+                      <p>Sample Artwork</p>
+                      <p className="text-sm">Innovation & Tradition Theme</p>
+                    </div>
                   </div>
                 </div>
               </div>

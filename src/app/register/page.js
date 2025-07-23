@@ -59,15 +59,15 @@ export default function Registration() {
             {/* Left Content - Centered text aligned with image */}
             <div className="lg:w-1/2 flex flex-col justify-center">
               <p className="text-xl mb-6 text-gray-800">
-                To participate in the International Tigers Olympiad, 
-                students must register through an official 
-                Country Representative in their home country.
+                To participate in the International Tigers Olympiad, students 
+                must register through an official Country Representative in 
+                their home country.
               </p>
               
               <p className="text-xl mb-6 text-gray-800">
-                Each participating country is supported by a designated representative organization. 
-                These trusted partners manage local registration, 
-                provide guidance, and coordinate the National Round in your region.
+                Each participating country is supported by a designated representative 
+                organization. These trusted partners manage local registration, provide 
+                guidance, and coordinate the National Round in your region.
               </p>
             </div>
             
@@ -99,7 +99,8 @@ export default function Registration() {
               <div className="bg-pink-400 p-6 text-white rounded-tl-lg rounded-bl-lg">
                 <div className="text-4xl font-bold mb-4">01</div>
                 <p>
-                  Visit the Representatives section on this website to find your country’s official representative.
+                  Visit the Representatives section on this website to find 
+                  your country's official representative.
                 </p>
               </div>
               
@@ -107,7 +108,9 @@ export default function Registration() {
               <div className="bg-pink-400 p-6 text-white">
                 <div className="text-4xl font-bold mb-4">02</div>
                 <p>
-                  Contact the representative directly to receive details on registration steps, deadlines, participation fees, and local venue information.
+                  Contact the representative directly to receive details on 
+                  registration steps, deadlines, participation fees, and 
+                  local venue information.
                 </p>
               </div>
               
@@ -121,7 +124,7 @@ export default function Registration() {
             </div>
           </div>
           
-          {/* Please Note Section */}
+          {/* Important Notes Section */}
           <div className="mb-12">
             <h3 className="text-xl font-bold mb-4">🛑 Important Notes:</h3>
             
@@ -134,33 +137,44 @@ export default function Registration() {
               
               <div className="bg-orange-600 p-6 text-white">
                 <p>
-                  Each Country Representative follows local guidelines for registration and participation.
+                  Each Country Representative follows local guidelines for 
+                  registration and participation.
                 </p>
               </div>
               
               <div className="bg-orange-600 p-6 text-white rounded-tr-lg rounded-br-lg">
                 <p>
-                  All students must participate in the Olympiad in English, regardless of location.
+                  All students must participate in the Olympiad in English, 
+                  regardless of location.
                 </p>
               </div>
             </div>
           </div>
           
-          {/* Contact Section */}
+          {/* Take the First Step Section */}
           <div className="bg-white p-8 rounded-lg text-center mb-8">
-            <p className="text-lg mb-4">
-              For general questions or if your country does not yet have a representative, 
-              contact the international team at{' '}
-              <a href="mailto:info@tigers-olympiad.org" className="text-orange-500 hover:underline">
-                info@tigers-olympiad.org
-              </a>
+            <h2 className="text-2xl font-bold text-orange-700 mb-4">Take the First Step</h2>
+            <p className="text-lg mb-6">
+              If your country is not yet represented or you have general questions, 
+              please reach out to the International Coordination Team — we're here to help!
+            </p>
+            <p className="text-lg mb-6">
+              Join the Olympiad by registering today — and begin your journey toward 
+              representing your school and your country on the international academic stage.
             </p>
             
             <Link 
               href="/representatives" 
-              className="inline-block bg-orange-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors mt-4"
+              className="inline-block bg-orange-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors mr-4"
             >
               Find Your Country Representative
+            </Link>
+            
+            <Link 
+              href="/contacts" 
+              className="inline-block bg-gray-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-gray-600 transition-colors"
+            >
+              Contact International Team
             </Link>
           </div>
         </div>

@@ -55,7 +55,7 @@ export default function Rules() {
               The Tigers Olympiad is a two-stage international competition that combines 
               academic excellence with creative expression. The Olympiad is conducted entirely in 
               English, and students may choose to compete in one or both subject tracks — 
-              Mathematics and/or Drawing. Participation in both is optional.
+              Mathematics and/or Art. Participation in both is optional.
             </p>
           </div>
           
@@ -74,25 +74,25 @@ export default function Rules() {
               <p className="mb-4 text-gray-700"><strong>Wave 2:</strong> Early March</p>
               <p className="mb-6 text-gray-700">
                 Each country hosts the Olympiad in approved schools or venues, coordinated by 
-                official national representatives.
+                official Country Representatives.
               </p>
               
               <h3 className="text-xl font-bold mb-4">Subject Formats:</h3>
               
-              <h4 className="font-bold mb-2">Mathematics - Offline, on paper</h4>
+              <h4 className="font-bold mb-2">📐 Mathematics - Offline, on paper</h4>
               <p className="mb-6 text-gray-700">
-                Participants complete a 60-minute written test consisting of 30 questions. 
+                Participants complete a 60-minute written test with up to 30 questions. 
                 The exam is conducted in person, under supervision, using printed materials. 
-                Students are grouped by grade level, and the tasks are adapted accordingly.
+                Students are grouped by age level, and the tasks are adapted accordingly.
               </p>
               
-              <h4 className="font-bold mb-2">Drawing - Created offline, submitted online</h4>
+              <h4 className="font-bold mb-2">🎨 Art - Created offline, submitted online</h4>
               <p className="text-gray-700">
                 Participants receive a theme and instructions in English and create their artwork 
                 independently at home or school using traditional art materials. Once completed, 
-                the work is scanned or photographed and submitted to the official country 
-                representative by the deadline. These submitted artworks are reviewed for originality 
-                and completeness, and qualifying works are selected to advance to the final round.
+                the work is scanned or photographed and submitted to the official Country 
+                Representative by the deadline. These submitted artworks are reviewed for originality 
+                and completeness, and qualifying works are selected to advance to the Global Finals.
               </p>
             </div>
           </div>
@@ -104,23 +104,23 @@ export default function Rules() {
                 <div className="text-orange-600 text-5xl font-bold">02</div>
               </div>
               
-              <h2 className="text-2xl font-bold mb-4">Final Round (USA)</h2>
+              <h2 className="text-2xl font-bold mb-4">Global Finals (Prague)</h2>
               <p className="mb-6 text-gray-700">
-                Finalists from each country are invited to the International Final in the United States, 
+                Finalists from each country are invited to the Global Finals in Prague, 
                 where they represent their nations and present their work on a global stage.
               </p>
               
-              <h4 className="font-bold mb-2">Mathematics - Offline, written exam</h4>
+              <h4 className="font-bold mb-2">📐 Mathematics - Offline, written exam</h4>
               <p className="mb-6 text-gray-700">
                 Finalists take part in an advanced in-person test, solving challenging problems 
                 under formal exam conditions. This stage emphasizes analytical thinking, creativity, 
                 and precision.
               </p>
               
-              <h4 className="font-bold mb-2">Drawing - International Exhibition & Jury Evaluation</h4>
+              <h4 className="font-bold mb-2">🎨 Art - International Exhibition & Jury Evaluation</h4>
               <p className="mb-2 text-gray-700">
                 Finalists' artworks, created during the National Round, are presented in an official 
-                exhibition during the final event. A panel of international experts, including 
+                exhibition during the Global Finals event. A panel of international experts, including 
                 professional artists and educators, evaluates the works based on artistic expression, 
                 technique, originality, and thematic interpretation.
               </p>
@@ -134,17 +134,53 @@ export default function Rules() {
           <div className="mb-10">
             <h2 className="text-3xl font-bold text-orange-600 mb-6">Subject Choice</h2>
             <p className="mb-4 text-gray-700 text-lg">
-              Participants may choose:
+              You can choose to participate in:
             </p>
             <ul className="text-gray-700 pl-5 mb-6 text-lg">
-              <li className="mb-3">• Only Mathematics</li>
-              <li className="mb-3">• Only Drawing</li>
-              <li className="mb-3">• Or both (if they wish to challenge themselves in both disciplines)</li>
+              <li className="mb-3">• 📐 <strong>Mathematics</strong></li>
+              <li className="mb-3">• 🎨 <strong>Art</strong></li>
+              <li className="mb-3">• <strong>Or both</strong> (if you wish to challenge yourself in both disciplines)</li>
             </ul>
             <p className="mt-4 text-gray-700 text-lg">
-              Schedules are arranged to avoid conflicts between subjects, allowing students to 
-              compete in both if desired.
+              The schedule is designed to ensure that students choosing both tracks can complete 
+              each part without conflict.
             </p>
+          </div>
+          
+          {/* Competition Format Section */}
+          <div className="mb-10 bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="relative p-6 md:p-8">
+              <h2 className="text-3xl font-bold text-orange-600 mb-6">Competition Format</h2>
+              
+              <div className="mb-8">
+                <h3 className="text-xl font-bold mb-4">📐 Mathematics:</h3>
+                <div className="bg-orange-50 p-4 rounded-lg mb-4">
+                  <p className="font-semibold mb-2">National Round:</p>
+                  <p className="text-gray-700">Offline, paper-based test with up to 30 questions in 60 minutes, held under exam conditions.</p>
+                </div>
+                <div className="bg-orange-50 p-4 rounded-lg">
+                  <p className="font-semibold mb-2">Global Finals:</p>
+                  <p className="text-gray-700">Advanced paper-based assessment conducted in person during the final event.</p>
+                </div>
+              </div>
+              
+              <div className="mb-8">
+                <h3 className="text-xl font-bold mb-4">🎨 Art:</h3>
+                <div className="bg-pink-50 p-4 rounded-lg mb-4">
+                  <p className="font-semibold mb-2">National Round:</p>
+                  <p className="text-gray-700">Participants create their artwork independently at home or school and submit it online to their Country Representative.</p>
+                </div>
+                <div className="bg-pink-50 p-4 rounded-lg">
+                  <p className="font-semibold mb-2">Global Finals:</p>
+                  <p className="text-gray-700">Finalist artworks are exhibited at the Global Finals in Prague, where they are evaluated by a panel of professional artists.</p>
+                </div>
+              </div>
+              
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <p className="font-semibold mb-2">Evaluation Criteria:</p>
+                <p className="text-gray-700">All tasks and themes are in English. Judging focuses on creativity, originality, clarity, and problem-solving.</p>
+              </div>
+            </div>
           </div>
           
           {/* Language Policy Section */}

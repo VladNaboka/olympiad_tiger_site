@@ -10,8 +10,8 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4 text-orange-400">Tigers Olympiad</h3>
             <p className="text-gray-300">
-              An international competition for students in grades 5-12, 
-              showcasing excellence in Mathematics and Drawing.
+              A prestigious global event where the brightest young minds aged 6-17 meet challenge, 
+              creativity, and innovation, showcasing excellence in Mathematics and Art.
             </p>
           </div>
           
@@ -38,13 +38,24 @@ export default function Footer() {
                   Representatives
                 </Link>
               </li>
+              <li>
+                <Link href="/gallery" className="text-gray-300 hover:text-pink-400 transition-colors">
+                  Gallery
+                </Link>
+              </li>
+              <li>
+                <Link href="/tasks" className="text-gray-300 hover:text-pink-400 transition-colors">
+                  Sample Tasks
+                </Link>
+              </li>
             </ul>
           </div>
           
           <div>
             <h3 className="text-xl font-bold mb-4 text-orange-400">Contact Us</h3>
-            <p className="text-gray-300 mb-2">Director: Janegizova Ulsaya</p>
-            <p className="text-gray-300 mb-2">Phone: +7 700 022 0880</p>
+            <p className="text-gray-300 mb-2">Director: Ovdiichuk Julia</p>
+            <p className="text-gray-300 mb-2">Phone: +7 700 595 1000</p>
+            <p className="text-gray-300 mb-4">Email: tigersolympiad@gmail.com</p>
             <div className="flex space-x-4 mt-4">
               <a href="#" className="text-gray-300 hover:text-pink-400 transition-colors">
                 <span className="sr-only">Instagram</span>

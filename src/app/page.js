@@ -52,19 +52,20 @@ export default function Home() {
         </div>
       </div>
       
-      {/* Orange info block */}
+      {/* Orange info block - Updated content */}
       <div className="px-4 pb-8">
         <div className="container mx-auto max-w-6xl bg-orange-600 text-white py-12 px-8 rounded-lg">
-          <h2 className="text-3xl font-bold mb-6 text-center">Welcome to the International Tigers Olympiad — a prestigious global event where the brightest young minds meet challenge, creativity, and innovation.</h2>
+          <h2 className="text-3xl font-bold mb-6 text-center">Welcome to the International Tigers Olympiad</h2>
           <p className="text-2xl text-center">
-            Open to students aged 6 to 17 from all countries, the Olympiad 
-            offers a unique opportunity to shine in Mathematics and Art — two disciplines 
-            that together reflect the full spectrum of human intelligence and expression.
+            A prestigious global event where the brightest young minds meet challenge, 
+            creativity, and innovation. Open to students aged 6 to 17 from all countries, 
+            the Olympiad offers a unique opportunity to shine in Mathematics and Art — 
+            two disciplines that together reflect the full spectrum of human intelligence and expression.
           </p>
         </div>
       </div>
       
-      {/* Empowerment Section */}
+      {/* Empowerment Section - Updated content */}
       <section className="container mx-auto px-4 py-24">
         <div className="flex flex-col lg:flex-row items-center gap-8">
           <div className="lg:w-1/2 order-2 lg:order-1">
@@ -98,18 +99,18 @@ export default function Home() {
           
           <div className="lg:w-1/2 order-1 lg:order-2">
             <h2 className="text-4xl font-bold mb-4 text-black">
-              At Tigers,<br />
-              every student <span className="text-orange-500">chooses</span><br />
-              their own path
+              At Tigers every student<br />
+              <span className="text-orange-500">chooses their own path</span>
             </h2>
+            <ul className="text-lg text-gray-700 mb-8 list-disc pl-6">
+              <li>Compete in Mathematics</li>
+              <li>Compete in Art</li>
+              <li>Or embrace both!</li>
+            </ul>
             <p className="text-lg text-gray-700 mb-8">
-              -Compete in Mathematics<br />
--Compete in Art<br />
--Or embrace both!<br /><br />
-Participation in either or both categories is entirely optional — and warmly encouraged. 
-This flexible format lets students build on their strengths, 
-try something new, and experience the Olympiad in a way that’s truly their own.
-
+              Participation in either or both categories is entirely optional — and warmly encouraged. 
+              This flexible format lets students build on their strengths, try something new, 
+              and experience the Olympiad in a way that's truly their own.
             </p>
             <Link 
               href="/register" 
@@ -121,22 +122,25 @@ try something new, and experience the Olympiad in a way that’s truly their own
         </div>
       </section>
       
-      {/* Global Stage Section */}
+      {/* Global Stage Section - Updated content */}
       <section className="container mx-auto px-4 py-24">
         <div className="flex flex-col lg:flex-row items-center gap-8">
           <div className="lg:w-1/2">
             <h2 className="text-4xl font-bold mb-4 text-black">
-              But Tigers is more than just <br />a competition — it’s a 
-              <span className="text-orange-500"> global stage</span> <br />for discovery and connection.
+              But Tigers is more than<br />
+              just a competition —<br />
+              <span className="text-orange-500">it's a global stage</span>
             </h2>
             <p className="text-lg text-gray-700 mb-8">
-              Held entirely in English, the Olympiad brings together ambitious students from every corner of the world — to think, create, and grow together.
+              for discovery and connection. Held entirely in English, the Olympiad brings 
+              together ambitious students from every corner of the world — 
+              to think, create, and grow together.
             </p>
             <Link 
               href="/register" 
               className="inline-block bg-amber-400 text-white py-3 px-12 rounded-full text-lg font-semibold hover:bg-amber-500 transition-colors"
             >
-              Join Us
+              Join the Movement
             </Link>
           </div>
           
@@ -153,7 +157,7 @@ try something new, and experience the Olympiad in a way that’s truly their own
         </div>
       </section>
       
-      {/* Features Section */}
+      {/* Features Section - Updated content */}
       <section className="container mx-auto px-4 py-24">
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -182,12 +186,12 @@ try something new, and experience the Olympiad in a way that’s truly their own
             <div className="relative h-48 w-full mb-4 rounded-lg overflow-hidden">
               <Image 
                 src="/image/people3.png" 
-                alt="Drawing" 
+                alt="Art" 
                 fill
                 className="object-cover"
               />
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-800">Drawing</h3>
+            <h3 className="text-2xl font-bold mb-4 text-gray-800">Art</h3>
             <p className="text-gray-700 mb-4">
               Express your creativity and artistic vision through themed artwork that 
               showcases your unique perspective and technical skills.
@@ -204,15 +208,16 @@ try something new, and experience the Olympiad in a way that’s truly their own
             <div className="relative h-48 w-full mb-4 rounded-lg overflow-hidden">
               <Image 
                 src="/image/people2.png" 
-                alt="International Final" 
+                alt="Global Finals" 
                 fill
                 className="object-cover"
               />
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-800">International Final</h3>
+            <h3 className="text-2xl font-bold mb-4 text-gray-800">Global Finals</h3>
             <p className="text-gray-700 mb-4">
-              Compete on a global stage at our prestigious final round in the United States, 
-              connecting with talented peers from around the world.
+              Compete on a global stage at our prestigious Global Finals in Prague, 
+              connecting with talented peers from around the world and celebrating 
+              academic and artistic excellence.
             </p>
             <Link href="/rules" className="text-orange-500 font-semibold hover:underline flex items-center">
               Learn more
@@ -224,7 +229,7 @@ try something new, and experience the Olympiad in a way that’s truly their own
         </div>
       </section>
       
-      {/* Join Movement Section */}
+      {/* Join Movement Section - Updated content */}
       <section className="container mx-auto px-4 py-24 mt-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
@@ -238,7 +243,7 @@ try something new, and experience the Olympiad in a way that’s truly their own
           </div>
           
           <div className="relative bg-pink-400 py-16 px-8 rounded-2xl overflow-hidden">
-            {/* Декоративные круги */}
+            {/* Decorative circles */}
             <div className="absolute top-0 left-0">
               <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="50" cy="50" r="100" stroke="white" strokeWidth="1" strokeOpacity="0.3" fill="none"/>
@@ -253,14 +258,14 @@ try something new, and experience the Olympiad in a way that’s truly their own
               </svg>
             </div>
             
-            {/* Декоративная стрелка */}
+            {/* Decorative arrow */}
             <div className="absolute bottom-10 left-16">
               <svg width="80" height="40" viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2 20C20 5 40 35 75 15" stroke="#FFC107" strokeWidth="3" strokeLinecap="round"/>
               </svg>
             </div>
             
-            {/* Декоративная лампочка */}
+            {/* Decorative lightbulb */}
             <div className="absolute bottom-10 right-16">
               <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 5C14.5 5 10 9.5 10 15C10 18.5 11.5 21.5 14 23.5V27C14 28.1 14.9 29 16 29H24C25.1 29 26 28.1 26 27V23.5C28.5 21.5 30 18.5 30 15C30 9.5 25.5 5 20 5Z" fill="white" fillOpacity="0.8"/>
@@ -268,13 +273,13 @@ try something new, and experience the Olympiad in a way that’s truly their own
               </svg>
             </div>
             
-            {/* Содержимое блока */}
+            {/* Block content */}
             <div className="max-w-3xl mx-auto text-center relative z-10">
               <h2 className="text-4xl font-bold text-white mb-6">Join the movement</h2>
               <p className="text-xl text-white mb-8">
-                Challenge your mind. Express your vision.<br />
-  And become part of a global community that celebrates your creativity — and showcases your talent to the world.
-
+                Challenge your mind. Express your vision. 
+                And become part of a global community that celebrates your creativity — 
+                and showcases your talent to the world.
               </p>
               
               <div className="flex bg-white rounded-full overflow-hidden max-w-lg mx-auto text-black">
