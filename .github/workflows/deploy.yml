@@ -20,7 +20,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /home/ubuntu/olympiad-tiger-site
+            cd /home/ubuntu/olympiad_tiger_site
             git pull origin main
             npm install
             pm2 restart tigers
+
+
+
