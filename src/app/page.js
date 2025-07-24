@@ -22,8 +22,8 @@ export default function Home() {
         </div>
         
         {/* Main hero content */}
-        <div className="container mx-auto px-4 py-24 flex flex-col lg:flex-row items-center relative z-10">
-          <div className="lg:w-1/2 mb-10 lg:mb-0">
+        <div className="container mx-auto px-4 py-8 md:py-24 flex flex-col lg:flex-row items-center relative z-10">
+          <div className="lg:w-1/2 mb-4 lg:mb-0">
             <h1 className="text-5xl font-bold mb-6 text-black">
               International <span className="text-orange-500">Tigers</span><br />
               Olympiad
@@ -39,7 +39,7 @@ export default function Home() {
               Register
             </Link>
           </div>
-          <div className="lg:w-1/2 flex justify-center items-center">
+          <div className="lg:w-1/2 hidden lg:flex justify-center items-center">
             <div className="relative h-[550px] w-full">
               <Image 
                 src="/image/main1.png" 
