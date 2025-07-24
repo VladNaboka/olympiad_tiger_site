@@ -36,7 +36,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6">
             <Link href="/" className={isActive('/') ? activeStyle : defaultStyle}>
               Home
             </Link>
@@ -57,6 +57,9 @@ export default function Navbar() {
             </Link>
             <Link href="/representatives" className={isActive('/representatives') ? activeStyle : defaultStyle}>
               Representatives
+            </Link>
+            <Link href="/partners" className={isActive('/partners') ? activeStyle : defaultStyle}>
+              Our Partners
             </Link>
             <Link href="/contacts" className={isActive('/contacts') ? activeStyle : defaultStyle}>
               Contacts
@@ -158,6 +161,13 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Representatives
+            </Link>
+            <Link 
+              href="/partners" 
+              className={`px-3 py-2 rounded ${isActive('/partners') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Our Partners
             </Link>
             <Link 
               href="/contacts" 
