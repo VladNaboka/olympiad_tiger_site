@@ -3,18 +3,21 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getStudentsByCountry } from '../../api/students_api';
-import { getArtWorksByCountryAndCategory } from '../../api/student_art_works';
-import { getMathWorksByCountryAndCategory } from '../../api/student_math_works';
+import { getAdminsAndTeachers } from '../../api/users_api';
 import { CATEGORIES, SUBJECTS, COUNTRIES, getCategoryName } from '../../utils/constants';
+import AddStudentForm from './AddStudentForm';
+import AddRepresentativeForm from './AddRepresentativeForm';
+import StudentsTab from './StudentsTab';
+import RepresentativesTab from './RepresentativesTab';
+import GalleryTab from './GalleryTab';
+import ResultsTab from './ResultsTab';
 
 export default function AdminDashboard({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('students');
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [showScoreModal, setShowScoreModal] = useState(false);
-  const [selectedWork, setSelectedWork] = useState(null);
+  const [showAddStudentForm, setShowAddStudentForm] = useState(false);
+  const [showAddRepForm, setShowAddRepForm] = useState(false);
   const [students, setStudents] = useState([]);
-  const [artworks, setArtworks] = useState([]);
-  const [mathworks, setMathworks] = useState([]);
+  const [representatives, setRepresentatives] = useState([]);
   const [filters, setFilters] = useState({
     country: '',
     category: '',
@@ -29,39 +32,33 @@ export default function AdminDashboard({ user, onLogout }) {
     }
   }, [user]);
 
+  // Устанавливаем начальную вкладку в зависимости от роли
+  useEffect(() => {
+    if (user?.role === 'owner') {
+      setActiveTab('representatives');
+    } else {
+      setActiveTab('students');
+    }
+  }, [user]);
+
   // Загрузка данных
   const loadData = async () => {
     if (!user) return;
     setLoading(true);
 
     try {
+      // Для главного админа загружаем представителей
+      if (user.role === 'owner') {
+        const repsData = await getAdminsAndTeachers();
+        setRepresentatives(repsData || []);
+      }
+
+      // Загружаем студентов в зависимости от роли
       const country = user.role === 'owner' ? filters.country : user.country;
       
       if (country) {
         const studentsData = await getStudentsByCountry(country);
         setStudents(studentsData || []);
-
-        // Загружаем работы если выбрана категория
-        if (filters.category) {
-          if (filters.subject === '1' || !filters.subject) {
-            try {
-              const artData = await getArtWorksByCountryAndCategory(country, parseInt(filters.category));
-              setArtworks(artData || []);
-            } catch (error) {
-              console.error('Error loading artworks:', error);
-              setArtworks([]);
-            }
-          }
-          if (filters.subject === '2' || !filters.subject) {
-            try {
-              const mathData = await getMathWorksByCountryAndCategory(country, parseInt(filters.category));
-              setMathworks(mathData || []);
-            } catch (error) {
-              console.error('Error loading math works:', error);
-              setMathworks([]);
-            }
-          }
-        }
       }
     } catch (error) {
       console.error('Error loading data:', error);
@@ -74,11 +71,33 @@ export default function AdminDashboard({ user, onLogout }) {
     loadData();
   }, [user, filters]);
 
-  const getWinners = () => {
-    const allWorks = [...artworks, ...mathworks].filter(work => work.score > 0);
-    const sorted = allWorks.sort((a, b) => b.score - a.score);
-    const winnersCount = Math.ceil(sorted.length * 0.1); // 10% победителей
-    return sorted.slice(0, winnersCount);
+  const handleStudentAdded = (studentId) => {
+    setShowAddStudentForm(false);
+    loadData(); // Перезагружаем данные
+    alert(`Student successfully added with ID: ${studentId}`);
+  };
+
+  const handleRepresentativeAdded = () => {
+    setShowAddRepForm(false);
+    loadData(); // Перезагружаем данные
+    alert('Representative successfully added!');
+  };
+
+  // Определяем доступные вкладки в зависимости от роли
+  const getAvailableTabs = () => {
+    const tabs = [];
+
+    if (user.role === 'owner') {
+      tabs.push({ id: 'representatives', label: '🌍 Representatives', icon: '🌍' });
+    }
+
+    tabs.push(
+      { id: 'students', label: '👥 Participants', icon: '👥' },
+      { id: 'gallery', label: '🎨 Gallery', icon: '🎨' },
+      { id: 'results', label: '🏆 Results', icon: '🏆' }
+    );
+
+    return tabs;
   };
 
   return (
@@ -142,7 +161,7 @@ export default function AdminDashboard({ user, onLogout }) {
                   onChange={(e) => setFilters({...filters, country: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
-                  <option value="">Select country</option>
+                  <option value="">All countries</option>
                   {COUNTRIES.map(country => (
                     <option key={country} value={country}>{country}</option>
                   ))}
@@ -188,36 +207,19 @@ export default function AdminDashboard({ user, onLogout }) {
         <div className="bg-white rounded-lg shadow-sm mb-6">
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex">
-              <button
-                onClick={() => setActiveTab('students')}
-                className={`py-4 px-6 text-sm font-medium border-b-2 ${
-                  activeTab === 'students'
-                    ? 'border-orange-500 text-orange-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                👥 Participants
-              </button>
-              <button
-                onClick={() => setActiveTab('gallery')}
-                className={`py-4 px-6 text-sm font-medium border-b-2 ${
-                  activeTab === 'gallery'
-                    ? 'border-orange-500 text-orange-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                🎨 Gallery
-              </button>
-              <button
-                onClick={() => setActiveTab('results')}
-                className={`py-4 px-6 text-sm font-medium border-b-2 ${
-                  activeTab === 'results'
-                    ? 'border-orange-500 text-orange-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                🏆 Results
-              </button>
+              {getAvailableTabs().map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`py-4 px-6 text-sm font-medium border-b-2 ${
+                    activeTab === tab.id
+                      ? 'border-orange-500 text-orange-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  {tab.icon} {tab.label}
+                </button>
+              ))}
             </nav>
           </div>
         </div>
@@ -231,97 +233,57 @@ export default function AdminDashboard({ user, onLogout }) {
             </div>
           )}
 
-          {!loading && activeTab === 'students' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">Participants</h2>
-                <button
-                  onClick={() => setShowAddForm(true)}
-                  className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 flex items-center"
-                >
-                  <span className="mr-2">+</span>
-                  Add Participant
-                </button>
-              </div>
+          {!loading && activeTab === 'representatives' && user.role === 'owner' && (
+            <RepresentativesTab 
+              representatives={representatives}
+              onAddNew={() => setShowAddRepForm(true)}
+              onRefresh={loadData}
+            />
+          )}
 
-              <div className="overflow-x-auto">
-                <table className="min-w-full table-auto">
-                  <thead>
-                    <tr className="bg-gray-50">
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        ID
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Full Name
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Date of Birth
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        School
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Country
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Category
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {students.map((student) => (
-                      <tr key={student.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-4 whitespace-nowrap text-sm font-mono text-gray-900 bg-yellow-50">
-                          {student.id}
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {student.full_name}
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {student.birth_date}
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {student.school}
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {student.country}
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {getCategoryName(student.category_id)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                
-                {students.length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
-                    No participants to display
-                  </div>
-                )}
-              </div>
-            </div>
+          {!loading && activeTab === 'students' && (
+            <StudentsTab 
+              students={students}
+              userRole={user.role}
+              userCountry={user.country}
+              onAddNew={() => setShowAddStudentForm(true)}
+              onRefresh={loadData}
+            />
           )}
 
           {!loading && activeTab === 'gallery' && (
-            <div>
-              <h2 className="text-xl font-semibold mb-6 text-gray-800">Gallery - Work in Progress</h2>
-              <div className="text-center py-8 text-gray-500">
-                Gallery functionality will be available soon
-              </div>
-            </div>
+            <GalleryTab 
+              userRole={user.role}
+              userCountry={user.country}
+              filters={filters}
+            />
           )}
 
           {!loading && activeTab === 'results' && (
-            <div>
-              <h2 className="text-xl font-semibold mb-6 text-gray-800">Results - Work in Progress</h2>
-              <div className="text-center py-8 text-gray-500">
-                Results functionality will be available soon
-              </div>
-            </div>
+            <ResultsTab 
+              userRole={user.role}
+              userCountry={user.country}
+              filters={filters}
+            />
           )}
         </div>
       </div>
+
+      {/* Модальные окна */}
+      {showAddStudentForm && (
+        <AddStudentForm 
+          onClose={() => setShowAddStudentForm(false)}
+          onSuccess={handleStudentAdded}
+          userCountry={user.role === 'admin' ? user.country : null}
+        />
+      )}
+
+      {showAddRepForm && user.role === 'owner' && (
+        <AddRepresentativeForm 
+          onClose={() => setShowAddRepForm(false)}
+          onSuccess={handleRepresentativeAdded}
+        />
+      )}
     </div>
   );
 }

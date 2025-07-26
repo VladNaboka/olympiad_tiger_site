@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { authWithToken } from '../api/auth_api';
 import AuthForm from '../components/admin/AuthForm';
-import AdminDashboard from '../components/admin/AdminDashboard';
+import AdminDashboard from '../components/admin/MainAdminDashboard';
 
 export default function AdminPage() {
   const [user, setUser] = useState(null);
