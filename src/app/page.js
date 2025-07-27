@@ -145,7 +145,7 @@ export default function Home() {
           </div>
           
           <div className="lg:w-1/2">
-            <div className="relative h-80 w-full rounded-lg overflow-hidden">
+            <div className="relative h-10 md:h-64 lg:h-80 w-full rounded-lg overflow-hidden">
               <Image 
                 src="/image/peoplesmain.png" 
                 alt="Students Celebrating" 
@@ -157,8 +157,8 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Features Section - Updated content */}
-      <section className="container mx-auto px-4 py-24">
+{/* Features Section - уменьшенный нижний отступ */}
+<section className="container mx-auto px-4 py-12 md:py-16 lg:py-24">
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-white p-6 rounded-lg shadow-sm">
             <div className="relative h-48 w-full mb-4 rounded-lg overflow-hidden">
@@ -229,10 +229,10 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Join Movement Section - Updated content */}
-      <section className="container mx-auto px-4 py-24 mt-8">
+      {/* Join Movement Section - убрали mt-8 и уменьшили верхний отступ */}
+      <section className="container mx-auto px-4 py-8 md:py-12 lg:py-16">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-4">
             <Image 
               src="/image/go_tigers.png" 
               alt="GO Tigers" 
@@ -282,21 +282,20 @@ export default function Home() {
                 and showcases your talent to the world.
               </p>
               
-              <div className="flex bg-white rounded-full overflow-hidden max-w-lg mx-auto text-black">
+              <div className="flex bg-white rounded-full overflow-hidden max-w-lg mx-auto text-black shadow-lg">
                 <input 
                   type="email" 
                   placeholder="Email Address" 
-                  className="flex-grow py-3 px-6 focus:outline-none"
+                  className="flex-grow py-3 md:py-4 px-5 md:px-6 focus:outline-none text-gray-800 placeholder-gray-500 text-base md:text-lg"
                 />
-                <button className="bg-orange-500 text-white py-3 px-8 font-semibold hover:bg-orange-600 transition-colors">
+                <button className="bg-orange-500 text-white py-3 md:py-4 pl-5 pr-9 md:pl-8 md:pr-8 font-semibold hover:bg-orange-600 transition-colors text-base md:text-lg flex items-center justify-center">
                   Send
                 </button>
               </div>
             </div>
           </div>
         </div>
-      </section>
-      
+      </section>      
       <Footer />
     </div>
   );

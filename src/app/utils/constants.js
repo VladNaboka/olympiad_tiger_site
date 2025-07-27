@@ -1,16 +1,16 @@
 // Константы для Tigers Olympiad Admin Panel
 
-// Категории по возрасту
+// Категории по возрасту (согласно новой API структуре)
 export const CATEGORIES = [
   { id: 1, name: 'Category I (6-9 years)', minAge: 6, maxAge: 9 },
   { id: 2, name: 'Category II (10-13 years)', minAge: 10, maxAge: 13 },
   { id: 3, name: 'Category III (14-17 years)', minAge: 14, maxAge: 17 }
 ];
 
-// Предметы олимпиады
+// Предметы олимпиады (согласно новой API структуре)
 export const SUBJECTS = [
-  { id: 1, name: 'Art', icon: '🎨', description: 'Visual arts and creativity' },
-  { id: 2, name: 'Mathematics', icon: '📐', description: 'Mathematical problem solving' }
+  { id: 1, name: 'Math', icon: '📐', description: 'Mathematical problem solving' },
+  { id: 2, name: 'Art', icon: '🎨', description: 'Visual arts and creativity' }
 ];
 
 // Страны участники
@@ -37,11 +37,10 @@ export const COUNTRIES = [
   'Finland'
 ];
 
-// Роли пользователей
+// Роли пользователей (обновлено согласно role_id)
 export const USER_ROLES = [
-  { id: 'owner', name: 'Main Administrator', description: 'Full system access' },
-  { id: 'admin', name: 'Regional Representative', description: 'Country-specific access' },
-  { id: 'teacher', name: 'Teacher', description: 'Limited access' }
+  { id: 1, name: 'Main Administrator', description: 'Full system access' },
+  { id: 2, name: 'Regional Representative', description: 'Country-specific access' }
 ];
 
 // Функция для получения названия категории по ID

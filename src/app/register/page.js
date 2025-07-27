@@ -152,7 +152,8 @@ export default function Registration() {
           </div>
           
           {/* Take the First Step Section */}
-          <div className="bg-white p-8 rounded-lg text-center mb-8">
+{/* Take the First Step Section - исправленная версия для мобильных */}
+<div className="bg-white p-8 rounded-lg text-center mb-8">
             <h2 className="text-2xl font-bold text-orange-700 mb-4">Take the First Step</h2>
             <p className="text-lg mb-6">
               If your country is not yet represented or you have general questions, 
@@ -163,19 +164,22 @@ export default function Registration() {
               representing your school and your country on the international academic stage.
             </p>
             
-            <Link 
-              href="/representatives" 
-              className="inline-block bg-orange-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors mr-4"
-            >
-              Find Your Country Representative
-            </Link>
-            
-            <Link 
-              href="/contacts" 
-              className="inline-block bg-gray-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-gray-600 transition-colors"
-            >
-              Contact International Team
-            </Link>
+            {/* Исправленные кнопки - вертикально на мобильных, горизонтально на десктопе */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link 
+                href="/representatives" 
+                className="w-full sm:w-auto bg-orange-500 text-white py-3 px-6 md:px-8 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors text-center"
+              >
+                Find Your Country Representative
+              </Link>
+              
+              <Link 
+                href="/contacts" 
+                className="w-full sm:w-auto bg-gray-500 text-white py-3 px-6 md:px-8 rounded-full text-lg font-semibold hover:bg-gray-600 transition-colors text-center"
+              >
+                Contact International Team
+              </Link>
+            </div>
           </div>
         </div>
       </div>
