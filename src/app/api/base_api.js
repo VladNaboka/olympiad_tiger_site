@@ -1,4 +1,4 @@
-export const API_URL = "http://195.49.212.237:8080";
+export const API_URL = "https://195.49.212.237:8080";
 
 export async function apiRequest(endpoint, method = "GET", body = null) {
     const options = {
