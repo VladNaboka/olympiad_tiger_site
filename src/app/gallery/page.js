@@ -1,274 +1,179 @@
+"use client";
+
+import { useState, useEffect } from 'react';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
-import Image from 'next/image';
-
-// Updated gallery data with new content and terminology
-const galleryItems = [
-  {
-    id: 1,
-    image: '/image/artwork-sample.png',
-    title: 'Global Finals artwork exhibition in Prague',
-    category: 'Art Exhibition',
-    description: 'Professional artworks evaluated by international panel'
-  },
-  {
-    id: 2,
-    image: '/image/artwork-sample.png', 
-    title: 'Mathematics competition at National Round',
-    category: 'Mathematics',
-    description: 'Students solving challenging problems under exam conditions'
-  },
-  {
-    id: 3,
-    image: '/image/artwork-sample.png',
-    title: 'Cultural exchange during Global Finals',
-    category: 'Cultural Exchange',
-    description: 'Students from different countries connecting and sharing experiences'
-  },
-  {
-    id: 4,
-    image: '/image/artwork-sample.png',
-    title: 'Award ceremony in Prague',
-    category: 'Awards Ceremony',
-    description: 'Recognition of top performers and achievements'
-  },
-  {
-    id: 5,
-    image: '/image/artwork-sample.png',
-    title: 'Creative art workshops',
-    category: 'Art Workshop',
-    description: 'Students exploring different artistic techniques and styles'
-  },
-  {
-    id: 6,
-    image: '/image/artwork-sample.png',
-    title: 'International finalists celebration',
-    category: 'Global Finals',
-    description: 'Celebrating academic and artistic excellence from around the world'
-  },
-  {
-    id: 7,
-    image: '/image/artwork-sample.png',
-    title: 'Mathematical problem-solving session',
-    category: 'Mathematics',
-    description: 'Analytical thinking and creativity in action'
-  },
-  {
-    id: 8,
-    image: '/image/artwork-sample.png',
-    title: 'Art exhibition opening',
-    category: 'Art Exhibition',
-    description: 'Showcasing creativity and unique perspectives from young artists'
-  },
-  {
-    id: 9,
-    image: '/image/artwork-sample.png',
-    title: 'Tigers community gathering',
-    category: 'Community',
-    description: 'Building lifelong friendships and global connections'
-  }
-];
+import { getArtWorksByCountryAndCategory } from '../api/student_art_works';
+import { getMathWorksByCountryAndCategory } from '../api/student_math_works'; // нужно будет сделать по аналогии с artworks
 
 export default function Gallery() {
+  const [country, setCountry] = useState('');
+  const [category, setCategory] = useState('');
+  const [subject, setSubject] = useState(''); // Artworks / Math
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const categoryNames = {
+    1: "6-9 years",
+    2: "10-13 years",
+    3: "14-17 years"
+  };
+
+  // Загрузка данных при изменении фильтров
+  useEffect(() => {
+    if (country && category && subject) {
+      setLoading(true);
+
+      let fetchData;
+      if (subject === "Artworks") {
+        fetchData = getArtWorksByCountryAndCategory(country, category);
+      } else if (subject === "Math") {
+        fetchData = getMathWorksByCountryAndCategory(country, category);
+      }
+
+      fetchData
+        .then((data) => {
+          setItems(Array.isArray(data) ? data : []);
+        })
+        .catch((err) => {
+          console.error("Ошибка загрузки данных:", err);
+          setItems([]);
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [country, category, subject]);
+
   return (
-    <div 
+    <div
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
-      style={{
-        backgroundImage: 'url("/image/fonmain1.png")', 
-      }}
+      style={{ backgroundImage: 'url("/image/fonmain1.png")' }}
     >
       <Navbar />
-      
-      {/* Hero Section with Pink Torch and Tiger Eye */}
+
+      {/* Hero */}
       <div className="py-16 px-4 relative">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between">
-            {/* Left - Pink Torch Logo */}
             <div className="md:w-1/4">
-              <img 
-                src="/image/pinkfakel.png" 
-                alt="Tigers Olympiad Pink Torch Logo" 
-                width="300"
-                height="400"
-                style={{width: "300px"}}
-              />
+              <img src="/image/pinkfakel.png" alt="Pink Torch" width="300" height="400" />
             </div>
-            
-            {/* Center - Title and Description */}
             <div className="md:w-2/4 text-center my-8 md:my-0">
-              <h1 className="text-5xl font-bold text-orange-600 mb-6">
-                📸 Tigers Gallery
-              </h1>
+              <h1 className="text-5xl font-bold text-orange-600 mb-6">📸 Tigers Gallery</h1>
               <p className="text-lg text-gray-600 max-w-xl mx-auto">
-                The Tigers Olympiad brings together some of the most inspiring young minds from around the world. 
-                Our Photo Gallery captures the essence of this unique global event — from intense competition and 
-                creative breakthroughs to cultural exchanges and joyful award ceremonies.
+                The Tigers Olympiad brings together the brightest young minds from around the globe.
               </p>
             </div>
-            
-            {/* Right - Tiger Eye */}
             <div className="md:w-1/4">
-              <img 
-                src="/image/tiger3.png" 
-                alt="Tiger Eye" 
-                width="300"
-                height="300"
-                style={{width: "300px"}}
-              />
+              <img src="/image/tiger3.png" alt="Tiger Eye" width="300" height="300" />
             </div>
           </div>
         </div>
       </div>
-      
-      {/* Inspiration Message */}
-      <div className="px-4 mb-12">
-        <div className="container mx-auto max-w-4xl">
-          <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white p-8 rounded-2xl text-center">
-            <h2 className="text-2xl font-bold mb-4">🌟 Explore a World of Inspiration</h2>
-            <p className="text-lg">
-              Explore a world of inspiration, unity, and achievement through images that reflect 
-              the heart of the Tigers experience. From mathematical breakthroughs to artistic masterpieces, 
-              witness the journey of young minds pushing boundaries and celebrating excellence.
-            </p>
-          </div>
+
+      {/* Filters */}
+      <div className="px-4 mb-8">
+        <div className="container mx-auto flex flex-col md:flex-row gap-4">
+          <select
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            className="border p-2 rounded w-full md:w-1/3"
+          >
+            <option value="">Select country</option>
+            <option value="Russia">Russia</option>
+            <option value="Kazakhstan">Kazakhstan</option>
+          </select>
+
+          <select
+            value={category}
+            onChange={(e) => setCategory(parseInt(e.target.value))}
+            className="border p-2 rounded w-full md:w-1/3"
+          >
+            <option value="">Select age category</option>
+            <option value="1">6-9 years</option>
+            <option value="2">10-13 years</option>
+            <option value="3">14-17 years</option>
+          </select>
+
+          <select
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            className="border p-2 rounded w-full md:w-1/3"
+          >
+            <option value="">Select subject</option>
+            <option value="Artworks">Artworks</option>
+            <option value="Math">Math</option>
+          </select>
         </div>
       </div>
-      
-      {/* Gallery Grid */}
+
+      {/* Gallery */}
       <div className="px-4 pb-16">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {galleryItems.map((item) => (
-              <div key={item.id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
-                <div className="relative">
-                  <img 
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-48 object-cover"
-                  />
-                  {/* Category badge */}
-                  <div className="absolute top-4 left-4">
-                    <span 
-                      className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-white border-2 border-gray-300"
-                      style={{ 
-                        color: 'black',
-                        backgroundColor: 'white',
-                        border: '2px solid #ccc'
-                      }}
-                    >
-                      {item.category}
-                    </span>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-gray-800 mb-2">{item.title}</h3>
-                  <p className="text-gray-600 text-sm mb-4">{item.description}</p>
-                  
-                  {/* Action buttons */}
-                  <div className="flex justify-between items-center">
-                    <button className="text-orange-500 hover:text-orange-600 font-medium text-sm">
-                      View Details
-                    </button>
-                    <div className="flex space-x-2">
-                      {item.category === 'Art Exhibition' && (
-                        <span className="text-2xl">🎨</span>
-                      )}
-                      {item.category === 'Mathematics' && (
-                        <span className="text-2xl">📐</span>
-                      )}
-                      {item.category === 'Global Finals' && (
-                        <span className="text-2xl">🏆</span>
-                      )}
-                      {item.category === 'Cultural Exchange' && (
-                        <span className="text-2xl">🌍</span>
-                      )}
-                      {item.category === 'Awards Ceremony' && (
-                        <span className="text-2xl">🏅</span>
-                      )}
-                      {item.category === 'Art Workshop' && (
-                        <span className="text-2xl">✨</span>
-                      )}
-                      {item.category === 'Community' && (
-                        <span className="text-2xl">🤝</span>
-                      )}
+          {loading ? (
+            <p className="text-center">Загрузка...</p>
+          ) : (items && items.length === 0) ? (
+            <p className="text-center">Нет данных для выбранных фильтров</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {items.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300"
+                >
+                  <div className="relative">
+                    {subject === "Artworks" ? (
+                      <img
+                        src={item.file_path}
+                        alt={item.title}
+                        className="w-full h-48 object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500 text-lg">
+                        {item.title}
+                      </div>
+                    )}
+
+                    {/* Имя участника */}
+                    <div className="absolute top-4 left-4">
+                      <span
+                        className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-white border-2 border-gray-300"
+                      >
+                        {categoryNames[item.category_id] || `Category #${item.category_id}`}
+                      </span>
                     </div>
                   </div>
+                  <div className="p-6">
+                    <p className="text-gray-600 text-sm mb-4">
+                      Country: {item.country} | Points: {item.score}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      {/* Categories Legend */}
-      <div className="px-4 pb-12">
-        <div className="container mx-auto max-w-4xl">
-          <div className="bg-white p-6 rounded-xl shadow-sm">
-            <h3 className="text-xl font-bold mb-4 text-center" style={{ color: '#000000' }}>Gallery Categories</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-pink-500 rounded-full mr-2"></div>
-                <span style={{ color: '#000000' }}>🎨 Art Exhibition</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-blue-500 rounded-full mr-2"></div>
-                <span style={{ color: '#000000' }}>📐 Mathematics</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-orange-500 rounded-full mr-2"></div>
-                <span style={{ color: '#000000' }}>🏆 Global Finals</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-green-500 rounded-full mr-2"></div>
-                <span style={{ color: '#000000' }}>🌍 Cultural Exchange</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-purple-500 rounded-full mr-2"></div>
-                <span style={{ color: '#000000' }}>🏅 Awards Ceremony</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-pink-400 rounded-full mr-2"></div>
-                <span style={{ color: '#000000' }}>✨ Art Workshop</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-yellow-500 rounded-full mr-2"></div>
-                <span style={{ color: '#000000' }}>🤝 Community</span>
-              </div>
+              ))}
             </div>
-          </div>
+          )}
         </div>
       </div>
-      
-      {/* Call to Action */}
+
+      {/* CTA */}
       <div className="px-4 pb-16">
         <div className="container mx-auto max-w-4xl">
           <div className="bg-gray-100 p-8 rounded-xl text-center">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">Ready to Join the Tigers Experience?</h3>
-            <p className="text-gray-600 mb-6">
-              Be part of the next generation of Tigers Olympiad participants and create your own inspiring moments.
-            </p>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Ready to Join?</h3>
+            <p className="text-gray-600 mb-6">Be part of the Tigers Olympiad experience.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                href="/register" 
-                className="inline-block bg-orange-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors"
-              >
+              <Link href="/register" className="bg-orange-500 text-white py-3 px-8 rounded-full hover:bg-orange-600">
                 Register Now
               </Link>
-              <Link 
-                href="/representatives" 
-                className="inline-block bg-gray-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-gray-600 transition-colors"
-              >
+              <Link href="/representatives" className="bg-gray-500 text-white py-3 px-8 rounded-full hover:bg-gray-600">
                 Find Your Representative
               </Link>
             </div>
           </div>
         </div>
       </div>
-      
-      <div className="mt-auto">
-        <Footer />
-      </div>
+
+      <Footer />
     </div>
   );
 }

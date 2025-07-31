@@ -1,18 +1,36 @@
+// api/users.js
 import { apiRequest } from "./base_api";
 
 /**
- * Получить всех пользователей, у которых роль не 'owner'
- * @returns {object[]} - список пользователей (админы, учителя и др.)
+ * Получить всех пользователей, кроме владельцев (role !== 'owner')
+ * @returns {Promise<object[]>} Массив пользователей
  */
-export function getAdminsAndTeachers() {
-    return apiRequest("/users");
+export async function getAdminsAndTeachers() {
+  try {
+    const data = await apiRequest("/users", "GET");
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error("Ошибка при получении админов и учителей:", error);
+    return [];
+  }
 }
 
 /**
- * Получить всех учителей по стране (role = 'teacher')
- * @param {string} country - название страны
- * @returns {object[]} - список учителей из указанной страны
+ * Получить всех учителей по стране
+ * @param {string} country - Название страны (например, "Kazakhstan")
+ * @returns {Promise<object[]>} Массив учителей из указанной страны
  */
-export function getTeachersByCountry(country) {
-    return apiRequest("/users/country", "POST", { country });
+export async function getTeachersByCountry(country) {
+  if (!country) {
+    console.warn("getTeachersByCountry: страна не указана");
+    return [];
+  }
+
+  try {
+    const data = await apiRequest("/users/country", "POST", { country });
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error(`Ошибка при получении учителей из страны ${country}:`, error);
+    return [];
+  }
 }
