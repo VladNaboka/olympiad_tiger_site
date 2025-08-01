@@ -81,10 +81,10 @@ export default function Contacts() {
             <div className="absolute bottom-0 right-0 w-32 h-32 border-2 border-white rounded-full opacity-20 translate-x-1/2 translate-y-1/2"></div>
             
             <div className="relative z-10 text-center">
-              <h3 className="text-2xl font-bold mb-6">Director Information</h3>
+              <h3 className="text-2xl font-bold mb-6">COO Information</h3>
               <div className="bg-white text-gray-800 p-6 rounded-xl max-w-md mx-auto">
                 <h4 className="text-xl font-bold text-orange-600 mb-2">Ovdiichuk Julia</h4>
-                <p className="text-gray-600 mb-4">Director, International Tigers Olympiad</p>
+                <p className="text-gray-600 mb-4">COO, International Tigers Olympiad</p>
                 
                 <div className="flex items-center justify-center mb-3">
                   <span className="flex-shrink-0 text-orange-500 mr-3">
