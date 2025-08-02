@@ -44,7 +44,7 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
 
     try {
       console.log('🔄 Creating representative with data:', formData);
-      
+
       // Подготавливаем данные согласно новой API структуре
       const userData = {
         full_name: formData.full_name,
@@ -55,29 +55,30 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
       };
 
       console.log('📤 Sending to API:', userData);
-      
+
       const response = await registerUser(userData);
       console.log('✅ Representative created successfully:', response);
-      
+
       // Проверяем успешность создания
-      if (response && (response.success || response.user || response.data)) {
+      if (response && (response.id || response.user_id)) {
         onSuccess();
       } else {
         throw new Error('Unexpected response format from server');
       }
-      
+
+
     } catch (error) {
       console.error('❌ Error creating representative:', error);
-      
+
       // Обрабатываем различные типы ошибок
       let errorMessage = 'Failed to create representative';
-      
+
       if (error.message) {
         errorMessage = error.message;
       } else if (typeof error === 'string') {
         errorMessage = error;
       }
-      
+
       // Специальные сообщения для известных ошибок
       if (errorMessage.includes('email')) {
         errorMessage = 'Email already exists or invalid email format';
@@ -86,10 +87,10 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
       } else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
         errorMessage = 'Network error. Please check your connection and try again.';
       }
-      
+
       setError(errorMessage);
     }
-    
+
     setLoading(false);
   };
 
@@ -124,7 +125,7 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
               <input
                 type="text"
                 value={formData.full_name}
-                onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 placeholder="Enter full name"
                 required
@@ -139,7 +140,7 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 placeholder="Enter email address"
                 required
@@ -154,7 +155,7 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
               <input
                 type="password"
                 value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 placeholder="Create password (min 6 characters)"
                 minLength={6}
@@ -171,7 +172,7 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
               <input
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 placeholder="Enter phone number"
                 required
@@ -186,7 +187,7 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
               </label>
               <select
                 value={formData.country}
-                onChange={(e) => setFormData({...formData, country: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
                 disabled={loading}

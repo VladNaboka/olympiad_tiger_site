@@ -200,7 +200,7 @@ export function setArtWorkScore(id, score) {
             throw new Error(`Set artwork score failed: ${response.status} ${response.statusText}`);
         }
         
-        return response.json();
+        return response.text().then(text => text ? JSON.parse(text) : {});
     }).then((result) => {
         console.log('✅ Set art work score API response:', result);
         return result;
