@@ -7,7 +7,7 @@ const representatives = [
   {
     id: 1,
     country: "Kazakhstan",
-    name: "Julia Ovdiichuk",
+    name: "Yulia Ovdiichuk",
     role: "National Coordinator",
     email: "yuliya@tigersedu.com",
     phone: "+7 700 595 1000"
@@ -109,7 +109,7 @@ export default function Representatives() {
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="flex-grow">
                   <h4 className="text-xl font-bold text-orange-600 mb-2">🇰🇿 Kazakhstan</h4>
-                  <h5 className="text-lg font-semibold mb-2">Julia Ovdiichuk</h5>
+                  <h5 className="text-lg font-semibold mb-2">Yulia Ovdiichuk</h5>
                   <p className="text-gray-600 mb-4">National Coordinator</p>
                   
                   <div className="flex items-center mb-2">
