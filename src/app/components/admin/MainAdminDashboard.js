@@ -13,6 +13,7 @@ import GlobalGalleryTab from './GlobalGalleryTab';
 import GlobalMathWorksTab from './GlobalMathWorksTab';
 import { getMathWorksByCountryAndCategory } from '../../api/student_math_works';
 import { getArtWorksByCountryAndCategory } from '../../api/student_art_works';
+import FeedbackTab from './FeedbackTab';
 
 
 
@@ -118,7 +119,8 @@ export default function MainAdminDashboard({ user, onLogout }) {
     { id: 'representatives', label: 'Representatives Management', icon: '🌍' },
     { id: 'statistics', label: 'Global Statistics', icon: '📊' },
     { id: 'gallery', label: 'Global Gallery', icon: '🎨' },
-    { id: 'mathworks', label: 'Math Works', icon: '🧮' } // новый таб
+    { id: 'mathworks', label: 'Math Works', icon: '🧮' },
+    { id: 'feedback', label: 'Feedback', icon: '📬' }
   ];
 
 
@@ -316,6 +318,10 @@ export default function MainAdminDashboard({ user, onLogout }) {
 
           {!loading && activeTab === 'mathworks' && (
             <GlobalMathWorksTab filters={filters} />
+          )}
+
+          {!loading && activeTab === 'feedback' && (
+            <FeedbackTab />
           )}
 
         </div>
