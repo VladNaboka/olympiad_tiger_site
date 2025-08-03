@@ -47,7 +47,7 @@ export default function AdminDashboard({ user, onLogout }) {
     setLoading(true);
 
     try {
-      // Для главного админа загружаем представителей
+      // Для главного админа загружаем представителе
       if (user.role === 'owner') {
         const repsData = await getAdminsAndTeachers();
         setRepresentatives(repsData || []);
