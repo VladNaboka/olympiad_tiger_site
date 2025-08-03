@@ -4,9 +4,9 @@ import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { createFeedback } from '../api/feedback_api'; // Подстрой путь под свой проект
+import { createFeedback } from '../api/feedback_api';
 
-export default function Contacts() {
+export default function ContactsContent() {
   const searchParams = useSearchParams();
 
   const [formData, setFormData] = useState({
