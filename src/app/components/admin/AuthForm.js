@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { registerUser, loginUser } from '../../api/auth_api';
-import { COUNTRIES } from '../../utils/constants';
+import { COUNTRIES, USER_ROLES } from '../../utils/constants';
 
 export default function AuthForm({ onLogin }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,7 +14,8 @@ export default function AuthForm({ onLogin }) {
     country: '',
     city: '',
     school: '',
-    role: 'admin'
+    role: 'admin',
+    role_id: USER_ROLES.REGIONAL_ADMIN // По умолчанию региональный представитель
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -201,6 +202,31 @@ export default function AuthForm({ onLogin }) {
                       required
                     />
                   </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Role *
+                    </label>
+                    <select
+                      value={formData.role_id}
+                      onChange={(e) => {
+                        const roleId = parseInt(e.target.value);
+                        setFormData({ 
+                          ...formData, 
+                          role_id: roleId,
+                          role: roleId === USER_ROLES.MAIN_ADMIN ? 'owner' : 'admin'
+                        });
+                      }}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all text-gray-800"
+                      required
+                    >
+                      <option value={USER_ROLES.REGIONAL_ADMIN}>Regional Representative</option>
+                      <option value={USER_ROLES.MAIN_ADMIN}>Main Administrator</option>
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Most users should select "Regional Representative"
+                    </p>
+                  </div>
                 </>
               )}
 
@@ -216,7 +242,6 @@ export default function AuthForm({ onLogin }) {
                   placeholder="Enter your email"
                   required
                 />
-
               </div>
 
               <div>
@@ -268,6 +293,15 @@ export default function AuthForm({ onLogin }) {
                 </p>
               </div>
             )}
+
+            {/* Demo credentials */}
+            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+              <p className="text-sm text-blue-800 font-semibold mb-2">Demo Accounts:</p>
+              <div className="text-xs text-blue-700 space-y-1">
+                <p><strong>Main Admin:</strong> admin@tigers.com / password123</p>
+                <p><strong>Regional Rep:</strong> rep@tigers.com / password123</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
