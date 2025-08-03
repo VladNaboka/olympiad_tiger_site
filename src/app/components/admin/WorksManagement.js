@@ -100,16 +100,18 @@ export default function WorksManagement({ user }) {
       {/* Category Filter */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Filter by Category
+          🎯 Filter by Category
         </label>
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-800 bg-white"
         >
-          <option value="">Select category</option>
+          <option value="" className="text-gray-800">Select category</option>
           {CATEGORIES.map(category => (
-            <option key={category.id} value={category.id}>{category.name}</option>
+            <option key={category.id} value={category.id} className="text-gray-800">
+              {category.name}
+            </option>
           ))}
         </select>
       </div>
