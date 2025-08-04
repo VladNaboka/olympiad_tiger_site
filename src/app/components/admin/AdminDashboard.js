@@ -534,17 +534,6 @@ function RegionalAdminDashboard({ user, onLogout }) {
                 </span>
               </button>
               <button
-                onClick={() => setActiveTab('gallery')}
-                className={`py-4 px-6 text-sm font-medium border-b-2 flex items-center space-x-2 ${
-                  activeTab === 'gallery'
-                    ? 'border-orange-500 text-orange-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <span>🎨</span>
-                <span>Gallery</span>
-              </button>
-              <button
                 onClick={() => setActiveTab('results')}
                 className={`py-4 px-6 text-sm font-medium border-b-2 flex items-center space-x-2 ${
                   activeTab === 'results'
@@ -558,6 +547,7 @@ function RegionalAdminDashboard({ user, onLogout }) {
             </nav>
           </div>
         </div>
+
 
         {/* Контент вкладок для регионального админа */}
         <div className="bg-white rounded-lg shadow-sm p-6">
@@ -588,6 +578,7 @@ function RegionalAdminDashboard({ user, onLogout }) {
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date of Birth</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">School</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                     </tr>
@@ -603,6 +594,11 @@ function RegionalAdminDashboard({ user, onLogout }) {
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                           {formatDate(student.birth_date)}
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            🏙️ {student.city}
+                          </span>
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                           {student.school}

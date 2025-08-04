@@ -53,7 +53,7 @@ export default function Footer() {
           
           <div>
             <h3 className="text-xl font-bold mb-4 text-orange-400">Contact Us</h3>
-            <p className="text-gray-300 mb-2">COO Ovdiichuk Yulia</p>
+            <p className="text-gray-300 mb-2">COO Yuliya Ovdiichuk</p>
             <p className="text-gray-300 mb-2">Phone: +7 700 595 1000</p>
             <p className="text-gray-300 mb-4">Email: yuliya@tigersedu.com</p>
             <div className="flex space-x-4 mt-4">

@@ -100,7 +100,7 @@ export default function ContactsContent() {
             <div className="relative z-10 text-center">
               <h3 className="text-2xl font-bold mb-6">COO Information</h3>
               <div className="bg-white text-gray-800 p-6 rounded-xl max-w-md mx-auto">
-                <h4 className="text-xl font-bold text-orange-600 mb-2">Ovdiichuk Yulia</h4>
+                <h4 className="text-xl font-bold text-orange-600 mb-2">Yuliya Ovdiichuk</h4>
                 <p className="text-gray-600 mb-4">COO, International Tigers Olympiad</p>
                 <p className="text-gray-700">📞 +7 700 595 1000</p>
                 <p className="text-gray-700">📧 yuliya@tigersedu.com</p>
