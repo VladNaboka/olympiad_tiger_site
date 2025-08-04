@@ -414,16 +414,10 @@ function RegionalAdminDashboard({ user, onLogout }) {
     setLoading(true);
 
     try {
-<<<<<<< Updated upstream
-      // Для главного админа загружаем представителе
-      if (user.role === 'owner') {
-        const repsData = await getAdminsAndTeachers();
-        setRepresentatives(repsData || []);
-      }
-=======
+
       const studentsData = await getStudentsByCountry(user.country);
       setStudents(studentsData || []);
->>>>>>> Stashed changes
+
 
       // Загружаем работы если выбрана категория
       if (filters.category) {

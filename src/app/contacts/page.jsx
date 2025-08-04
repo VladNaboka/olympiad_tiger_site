@@ -1,5 +1,8 @@
+'use client';
+
 import { Suspense } from "react";
 import ContactsContent from "./ContactsContent";
+export const dynamic = 'force-dynamic';
 
 export default function ContactsPage() {
   return (
