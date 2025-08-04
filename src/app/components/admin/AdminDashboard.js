@@ -6,16 +6,177 @@ import { getStudentsByCountry } from '../../api/students_api';
 import { getArtWorksByCountryAndCategory } from '../../api/student_art_works';
 import { getMathWorksByCountryAndCategory } from '../../api/student_math_works';
 import { getAdminsAndTeachers } from '../../api/users_api';
+import { registerUser, deleteUser } from '../../api/auth_api';
 import { CATEGORIES, SUBJECTS, COUNTRIES, getCategoryName, isMainAdmin, isRegionalAdmin, getUserRoleName, formatDate } from '../../utils/constants';
 import GalleryTab from './GalleryTab';
 import ResultsTab from './ResultsTab';
 import AddStudentForm from './AddStudentForm';
 import WorksManagement from './WorksManagement';
 
-// Главная админ панель (role_id = 1)
+// Форма добавления регионального представителя
+function AddRepresentativeForm({ onClose, onSuccess }) {
+  const [formData, setFormData] = useState({
+    full_name: '',
+    email: '',
+    password: '',
+    country: '',
+    city: '',
+    school: '',
+    role: 'admin' // Всегда региональный представитель
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await registerUser(formData);
+      console.log('✅ Representative added:', response);
+      onSuccess();
+    } catch (error) {
+      console.error('❌ Error adding representative:', error);
+      setError(error.message || 'Failed to add representative');
+    }
+    
+    setLoading(false);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold text-orange-600">Add Regional Representative</h3>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 text-2xl"
+          >
+            ×
+          </button>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Full Name *
+              </label>
+              <input
+                type="text"
+                value={formData.full_name}
+                onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Email *
+              </label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Password *
+              </label>
+              <input
+                type="password"
+                value={formData.password}
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                required
+                minLength="6"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Country *
+              </label>
+              <select
+                value={formData.country}
+                onChange={(e) => setFormData({...formData, country: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                required
+              >
+                <option value="">Select country</option>
+                {COUNTRIES.map(country => (
+                  <option key={country} value={country}>{country}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                City *
+              </label>
+              <input
+                type="text"
+                value={formData.city}
+                onChange={(e) => setFormData({...formData, city: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Organization *
+              </label>
+              <input
+                type="text"
+                value={formData.school}
+                onChange={(e) => setFormData({...formData, school: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                placeholder="School or educational organization"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end space-x-3 mt-6">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 disabled:opacity-50"
+            >
+              {loading ? 'Adding...' : 'Add Representative'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// Главная админ панель (role_id = 1 или role = 'owner')
 function MainAdminDashboard({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('overview');
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [showAddStudentForm, setShowAddStudentForm] = useState(false);
+  const [showAddRepForm, setShowAddRepForm] = useState(false);
   const [students, setStudents] = useState([]);
   const [users, setUsers] = useState([]);
   const [artworks, setArtworks] = useState([]);
@@ -72,6 +233,18 @@ function MainAdminDashboard({ user, onLogout }) {
     loadData();
   }, [filters]);
 
+  const handleDeleteUser = async (userId, userName) => {
+    if (window.confirm(`Are you sure you want to delete ${userName}?`)) {
+      try {
+        await deleteUser(userId);
+        loadData(); // Перезагружаем данные
+        alert('Representative deleted successfully');
+      } catch (error) {
+        alert('Error deleting representative: ' + error.message);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#fffbf2]">
       {/* Header */}
@@ -87,7 +260,7 @@ function MainAdminDashboard({ user, onLogout }) {
               </div>
               <h1 className="text-xl font-bold text-gray-900">Tigers Olympiad - Main Admin</h1>
               <span className="ml-3 px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">
-                Main Administrator
+                👑 Main Administrator
               </span>
             </div>
             <div className="flex items-center space-x-4">
@@ -107,13 +280,13 @@ function MainAdminDashboard({ user, onLogout }) {
         {/* Фильтры для главного админа */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">🌍 Global Filters</h2>
+            <h2 className="text-lg font-semibold text-gray-800">🌍 Global Management Dashboard</h2>
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full">
                 👑 Main Administrator
               </span>
               <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                🌍 All Countries
+                🌍 All Countries Access
               </span>
             </div>
           </div>
@@ -213,14 +386,17 @@ function MainAdminDashboard({ user, onLogout }) {
                 📊 Overview
               </button>
               <button
-                onClick={() => setActiveTab('users')}
-                className={`py-4 px-6 text-sm font-medium border-b-2 ${
-                  activeTab === 'users'
+                onClick={() => setActiveTab('representatives')}
+                className={`py-4 px-6 text-sm font-medium border-b-2 flex items-center space-x-2 ${
+                  activeTab === 'representatives'
                     ? 'border-orange-500 text-orange-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
               >
-                👤 Representatives
+                <span>👤 Representatives</span>
+                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                  {users.length}
+                </span>
               </button>
               <button
                 onClick={() => setActiveTab('students')}
@@ -272,26 +448,66 @@ function MainAdminDashboard({ user, onLogout }) {
                 <div className="bg-blue-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold text-blue-800">Total Representatives</h3>
                   <p className="text-3xl font-bold text-blue-600">{users.length}</p>
+                  <p className="text-sm text-blue-600 mt-2">Regional coordinators</p>
                 </div>
                 <div className="bg-green-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold text-green-800">Total Participants</h3>
                   <p className="text-3xl font-bold text-green-600">{students.length}</p>
+                  <p className="text-sm text-green-600 mt-2">
+                    {filters.country ? `from ${filters.country}` : 'Select country to view'}
+                  </p>
                 </div>
                 <div className="bg-purple-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold text-purple-800">Art Works</h3>
                   <p className="text-3xl font-bold text-purple-600">{artworks.length}</p>
+                  <p className="text-sm text-purple-600 mt-2">Creative submissions</p>
                 </div>
                 <div className="bg-orange-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold text-orange-800">Math Works</h3>
                   <p className="text-3xl font-bold text-orange-600">{mathworks.length}</p>
+                  <p className="text-sm text-orange-600 mt-2">Problem solutions</p>
+                </div>
+              </div>
+
+              {/* Quick Actions Cards */}
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">👤 Manage Representatives</h3>
+                  <p className="text-sm mb-4">Add, edit, or remove regional representatives</p>
+                  <button
+                    onClick={() => setActiveTab('representatives')}
+                    className="bg-white text-orange-600 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
+                  >
+                    Manage Representatives
+                  </button>
+                </div>
+                <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">👥 Add Participant</h3>
+                  <p className="text-sm mb-4">Register new participants from any country</p>
+                  <button
+                    onClick={() => setShowAddStudentForm(true)}
+                    className="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
+                  >
+                    Add Participant
+                  </button>
                 </div>
               </div>
             </div>
           )}
 
-          {!loading && activeTab === 'users' && (
+          {!loading && activeTab === 'representatives' && (
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-6">Regional Representatives</h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">Regional Representatives</h2>
+                <button
+                  onClick={() => setShowAddRepForm(true)}
+                  className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 flex items-center"
+                >
+                  <span className="mr-2">+</span>
+                  Add Representative
+                </button>
+              </div>
+              
               <div className="overflow-x-auto">
                 <table className="min-w-full table-auto">
                   <thead>
@@ -299,31 +515,58 @@ function MainAdminDashboard({ user, onLogout }) {
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Country</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">City</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Organization</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {users.map((user) => (
-                      <tr key={user.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-4 text-sm font-medium text-gray-900">{user.full_name}</td>
-                        <td className="px-4 py-4 text-sm text-gray-900">{user.email}</td>
-                        <td className="px-4 py-4 text-sm text-gray-900">{user.country}</td>
+                    {users.map((rep) => (
+                      <tr key={rep.id} className="hover:bg-gray-50">
+                        <td className="px-4 py-4 text-sm font-medium text-gray-900">{rep.full_name}</td>
+                        <td className="px-4 py-4 text-sm text-gray-900">{rep.email}</td>
                         <td className="px-4 py-4 text-sm text-gray-900">
-                          <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                            {user.role === 'admin' ? 'Representative' : user.role}
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            🌍 {rep.country}
                           </span>
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-900">{rep.city}</td>
+                        <td className="px-4 py-4 text-sm text-gray-900">{rep.school}</td>
+                        <td className="px-4 py-4 text-sm text-gray-900">
+                          <button
+                            onClick={() => handleDeleteUser(rep.id, rep.full_name)}
+                            className="text-red-600 hover:text-red-800 font-medium"
+                          >
+                            Delete
+                          </button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+                
+                {users.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    No representatives found. Add some to get started!
+                  </div>
+                )}
               </div>
             </div>
           )}
 
           {!loading && activeTab === 'students' && (
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-6">All Participants</h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">All Participants</h2>
+                <button
+                  onClick={() => setShowAddStudentForm(true)}
+                  className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 flex items-center"
+                >
+                  <span className="mr-2">+</span>
+                  Add Participant
+                </button>
+              </div>
+              
               {filters.country ? (
                 <div className="overflow-x-auto">
                   <table className="min-w-full table-auto">
@@ -342,7 +585,7 @@ function MainAdminDashboard({ user, onLogout }) {
                         <tr key={student.id} className="hover:bg-gray-50">
                           <td className="px-4 py-4 text-sm font-mono text-gray-900 bg-yellow-50">{student.id}</td>
                           <td className="px-4 py-4 text-sm text-gray-900">{student.full_name}</td>
-                                                      <td className="px-4 py-4 text-sm text-gray-900">{formatDate(student.birth_date)}</td>
+                          <td className="px-4 py-4 text-sm text-gray-900">{formatDate(student.birth_date)}</td>
                           <td className="px-4 py-4 text-sm text-gray-900">{student.school}</td>
                           <td className="px-4 py-4 text-sm text-gray-900">{student.country}</td>
                           <td className="px-4 py-4 text-sm text-gray-900">{getCategoryName(student.category_id)}</td>
@@ -380,22 +623,34 @@ function MainAdminDashboard({ user, onLogout }) {
       </div>
 
       {/* Форма добавления студента */}
-      {showAddForm && (
+      {showAddStudentForm && (
         <AddStudentForm
-          onClose={() => setShowAddForm(false)}
+          onClose={() => setShowAddStudentForm(false)}
           onSuccess={(studentId) => {
-            setShowAddForm(false);
+            setShowAddStudentForm(false);
             loadData();
             alert(`Student added successfully! ID: ${studentId}`);
           }}
           userCountry={null} // Главный админ может выбирать любую страну
         />
       )}
+
+      {/* Форма добавления представителя */}
+      {showAddRepForm && (
+        <AddRepresentativeForm
+          onClose={() => setShowAddRepForm(false)}
+          onSuccess={() => {
+            setShowAddRepForm(false);
+            loadData();
+            alert('Representative added successfully!');
+          }}
+        />
+      )}
     </div>
   );
 }
 
-// Региональная админ панель (role_id = 2)
+// Региональная админ панель (role_id = 2 или role = 'admin')
 function RegionalAdminDashboard({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('students');
   const [showAddForm, setShowAddForm] = useState(false);
@@ -414,10 +669,8 @@ function RegionalAdminDashboard({ user, onLogout }) {
     setLoading(true);
 
     try {
-
       const studentsData = await getStudentsByCountry(user.country);
       setStudents(studentsData || []);
-
 
       // Загружаем работы если выбрана категория
       if (filters.category) {
@@ -466,7 +719,7 @@ function RegionalAdminDashboard({ user, onLogout }) {
               </div>
               <h1 className="text-xl font-bold text-gray-900">Tigers Olympiad - {user.country}</h1>
               <span className="ml-3 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                Regional Representative
+                🌍 Regional Representative
               </span>
             </div>
             <div className="flex items-center space-x-4">
@@ -484,7 +737,7 @@ function RegionalAdminDashboard({ user, onLogout }) {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Фильтры для регионального админа */}
+        {/* Dashboard для регионального админа */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-800">
@@ -497,6 +750,53 @@ function RegionalAdminDashboard({ user, onLogout }) {
               <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
                 👥 {students.length} participants
               </span>
+            </div>
+          </div>
+
+          {/* Statistics Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-green-50 p-4 rounded-lg">
+              <h3 className="text-sm font-semibold text-green-800">Total Participants</h3>
+              <p className="text-2xl font-bold text-green-600">{students.length}</p>
+            </div>
+            <div className="bg-purple-50 p-4 rounded-lg">
+              <h3 className="text-sm font-semibold text-purple-800">Art Works</h3>
+              <p className="text-2xl font-bold text-purple-600">{artworks.length}</p>
+            </div>
+            <div className="bg-orange-50 p-4 rounded-lg">
+              <h3 className="text-sm font-semibold text-orange-800">Math Works</h3>
+              <p className="text-2xl font-bold text-orange-600">{mathworks.length}</p>
+            </div>
+            <div className="bg-yellow-50 p-4 rounded-lg">
+              <h3 className="text-sm font-semibold text-yellow-800">Categories</h3>
+              <p className="text-2xl font-bold text-yellow-600">
+                {[...new Set(students.map(s => s.category_id))].length}
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <p className="text-sm font-medium text-gray-700 mb-2">Quick Actions:</p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setShowAddForm(true)}
+                className="px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700 hover:bg-orange-200 transition-colors"
+              >
+                ➕ Add Participant
+              </button>
+              <button
+                onClick={() => setActiveTab('works')}
+                className="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors"
+              >
+                📝 Manage Works
+              </button>
+              <button
+                onClick={() => setActiveTab('results')}
+                className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition-colors"
+              >
+                🏆 View Results
+              </button>
             </div>
           </div>
         </div>
@@ -547,7 +847,6 @@ function RegionalAdminDashboard({ user, onLogout }) {
             </nav>
           </div>
         </div>
-
 
         {/* Контент вкладок для регионального админа */}
         <div className="bg-white rounded-lg shadow-sm p-6">
@@ -604,7 +903,9 @@ function RegionalAdminDashboard({ user, onLogout }) {
                           {student.school}
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {getCategoryName(student.category_id)}
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            {getCategoryName(student.category_id)}
+                          </span>
                         </td>
                       </tr>
                     ))}
@@ -613,7 +914,15 @@ function RegionalAdminDashboard({ user, onLogout }) {
                 
                 {students.length === 0 && (
                   <div className="text-center py-8 text-gray-500">
-                    No participants from {user.country} yet. Start by adding some!
+                    <div className="text-4xl mb-4">📚</div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No participants yet</h3>
+                    <p className="text-gray-500 mb-4">Start by adding participants from {user.country}</p>
+                    <button
+                      onClick={() => setShowAddForm(true)}
+                      className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600"
+                    >
+                      Add First Participant
+                    </button>
                   </div>
                 )}
               </div>
@@ -622,10 +931,6 @@ function RegionalAdminDashboard({ user, onLogout }) {
 
           {!loading && activeTab === 'works' && (
             <WorksManagement user={user} />
-          )}
-
-          {!loading && activeTab === 'gallery' && (
-            <GalleryTab user={user} filters={filters} />
           )}
 
           {!loading && activeTab === 'results' && (
