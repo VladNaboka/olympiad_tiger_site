@@ -177,3 +177,21 @@ export function deleteStudent(studentId) {
             throw error;
         });
 }
+
+/**
+ * Получить общее количество студентов
+ * @returns {Promise<{total_students: number}>}
+ */
+export function getStudentsCount() {
+    console.log('🔄 getStudentsCount called');
+
+    return apiRequest("/students/count")
+        .then(response => {
+            console.log('✅ Get students count API response:', response);
+            return response;
+        })
+        .catch(error => {
+            console.error('❌ Get students count API error:', error);
+            throw error;
+        });
+}

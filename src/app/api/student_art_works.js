@@ -209,3 +209,21 @@ export function setArtWorkScore(id, score) {
         throw error;
     });
 }
+
+/**
+ * Получить общее количество арт-работ
+ * @returns {Promise<{total_art_works: number}>}
+ */
+export function getArtWorksCount() {
+    console.log('🔄 getArtWorksCount called');
+
+    return apiRequest("/artworks/count")
+        .then(response => {
+            console.log('✅ Get art works count API response:', response);
+            return response;
+        })
+        .catch(error => {
+            console.error('❌ Get art works count API error:', error);
+            throw error;
+        });
+}

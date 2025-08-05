@@ -3,19 +3,18 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getAdminsAndTeachers } from '../../api/users_api';
-import { getStudentsByCountry } from '../../api/students_api';
 import { COUNTRIES } from '../../utils/constants';
-import { CATEGORIES } from '../../utils/constants';
 import AddRepresentativeForm from './AddRepresentativeForm';
 import RepresentativesTab from './RepresentativesTab';
 import GlobalStatisticsTab from './GlobalStatisticsTab';
 import GlobalGalleryTab from './GlobalGalleryTab';
 import GlobalMathWorksTab from './GlobalMathWorksTab';
-import { getMathWorksByCountryAndCategory } from '../../api/student_math_works';
-import { getArtWorksByCountryAndCategory } from '../../api/student_art_works';
 import FeedbackTab from './FeedbackTab';
 
-
+// ✅ Новые API для глобальной статистики
+import { getStudentsCount } from '../../api/students_api';
+import { getMathWorksCount } from '../../api/student_math_works';
+import { getArtWorksCount } from '../../api/student_art_works';
 
 export default function MainAdminDashboard({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('representatives');
@@ -36,7 +35,7 @@ export default function MainAdminDashboard({ user, onLogout }) {
       const repsData = await getAdminsAndTeachers();
       setRepresentatives(repsData || []);
 
-      // Загружаем глобальную статистику на основе repsData
+      // Загружаем глобальную статистику
       const stats = await loadGlobalStatistics(repsData || []);
       setGlobalStats(stats);
     } catch (error) {
@@ -45,65 +44,29 @@ export default function MainAdminDashboard({ user, onLogout }) {
     setLoading(false);
   };
 
+  // ✅ Упрощённая функция для глобальной статистики
   const loadGlobalStatistics = async (representativesList) => {
     try {
       const countries = [...new Set(representativesList.map(rep => rep.country))];
 
-      let totalStudents = 0;
-      let totalArtStudents = 0;
-      let totalMathStudents = 0;
-
-      // Подсчёт студентов
-      for (const country of countries) {
-        try {
-          const students = await getStudentsByCountry(country);
-          totalStudents += students.length;
-          totalArtStudents += students.filter(s => s.course_id === 1 || s.course_id === '1').length;
-          totalMathStudents += students.filter(s => s.course_id === 2 || s.course_id === '2').length;
-        } catch { }
-      }
-
-      // Подсчёт Math Works
-      const mathPromises = countries.map(async (country) => {
-        const categoryPromises = CATEGORIES.map(category =>
-          getMathWorksByCountryAndCategory(country, category.id).catch(() => [])
-        );
-        const categoryResults = await Promise.all(categoryPromises);
-        const countryWorks = categoryResults.flat().filter(w => w && w.title);
-        return countryWorks.length;
-      });
-      const mathCounts = await Promise.all(mathPromises);
-      const totalMathWorks = mathCounts.reduce((a, b) => a + b, 0);
-
-      // Подсчёт Art Works
-      const artPromises = countries.map(async (country) => {
-        const categoryPromises = CATEGORIES.map(category =>
-          getArtWorksByCountryAndCategory(country, category.id).catch(() => [])
-        );
-        const categoryResults = await Promise.all(categoryPromises);
-        const countryWorks = categoryResults.flat().filter(w => w && w.title);
-        return countryWorks.length;
-      });
-      const artCounts = await Promise.all(artPromises);
-      const totalArtWorks = artCounts.reduce((a, b) => a + b, 0);
+      const [studentsRes, mathWorksRes, artWorksRes] = await Promise.all([
+        getStudentsCount(),
+        getMathWorksCount(),
+        getArtWorksCount()
+      ]);
 
       return {
         totalCountries: countries.length,
         totalRepresentatives: representativesList.length,
-        totalStudents,
-        totalArtStudents,
-        totalMathStudents,
-        totalMathWorks,
-        totalArtWorks
+        totalStudents: studentsRes.total_students || 0,
+        totalMathWorks: mathWorksRes.total_math_works || 0,
+        totalArtWorks: artWorksRes.total_art_works || 0
       };
     } catch (error) {
       console.error('Error loading global statistics:', error);
       return {};
     }
   };
-
-
-
 
   useEffect(() => {
     loadData();
@@ -122,7 +85,6 @@ export default function MainAdminDashboard({ user, onLogout }) {
     { id: 'mathworks', label: 'Math Works', icon: '🧮' },
     { id: 'feedback', label: 'Feedback', icon: '📬' }
   ];
-
 
   return (
     <div className="min-h-screen bg-[#fffbf2]">
@@ -195,7 +157,7 @@ export default function MainAdminDashboard({ user, onLogout }) {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-3xl font-bold">{globalStats.totalStudents || 0}</div>
-                <div className="text-purple-100">Total Participants</div>
+                <div className="text-purple-100">Total Students</div>
               </div>
               <div className="text-4xl opacity-80">🎓</div>
             </div>
@@ -204,16 +166,10 @@ export default function MainAdminDashboard({ user, onLogout }) {
           <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 rounded-lg shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                {/* <div className="text-2xl font-bold">
-                  {globalStats.totalArtStudents || 0} / {globalStats.totalMathStudents || 0}
-                </div>
-                <div className="text-orange-100">Art / Math</div> */}
                 <div className="text-2xl font-bold">
                   {globalStats.totalArtWorks || 0} / {globalStats.totalMathWorks || 0}
                 </div>
-                <div className="text-orange-100">Art / Math</div>
-
-
+                <div className="text-orange-100">Art / Math Works</div>
               </div>
               <div className="text-4xl opacity-80">📊</div>
             </div>
@@ -323,7 +279,6 @@ export default function MainAdminDashboard({ user, onLogout }) {
           {!loading && activeTab === 'feedback' && (
             <FeedbackTab />
           )}
-
         </div>
       </div>
 

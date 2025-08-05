@@ -34,3 +34,22 @@ export async function getTeachersByCountry(country) {
     return [];
   }
 }
+
+/**
+ * Получить общее количество пользователей
+ * @returns {Promise<{total_users: number}>}
+ */
+export function getUsersCount() {
+    console.log('🔄 getUsersCount called');
+
+    return apiRequest("/users/count")
+        .then(response => {
+            console.log('✅ Get users count API response:', response);
+            return response;
+        })
+        .catch(error => {
+            console.error('❌ Get users count API error:', error);
+            throw error;
+        });
+}
+

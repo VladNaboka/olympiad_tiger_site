@@ -152,3 +152,21 @@ export function setMathWorkScore(id, score) {
             throw error;
         });
 }
+
+/**
+ * Получить общее количество математических работ
+ * @returns {Promise<{total_math_works: number}>}
+ */
+export function getMathWorksCount() {
+    console.log('🔄 getMathWorksCount called');
+
+    return apiRequest("/mathworks/count")
+        .then(response => {
+            console.log('✅ Get math works count API response:', response);
+            return response;
+        })
+        .catch(error => {
+            console.error('❌ Get math works count API error:', error);
+            throw error;
+        });
+}
