@@ -12,6 +12,7 @@ import GalleryTab from './GalleryTab';
 import ResultsTab from './ResultsTab';
 import AddStudentForm from './AddStudentForm';
 import WorksManagement from './WorksManagement';
+import MainAdminWorksManagement from './MainAdminWorksManagement';
 
 // Форма добавления регионального представителя
 function AddRepresentativeForm({ onClose, onSuccess }) {
@@ -73,7 +74,7 @@ function AddRepresentativeForm({ onClose, onSuccess }) {
                 type="text"
                 value={formData.full_name}
                 onChange={(e) => setFormData({...formData, full_name: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
               />
             </div>
@@ -86,7 +87,7 @@ function AddRepresentativeForm({ onClose, onSuccess }) {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
               />
             </div>
@@ -99,11 +100,23 @@ function AddRepresentativeForm({ onClose, onSuccess }) {
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
                 minLength="6"
               />
             </div>
+
+            {/* <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Number *
+              </label>
+              <input
+                value={formData.number}
+                onChange={(e) => setFormData({...formData, number: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                required
+              />
+            </div> */}
 
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -112,7 +125,7 @@ function AddRepresentativeForm({ onClose, onSuccess }) {
               <select
                 value={formData.country}
                 onChange={(e) => setFormData({...formData, country: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
               >
                 <option value="">Select country</option>
@@ -130,7 +143,7 @@ function AddRepresentativeForm({ onClose, onSuccess }) {
                 type="text"
                 value={formData.city}
                 onChange={(e) => setFormData({...formData, city: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
               />
             </div>
@@ -143,7 +156,7 @@ function AddRepresentativeForm({ onClose, onSuccess }) {
                 type="text"
                 value={formData.school}
                 onChange={(e) => setFormData({...formData, school: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 placeholder="School or educational organization"
                 required
               />
@@ -192,41 +205,188 @@ function MainAdminDashboard({ user, onLogout }) {
   const loadData = async () => {
     setLoading(true);
     try {
+      console.log('🔄 Loading main admin data...');
+      
       // Загружаем всех пользователей
       const usersData = await getAdminsAndTeachers();
       setUsers(usersData || []);
-
-      // Если выбрана страна, загружаем студентов
+      console.log('👥 Users loaded:', usersData?.length || 0);
+  
+      // НОВАЯ ЛОГИКА: Загружаем всех студентов или только из выбранной страны
+      let studentsData = [];
+      
       if (filters.country) {
-        const studentsData = await getStudentsByCountry(filters.country);
-        setStudents(studentsData || []);
-
-        // Загружаем работы если выбрана категория
-        if (filters.category) {
-          if (filters.subject === '1' || !filters.subject) {
-            try {
-              const artData = await getArtWorksByCountryAndCategory(filters.country, parseInt(filters.category));
-              setArtworks(artData || []);
-            } catch (error) {
-              console.error('Error loading artworks:', error);
-              setArtworks([]);
+        // Если выбрана конкретная страна
+        console.log('🌍 Loading students for specific country:', filters.country);
+        studentsData = await getStudentsByCountry(filters.country);
+      } else {
+        // Если страна не выбрана, загружаем студентов из всех стран
+        console.log('🌍 Loading students from all countries...');
+        const allStudents = [];
+        
+        for (const country of COUNTRIES) {
+          try {
+            const countryStudents = await getStudentsByCountry(country);
+            if (countryStudents && countryStudents.length > 0) {
+              allStudents.push(...countryStudents);
             }
+          } catch (error) {
+            console.warn(`No students found in ${country}:`, error);
+            // Продолжаем загружать из других стран
           }
-          if (filters.subject === '2' || !filters.subject) {
-            try {
-              const mathData = await getMathWorksByCountryAndCategory(filters.country, parseInt(filters.category));
-              setMathworks(mathData || []);
-            } catch (error) {
-              console.error('Error loading math works:', error);
-              setMathworks([]);
+        }
+        studentsData = allStudents;
+      }
+      
+      setStudents(studentsData || []);
+      console.log('👨‍🎓 Total students loaded:', studentsData?.length || 0);
+  
+      // Загружаем работы только если выбрана конкретная страна
+      if (filters.country) {
+        console.log('📝 Loading works for country:', filters.country);
+        
+        // Загружаем художественные работы
+        if (filters.subject === '1' || !filters.subject) {
+          console.log('🎨 Loading art works...');
+          try {
+            let artData = [];
+            
+            if (filters.category) {
+              artData = await getArtWorksByCountryAndCategory(filters.country, parseInt(filters.category));
+            } else {
+              // Загружаем все художественные работы для страны
+              for (const category of CATEGORIES) {
+                try {
+                  const categoryArtworks = await getArtWorksByCountryAndCategory(filters.country, category.id);
+                  if (categoryArtworks && categoryArtworks.length > 0) {
+                    artData.push(...categoryArtworks);
+                  }
+                } catch (categoryError) {
+                  console.warn(`No artworks for category ${category.id}:`, categoryError);
+                }
+              }
             }
+            
+            setArtworks(artData || []);
+            console.log('✅ Artworks loaded:', artData?.length || 0);
+          } catch (error) {
+            console.error('❌ Error loading artworks:', error);
+            setArtworks([]);
           }
+        } else {
+          setArtworks([]);
+        }
+        
+        // Загружаем математические работы
+        if (filters.subject === '2' || !filters.subject) {
+          console.log('📐 Loading math works...');
+          try {
+            let mathData = [];
+            
+            if (filters.category) {
+              mathData = await getMathWorksByCountryAndCategory(filters.country, parseInt(filters.category));
+            } else {
+              // Загружаем все математические работы для страны
+              for (const category of CATEGORIES) {
+                try {
+                  const categoryMathworks = await getMathWorksByCountryAndCategory(filters.country, category.id);
+                  if (categoryMathworks && categoryMathworks.length > 0) {
+                    mathData.push(...categoryMathworks);
+                  }
+                } catch (categoryError) {
+                  console.warn(`No math works for category ${category.id}:`, categoryError);
+                }
+              }
+            }
+            
+            setMathworks(mathData || []);
+            console.log('✅ Math works loaded:', mathData?.length || 0);
+          } catch (error) {
+            console.error('❌ Error loading math works:', error);
+            setMathworks([]);
+          }
+        } else {
+          setMathworks([]);
+        }
+      } else {
+        // Если страна не выбрана, загружаем работы из всех стран
+        console.log('📝 Loading works from all countries...');
+        
+        if (filters.subject === '1' || !filters.subject) {
+          console.log('🎨 Loading all art works...');
+          try {
+            const allArtworks = [];
+            
+            for (const country of COUNTRIES) {
+              try {
+                for (const category of CATEGORIES) {
+                  try {
+                    const works = await getArtWorksByCountryAndCategory(country, category.id);
+                    if (works && works.length > 0) {
+                      allArtworks.push(...works);
+                    }
+                  } catch (error) {
+                    // Игнорируем ошибки для отдельных категорий/стран
+                  }
+                }
+              } catch (error) {
+                console.warn(`Error loading artworks from ${country}:`, error);
+              }
+            }
+            
+            setArtworks(allArtworks);
+            console.log('✅ All artworks loaded:', allArtworks?.length || 0);
+          } catch (error) {
+            console.error('❌ Error loading all artworks:', error);
+            setArtworks([]);
+          }
+        } else {
+          setArtworks([]);
+        }
+        
+        if (filters.subject === '2' || !filters.subject) {
+          console.log('📐 Loading all math works...');
+          try {
+            const allMathworks = [];
+            
+            for (const country of COUNTRIES) {
+              try {
+                for (const category of CATEGORIES) {
+                  try {
+                    const works = await getMathWorksByCountryAndCategory(country, category.id);
+                    if (works && works.length > 0) {
+                      allMathworks.push(...works);
+                    }
+                  } catch (error) {
+                    // Игнорируем ошибки для отдельных категорий/стран
+                  }
+                }
+              } catch (error) {
+                console.warn(`Error loading math works from ${country}:`, error);
+              }
+            }
+            
+            setMathworks(allMathworks);
+            console.log('✅ All math works loaded:', allMathworks?.length || 0);
+          } catch (error) {
+            console.error('❌ Error loading all math works:', error);
+            setMathworks([]);
+          }
+        } else {
+          setMathworks([]);
         }
       }
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('❌ Error loading main admin data:', error);
     }
     setLoading(false);
+    
+    console.log('📊 Final main admin statistics:', {
+      users: users.length,
+      students: students.length,
+      artworks: artworks.length,
+      mathworks: mathworks.length
+    });
   };
 
   useEffect(() => {
@@ -288,48 +448,6 @@ function MainAdminDashboard({ user, onLogout }) {
               <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
                 🌍 All Countries Access
               </span>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">🌍 Country</label>
-              <select
-                value={filters.country}
-                onChange={(e) => setFilters({...filters, country: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-              >
-                <option value="">All countries</option>
-                {COUNTRIES.map(country => (
-                  <option key={country} value={country}>{country}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">🎯 Category</label>
-              <select
-                value={filters.category}
-                onChange={(e) => setFilters({...filters, category: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-              >
-                <option value="">All categories</option>
-                {CATEGORIES.map(category => (
-                  <option key={category.id} value={category.id}>{category.name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">📚 Subject</label>
-              <select
-                value={filters.subject}
-                onChange={(e) => setFilters({...filters, subject: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-              >
-                <option value="">All subjects</option>
-                {SUBJECTS.map(subject => (
-                  <option key={subject.id} value={subject.id}>{subject.name}</option>
-                ))}
-              </select>
             </div>
           </div>
 
@@ -554,62 +672,137 @@ function MainAdminDashboard({ user, onLogout }) {
             </div>
           )}
 
-          {!loading && activeTab === 'students' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">All Participants</h2>
-                <button
-                  onClick={() => setShowAddStudentForm(true)}
-                  className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 flex items-center"
-                >
-                  <span className="mr-2">+</span>
-                  Add Participant
-                </button>
-              </div>
-              
-              {filters.country ? (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full table-auto">
-                    <thead>
-                      <tr className="bg-gray-50">
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Birth Date</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">School</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Country</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {students.map((student) => (
-                        <tr key={student.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-4 text-sm font-mono text-gray-900 bg-yellow-50">{student.id}</td>
-                          <td className="px-4 py-4 text-sm text-gray-900">{student.full_name}</td>
-                          <td className="px-4 py-4 text-sm text-gray-900">{formatDate(student.birth_date)}</td>
-                          <td className="px-4 py-4 text-sm text-gray-900">{student.school}</td>
-                          <td className="px-4 py-4 text-sm text-gray-900">{student.country}</td>
-                          <td className="px-4 py-4 text-sm text-gray-900">{getCategoryName(student.category_id)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  Please select a country to view participants
-                </div>
-              )}
-            </div>
+{!loading && activeTab === 'students' && (
+  <div>
+    <div className="flex justify-between items-center mb-6">
+      <div>
+        <h2 className="text-xl font-semibold text-gray-800">
+          All Participants
+          {filters.country && (
+            <span className="ml-2 text-base font-normal text-gray-600">
+              from {filters.country}
+            </span>
           )}
+        </h2>
+        <p className="text-sm text-gray-500 mt-1">
+          {filters.country 
+            ? `Showing participants from ${filters.country}` 
+            : 'Showing participants from all countries'
+          }
+        </p>
+      </div>
+      <button
+        onClick={() => setShowAddStudentForm(true)}
+        className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 flex items-center"
+      >
+        <span className="mr-2">+</span>
+        Add Participant
+      </button>
+    </div>
+    
+    {/* Дополнительная статистика */}
+    <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="bg-blue-50 p-4 rounded-lg">
+        <h3 className="text-sm font-semibold text-blue-800">Total Students</h3>
+        <p className="text-2xl font-bold text-blue-600">{students.length}</p>
+      </div>
+      <div className="bg-green-50 p-4 rounded-lg">
+        <h3 className="text-sm font-semibold text-green-800">Countries</h3>
+        <p className="text-2xl font-bold text-green-600">
+          {[...new Set(students.map(s => s.country))].length}
+        </p>
+      </div>
+      <div className="bg-purple-50 p-4 rounded-lg">
+        <h3 className="text-sm font-semibold text-purple-800">Categories</h3>
+        <p className="text-2xl font-bold text-purple-600">
+          {[...new Set(students.map(s => s.category_id))].length}
+        </p>
+      </div>
+      <div className="bg-orange-50 p-4 rounded-lg">
+        <h3 className="text-sm font-semibold text-orange-800">Schools</h3>
+        <p className="text-2xl font-bold text-orange-600">
+          {[...new Set(students.map(s => s.school))].length}
+        </p>
+      </div>
+    </div>
+    
+    <div className="overflow-x-auto">
+      <table className="min-w-full table-auto">
+        <thead>
+          <tr className="bg-gray-50">
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Birth Date</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">School</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Country</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">City</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {students.map((student) => (
+            <tr key={student.id} className="hover:bg-gray-50">
+              <td className="px-4 py-4 text-sm font-mono text-gray-900 bg-yellow-50">
+                {student.id}
+              </td>
+              <td className="px-4 py-4 text-sm font-medium text-gray-900">
+                {student.name || student.full_name}
+              </td>
+              <td className="px-4 py-4 text-sm text-gray-900">
+                {formatDate(student.birth_date)}
+              </td>
+              <td className="px-4 py-4 text-sm text-gray-900">
+                {student.school}
+              </td>
+              <td className="px-4 py-4 text-sm text-gray-900">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  🌍 {student.country}
+                </span>
+              </td>
+              <td className="px-4 py-4 text-sm text-gray-900">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                  🏙️ {student.city}
+                </span>
+              </td>
+              <td className="px-4 py-4 text-sm text-gray-900">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  {getCategoryName(student.category_id)}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      
+      {students.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          <div className="text-4xl mb-4">👥</div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No participants found</h3>
+          <p className="text-gray-500 mb-4">
+            {filters.country 
+              ? `No participants found in ${filters.country}` 
+              : 'No participants have been registered yet'
+            }
+          </p>
+          <button
+            onClick={() => setShowAddStudentForm(true)}
+            className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600"
+          >
+            Add First Participant
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+)}
 
-          {!loading && activeTab === 'works' && (
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-6">All Works</h2>
-              <div className="text-center py-8 text-gray-500">
-                Works management functionality coming soon
-              </div>
-            </div>
-          )}
+{!loading && activeTab === 'works' && (
+  <MainAdminWorksManagement 
+    user={user} 
+    filters={filters} 
+    setFilters={setFilters} 
+  />
+)}
 
           {!loading && activeTab === 'statistics' && (
             <div>

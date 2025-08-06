@@ -170,3 +170,26 @@ export function getMathWorksCount() {
             throw error;
         });
 }
+
+// В student_math_works.js - функция для получения всех математических работ по стране  
+export async function getAllMathWorksByCountry(country) {
+    try {
+        const allMathworks = [];
+        // Загружаем работы для всех категорий
+        for (let categoryId = 1; categoryId <= 3; categoryId++) {
+            try {
+                const mathworks = await getMathWorksByCountryAndCategory(country, categoryId);
+                if (mathworks && mathworks.length > 0) {
+                    allMathworks.push(...mathworks);
+                }
+            } catch (error) {
+                console.warn(`No math works for category ${categoryId} in ${country}:`, error);
+                // Продолжаем загружать другие категории
+            }
+        }
+        return allMathworks;
+    } catch (error) {
+        console.error('Error loading all math works:', error);
+        return [];
+    }
+}
