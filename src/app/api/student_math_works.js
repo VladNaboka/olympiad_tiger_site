@@ -193,3 +193,29 @@ export async function getAllMathWorksByCountry(country) {
         return [];
     }
 }
+
+/**
+ * Получить все математические работы по стране (без фильтрации по категориям)
+ * @param {string} country 
+ */
+export function getMathWorksByCountry(country) {
+    console.log('🔄 getMathWorksByCountry called with:', country);
+
+    if (!country) {
+        throw new Error('Country is required');
+    }
+
+    const apiData = { country };
+
+    console.log('📤 Sending to API /mathworks/country:', apiData);
+
+    return apiRequest("/mathworks/country", "POST", apiData)
+        .then(response => {
+            console.log('✅ Get math works by country API response:', response);
+            return response;
+        })
+        .catch(error => {
+            console.error('❌ Get math works by country API error:', error);
+            throw error;
+        });
+}

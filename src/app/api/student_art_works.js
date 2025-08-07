@@ -250,3 +250,39 @@ export async function getAllArtWorksByCountry(country) {
         return [];
     }
 }
+
+/**
+ * Получить все художественные работы по стране (без фильтрации по категориям)
+ * @param {string} country 
+ */
+export function getArtWorksByCountry(country) {
+    console.log('🔄 getArtWorksByCountry called with:', country);
+
+    if (!country) {
+        throw new Error('Country is required');
+    }
+
+    const apiData = { country };
+
+    return fetch(`${API_URL}/artworks/country`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(apiData)
+    }).then((response) => {
+        console.log('📡 Get artworks by country response status:', response.status);
+
+        if (!response.ok) {
+            throw new Error(`Get artworks by country failed: ${response.status} ${response.statusText}`);
+        }
+
+        return response.json();
+    }).then((result) => {
+        console.log('✅ Get artworks by country API response:', result);
+        return result;
+    }).catch((error) => {
+        console.error('❌ Get artworks by country API error:', error);
+        throw error;
+    });
+}
