@@ -16,10 +16,6 @@ export default function RegionalAdminDashboard({ user, onLogout }) {
   const [showAddStudentForm, setShowAddStudentForm] = useState(false);
   const [students, setStudents] = useState([]);
   const [countryStats, setCountryStats] = useState({});
-  const [filters, setFilters] = useState({
-    category: '',
-    subject: ''
-  });
   const [loading, setLoading] = useState(false);
 
   // Загрузка данных для региона

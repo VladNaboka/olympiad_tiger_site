@@ -2,34 +2,37 @@
 
 import { useState, useEffect } from 'react';
 import { getStudentsByCountry } from '../../api/students_api';
-import { getArtWorksByCountryAndCategory, uploadArtWork, setArtWorkScore } from '../../api/student_art_works';
-import { getMathWorksByCountryAndCategory, createMathWork, setMathWorkScore } from '../../api/student_math_works';
+import { getAllArtWorksByCountry, getArtWorksByCountryAndCategory, uploadArtWork, setArtWorkScore } from '../../api/student_art_works';
+import { getAllMathWorksByCountry, getMathWorksByCountryAndCategory, createMathWork, setMathWorkScore } from '../../api/student_math_works';
 import { CATEGORIES, getCategoryName } from '../../utils/constants';
 
 export default function WorksManagement({ user }) {
   const [activeTab, setActiveTab] = useState('art'); // 'art' or 'math'
-  const [selectedCategory, setSelectedCategory] = useState('');
   const [students, setStudents] = useState([]);
   const [works, setWorks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [selectedWork, setSelectedWork] = useState(null);
-  const [selectedStudent, setSelectedStudent] = useState(null);
 
-  // Загрузка студентов
+  // Локальные фильтры для Works Management
+  const [localFilters, setLocalFilters] = useState({
+    category: ''
+  });
+
+  // Загрузка студентов при монтировании компонента
   useEffect(() => {
     if (user.country) {
       loadStudents();
     }
   }, [user.country]);
 
-  // Загрузка работ при изменении фильтров
+  // Загрузка работ при изменении фильтров или вкладки
   useEffect(() => {
-    if (user.country && selectedCategory) {
+    if (user.country) {
       loadWorks();
     }
-  }, [user.country, selectedCategory, activeTab]);
+  }, [user.country, localFilters.category, activeTab]);
 
   const loadStudents = async () => {
     try {
@@ -45,12 +48,27 @@ export default function WorksManagement({ user }) {
     setLoading(true);
     try {
       let worksData;
+      
       if (activeTab === 'art') {
-        worksData = await getArtWorksByCountryAndCategory(user.country, parseInt(selectedCategory));
+        if (localFilters.category) {
+          // Загружаем работы для конкретной категории
+          worksData = await getArtWorksByCountryAndCategory(user.country, parseInt(localFilters.category));
+        } else {
+          // Загружаем все художественные работы
+          worksData = await getAllArtWorksByCountry(user.country);
+        }
       } else {
-        worksData = await getMathWorksByCountryAndCategory(user.country, parseInt(selectedCategory));
+        if (localFilters.category) {
+          // Загружаем работы для конкретной категории
+          worksData = await getMathWorksByCountryAndCategory(user.country, parseInt(localFilters.category));
+        } else {
+          // Загружаем все математические работы
+          worksData = await getAllMathWorksByCountry(user.country);
+        }
       }
+      
       setWorks(worksData || []);
+      console.log(`📊 Loaded ${worksData?.length || 0} ${activeTab} works for ${user.country} ${localFilters.category ? `(category ${localFilters.category})` : '(all categories)'}`);
     } catch (error) {
       console.error('Error loading works:', error);
       setWorks([]);
@@ -61,14 +79,83 @@ export default function WorksManagement({ user }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-800">Works Management</h2>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800">Works Management</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Manage works from {user.country} - {localFilters.category ? getCategoryName(localFilters.category) : 'All Categories'}
+          </p>
+        </div>
         <button
           onClick={() => setShowUploadModal(true)}
           className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 flex items-center"
         >
           <span className="mr-2">+</span>
-          Add Work
+          Add {activeTab === 'art' ? 'Artwork' : 'Math Work'}
         </button>
+      </div>
+
+      {/* Локальные фильтры для Works */}
+      <div className="bg-gray-50 rounded-lg p-4 mb-6">
+        <h3 className="text-sm font-semibold text-gray-700 mb-3">🔍 Filter Works</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">🎯 Category</label>
+            <select
+              value={localFilters.category}
+              onChange={(e) => setLocalFilters({...localFilters, category: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+            >
+              <option value="">All Categories</option>
+              {CATEGORIES.map(category => (
+                <option key={category.id} value={category.id}>{category.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-end">
+            <button
+              onClick={() => setLocalFilters({category: ''})}
+              className="w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm"
+            >
+              🔄 Clear Filters
+            </button>
+          </div>
+        </div>
+        
+        <p className="text-xs text-gray-500 mt-2">
+          {localFilters.category 
+            ? `Showing ${activeTab} works for ${getCategoryName(localFilters.category)}`
+            : `Showing all ${activeTab} works from ${user.country}`
+          }
+        </p>
+      </div>
+
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-blue-50 p-4 rounded-lg">
+          <h3 className="text-sm font-semibold text-blue-800">Total Students</h3>
+          <p className="text-2xl font-bold text-blue-600">{students.length}</p>
+        </div>
+        <div className="bg-purple-50 p-4 rounded-lg">
+          <h3 className="text-sm font-semibold text-purple-800">Current Works</h3>
+          <p className="text-2xl font-bold text-purple-600">{works.length}</p>
+        </div>
+        <div className="bg-green-50 p-4 rounded-lg">
+          <h3 className="text-sm font-semibold text-green-800">Scored Works</h3>
+          <p className="text-2xl font-bold text-green-600">
+            {works.filter(w => w.score).length}
+          </p>
+        </div>
+        <div className="bg-yellow-50 p-4 rounded-lg">
+          <h3 className="text-sm font-semibold text-yellow-800">Avg Score</h3>
+          <p className="text-2xl font-bold text-yellow-600">
+            {(() => {
+              const scoredWorks = works.filter(w => w.score);
+              return scoredWorks.length > 0 
+                ? (scoredWorks.reduce((sum, w) => sum + w.score, 0) / scoredWorks.length).toFixed(1)
+                : '0.0';
+            })()}
+          </p>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -76,44 +163,33 @@ export default function WorksManagement({ user }) {
         <nav className="-mb-px flex space-x-8">
           <button
             onClick={() => setActiveTab('art')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+            className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
               activeTab === 'art'
                 ? 'border-purple-500 text-purple-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             }`}
           >
-            🎨 Art Works
+            <span>🎨</span>
+            <span>Art Works</span>
+            <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">
+              {activeTab === 'art' ? works.length : '-'}
+            </span>
           </button>
           <button
             onClick={() => setActiveTab('math')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+            className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
               activeTab === 'math'
                 ? 'border-blue-500 text-blue-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             }`}
           >
-            📐 Math Works
+            <span>📐</span>
+            <span>Math Works</span>
+            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+              {activeTab === 'math' ? works.length : '-'}
+            </span>
           </button>
         </nav>
-      </div>
-
-      {/* Category Filter */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          🎯 Filter by Category
-        </label>
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-800 bg-white"
-        >
-          <option value="" className="text-gray-800">Select category</option>
-          {CATEGORIES.map(category => (
-            <option key={category.id} value={category.id} className="text-gray-800">
-              {category.name}
-            </option>
-          ))}
-        </select>
       </div>
 
       {/* Works List */}
@@ -122,20 +198,23 @@ export default function WorksManagement({ user }) {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto"></div>
           <p className="mt-2 text-gray-600">Loading works...</p>
         </div>
-      ) : !selectedCategory ? (
-        <div className="text-center py-8 text-gray-500">
-          <div className="text-4xl mb-2">🎯</div>
-          <p>Select a category to view works</p>
-        </div>
       ) : works.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           <div className="text-4xl mb-2">📝</div>
-          <p>No {activeTab} works found for {getCategoryName(selectedCategory)}</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            No {activeTab} works found
+          </h3>
+          <p className="text-gray-500 mb-4">
+            {localFilters.category 
+              ? `No ${activeTab} works found for ${getCategoryName(localFilters.category)} from ${user.country}`
+              : `No ${activeTab} works found from ${user.country}`
+            }
+          </p>
           <button
             onClick={() => setShowUploadModal(true)}
-            className="mt-4 text-orange-500 hover:text-orange-600 font-medium"
+            className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600"
           >
-            Add the first work
+            Add First {activeTab === 'art' ? 'Artwork' : 'Math Work'}
           </button>
         </div>
       ) : (
@@ -148,6 +227,9 @@ export default function WorksManagement({ user }) {
                     src={work.file_path || "/image/artwork-sample.png"}
                     alt={work.title}
                     className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      e.target.src = "/image/artwork-sample.png";
+                    }}
                   />
                   <div className="absolute top-2 left-2">
                     <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">🎨 Art</span>
@@ -164,7 +246,7 @@ export default function WorksManagement({ user }) {
                 <div className="relative h-48 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-4xl mb-2">📐</div>
-                    <p className="text-gray-700 font-medium">{work.title}</p>
+                    <p className="text-gray-700 font-medium text-sm px-4">{work.title}</p>
                   </div>
                   <div className="absolute top-2 left-2">
                     <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">📐 Math</span>
@@ -180,10 +262,13 @@ export default function WorksManagement({ user }) {
               )}
               
               <div className="p-4">
-                <h3 className="font-semibold text-gray-800 mb-2">{work.title}</h3>
-                <p className="text-sm text-gray-600 mb-3">Student ID: {work.student_id}</p>
+                <h3 className="font-semibold text-gray-800 mb-2 truncate">{work.title}</h3>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p>Student ID: <span className="font-mono text-xs bg-gray-100 px-1 rounded">{work.student_id}</span></p>
+                  <p>Category: <span className="text-green-600">{getCategoryName(work.category_id)}</span></p>
+                </div>
                 
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
                   <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
                     {getCategoryName(work.category_id)}
                   </span>
@@ -200,6 +285,37 @@ export default function WorksManagement({ user }) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Summary when works exist */}
+      {works.length > 0 && (
+        <div className="mt-6 bg-gray-50 p-4 rounded-lg">
+          <h4 className="text-sm font-semibold text-gray-700 mb-2">📊 Summary</h4>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <span className="font-medium text-gray-700">Total Works:</span>
+              <span className="ml-2 text-gray-900 font-semibold">{works.length}</span>
+            </div>
+            <div>
+              <span className="font-medium text-gray-700">Scored:</span>
+              <span className="ml-2 text-green-600 font-semibold">
+                {works.filter(w => w.score).length}
+              </span>
+            </div>
+            <div>
+              <span className="font-medium text-gray-700">Unscored:</span>
+              <span className="ml-2 text-orange-600 font-semibold">
+                {works.filter(w => !w.score).length}
+              </span>
+            </div>
+            <div>
+              <span className="font-medium text-gray-700">Categories:</span>
+              <span className="ml-2 text-purple-600 font-semibold">
+                {[...new Set(works.map(w => w.category_id))].length}
+              </span>
+            </div>
+          </div>
         </div>
       )}
 
@@ -326,7 +442,7 @@ function UploadWorkModal({ user, students, activeTab, onClose, onSuccess }) {
               <option value="">Select student</option>
               {students.map(student => (
                 <option key={student.id} value={student.id}>
-                  {student.name} (ID: {student.id})
+                  {student.name || student.full_name} (ID: {student.id})
                 </option>
               ))}
             </select>
@@ -478,5 +594,5 @@ function ScoreModal({ work, activeTab, onClose, onSuccess }) {
         </form>
       </div>
     </div>
-  )
+  );
 }
