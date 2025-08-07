@@ -320,7 +320,7 @@ function UploadWorkModal({ user, students, activeTab, onClose, onSuccess }) {
                   category_id: student ? student.category_id : ''
                 });
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 py-2 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
             >
               <option value="">Select student</option>
@@ -345,7 +345,7 @@ function UploadWorkModal({ user, students, activeTab, onClose, onSuccess }) {
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({...formData, title: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder={activeTab === 'art' ? 'Artwork title' : 'Math work title'}
               required
             />
@@ -360,7 +360,7 @@ function UploadWorkModal({ user, students, activeTab, onClose, onSuccess }) {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setArtworkFile(e.target.files[0])}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
               />
               <p className="text-sm text-gray-500 mt-1">

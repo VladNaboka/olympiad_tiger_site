@@ -227,3 +227,26 @@ export function getArtWorksCount() {
             throw error;
         });
 }
+
+// В student_art_works.js - функция для получения всех художественных работ по стране
+export async function getAllArtWorksByCountry(country) {
+    try {
+        const allArtworks = [];
+        // Загружаем работы для всех категорий
+        for (let categoryId = 1; categoryId <= 3; categoryId++) {
+            try {
+                const artworks = await getArtWorksByCountryAndCategory(country, categoryId);
+                if (artworks && artworks.length > 0) {
+                    allArtworks.push(...artworks);
+                }
+            } catch (error) {
+                console.warn(`No artworks for category ${categoryId} in ${country}:`, error);
+                // Продолжаем загружать другие категории
+            }
+        }
+        return allArtworks;
+    } catch (error) {
+        console.error('Error loading all artworks:', error);
+        return [];
+    }
+}
