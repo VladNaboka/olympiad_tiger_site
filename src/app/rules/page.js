@@ -141,6 +141,121 @@ The jury is formed by the organizer. Jury decisions are final and not subject to
   }
 ];
 
+// Mathematics regulations data for collapsible sections
+const mathRegulations = [
+  {
+    id: 1,
+    title: "📋 General Provisions",
+    content: `This document outlines the rules and structure of the TIGERS International Mathematics Olympiad, aimed at developing students' intellectual potential, fostering interest in mathematics, and building an international academic community of young problem-solvers. 
+
+The Olympiad is conducted within the global educational framework of Owlwin.`
+  },
+  {
+    id: 2,
+    title: "🏢 Organizer",
+    content: `The Olympiad is organized by TIGERS, an independent educational initiative founded in 2025. The team has extensive experience in international academic and cultural cooperation and has previously collaborated with global partners on major educational projects.
+
+TIGERS operates under the umbrella of Owlwin, a trusted international educational organization with more than 10 years of experience in organizing academic camps and Olympiads abroad.`
+  },
+  {
+    id: 3,
+    title: "🎯 Goals and Objectives",
+    content: `• To identify and support mathematically gifted students
+• To promote logical and critical thinking
+• To foster interest in mathematics as a field of study
+• To ensure academic integrity and global competition
+• To provide a platform for knowledge sharing among international students`
+  },
+  {
+    id: 4,
+    title: "👥 Participants",
+    content: `Students from Grades 5 to 12 are eligible to participate, divided into four age categories:
+
+• Category I — Grades 5–6
+• Category II — Grades 7–8
+• Category III — Grades 9–10
+• Category IV — Grades 11–12`
+  },
+  {
+    id: 5,
+    title: "🏆 Format and Stages",
+    content: `The Olympiad consists of two offline stages:
+
+5.1 Preliminary Round:
+• 📅 Dates: December 15–25, 2025
+• 📍 Locations in Kazakhstan: Astana, Almaty, Shymkent, and Aktau
+• 🕒 Exact time and venue details will be provided after registration closes
+
+5.2 Final Round:
+• 📅 Summer 2026
+• 📍 Final location will be shared individually with students who qualify through the preliminary round`
+  },
+  {
+    id: 6,
+    title: "📝 Test Format",
+    content: `• Categories I and II: 20 questions
+• Categories III and IV: 30 questions
+• All test materials and instructions are provided exclusively in English
+• The Olympiad is conducted only in English, with no translation options
+• Participants will use OMR (Optical Mark Recognition) answer sheets`
+  },
+  {
+    id: 7,
+    title: "📚 Topics and Preparation",
+    content: `• The list of topics and syllabus for each category will be published on our official website in September 2025: www.tigersedu.com
+• Past papers are not publicly available due to copyright regulations and academic integrity standards`
+  },
+  {
+    id: 8,
+    title: "📝 Registration",
+    content: `Registration is carried out through official TIGERS managers and includes:
+• Submitting a registration form
+• Completing the payment
+• Receiving a receipt, which serves as confirmation of participation
+
+☝️ Parental consent is considered granted upon registration and payment for participants under 18.`
+  },
+  {
+    id: 9,
+    title: "💰 Participation Fee",
+    content: `💬 Details regarding participation fees for each stage of the Olympiad may be obtained directly from the regional manager of your country or city.`
+  },
+  {
+    id: 10,
+    title: "⭐ Evaluation",
+    content: `• All answer sheets are evaluated by an independent jury, whose members remain anonymous to ensure impartiality
+• Scoring is based on the number of correct answers and time taken
+• Official results will be published on the Olympiad website`
+  },
+  {
+    id: 11,
+    title: "🏅 Awards",
+    content: `Finalists will receive the following prizes:
+
+🥇 1st Place – Two-week international educational camp (USA or UK)
+🥈 2nd Place – Two-week international educational camp (Europe or Asia)
+🥉 3rd Place – Apple iPad
+
+🎖 All participants will receive an official certificate of participation.`
+  },
+  {
+    id: 12,
+    title: "📄 Materials and Publication",
+    content: `• Test papers can be provided to participants upon individual request
+• OMR answer sheets will not be published online
+• Photos, videos, and participant feedback may be published on official TIGERS platforms (website and social media)`
+  },
+  {
+    id: 13,
+    title: "📞 Contact Information",
+    content: `For all inquiries, contact:
+
+📧 Email: yuliya@tigersedu.com
+📱 WhatsApp: +7 700 595 1000
+📸 Instagram: @tigers.olympiad`
+  }
+];
+
 // Component for one regulation section with animation
 const RegulationItem = ({ item, isOpen, toggleSection }) => {
   const contentRef = useRef(null);
@@ -289,20 +404,25 @@ export default function Regulations() {
             </div>
           )}
 
-          {/* Mathematics Regulations - Coming Soon */}
+          {/* Mathematics Regulations - Collapsible */}
           {activeTab === 'math' && (
-            <div className="text-center py-16">
-              <div className="bg-white rounded-lg shadow-sm p-12">
-                <div className="text-6xl mb-6">📐</div>
-                <h3 className="text-3xl font-bold text-gray-800 mb-4">Mathematics Regulations</h3>
-                <p className="text-xl text-gray-600 mb-8">
-                  Mathematics competition regulations are currently being finalized.
+            <div>
+              <div className="text-center mb-8">
+                <h3 className="text-3xl font-bold text-orange-600 mb-4">📐 Mathematics Competition Regulations</h3>
+                <p className="text-lg text-gray-600">
+                  Detailed regulations for the International Tigers Mathematics Olympiad
                 </p>
-                <div className="bg-orange-50 p-6 rounded-lg">
-                  <p className="text-orange-800 font-medium">
-                    📅 Mathematics regulations will be published soon. Stay tuned for updates!
-                  </p>
-                </div>
+              </div>
+              
+              <div>
+                {mathRegulations.map((regulation) => (
+                  <RegulationItem 
+                    key={regulation.id}
+                    item={regulation}
+                    isOpen={openSectionId === regulation.id}
+                    toggleSection={() => setOpenSectionId(openSectionId === regulation.id ? null : regulation.id)}
+                  />
+                ))}
               </div>
             </div>
           )}
