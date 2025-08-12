@@ -124,32 +124,44 @@ export function deleteUser(userId) {
 }
 
 /**
- * Обновление ФИО пользователя
- * @param {number} userId
- * @param {string} newName
- * @returns {object}
+ * Обновление данных пользователя (частичное)
+ * @param {number} id - ID пользователя (обязательно)
+ * @param {string} [full_name] - новое ФИО
+ * @param {string} [email] - новый email
+ * @param {string} [password] - новый пароль
+ * @param {string} [country] - новая страна
+ * @param {string} [phone] - новый телефон
+ * @param {number} [role_id] - новая роль
+ * @returns {Promise<object>}
  */
-export function updateUserName(userId, newName) {
-    console.log('🔄 updateUserName called:', { userId, newName });
-    
-    if (!userId || !newName) {
-        throw new Error('User ID and new name are required');
+export function updateUser(id, full_name, email, password, country, phone, role_id) {
+    console.log('🔄 updateUser called');
+
+    if (!id) {
+        throw new Error('User ID is required');
     }
-    
-    const updateData = {
-        id: userId,
-        full_name: newName
-    };
-    
-    console.log('📤 Sending to API PUT /users/update:', updateData);
-    
+
+    // Формируем объект только с переданными значениями
+    const updateData = { id };
+    if (full_name !== undefined) updateData.full_name = full_name;
+    if (email !== undefined) updateData.email = email;
+    if (password !== undefined) updateData.password = password;
+    if (country !== undefined) updateData.country = country;
+    if (phone !== undefined) updateData.phone = phone;
+    if (role_id !== undefined) updateData.role_id = role_id;
+
+    // Логируем без пароля
+    const logData = { ...updateData };
+    if (logData.password) logData.password = '***';
+    console.log('📤 Sending to API PUT /users/update:', logData);
+
     return apiRequest("/users/update", "PUT", updateData)
         .then(response => {
-            console.log('✅ Update user name API response:', response);
+            console.log('✅ Update user API response:', response);
             return response;
         })
         .catch(error => {
-            console.error('❌ Update user name API error:', error);
+            console.error('❌ Update user API error:', error);
             throw error;
         });
 }
