@@ -8,7 +8,7 @@ import { apiRequest } from "./base_api";
 export function addStudent(student) {
     console.log('🔄 addStudent called with:', student);
     
-    const requiredFields = ['name', 'birth_date', 'school', 'phone', 'email', 'country', 'city', 'course_id', 'category_id'];
+    const requiredFields = ['id', 'name', 'birth_date', 'school', 'phone', 'email', 'country', 'city', 'course_id', 'category_id'];
     const missingFields = requiredFields.filter(field => !student[field]);
     
     if (missingFields.length > 0) {
@@ -17,6 +17,7 @@ export function addStudent(student) {
     
     // Подготавливаем данные согласно новой API структуре
     const apiData = {
+        id: student.id,
         name: student.name, // Изменено с full_name на name
         birth_date: student.birth_date,
         school: student.school,

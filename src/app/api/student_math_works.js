@@ -15,7 +15,7 @@ export function createMathWork(data) {
     }
     
     const apiData = {
-        student_id: parseInt(data.student_id),
+        student_id: data.student_id,
         title: data.title,
         country: data.country,
         category_id: parseInt(data.category_id)
