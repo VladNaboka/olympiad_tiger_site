@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { updateStudent } from '../../api/students_api';
-import { CATEGORIES, COUNTRIES, calculateCategory, formatDate } from '../../utils/constants';
+import { getCategoriesBySubject, calculateCategory, SUBJECTS, COUNTRIES } from '../../utils/constants';
 
 export default function EditStudentModal({ student, onClose, onSuccess, userCountry }) {
   const [formData, setFormData] = useState({
@@ -17,6 +17,7 @@ export default function EditStudentModal({ student, onClose, onSuccess, userCoun
     category_id: ''
   });
   const [loading, setLoading] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState('');
 
   const courses = [
     { id: 1, name: 'Mathematics', icon: '📐' },
@@ -26,15 +27,17 @@ export default function EditStudentModal({ student, onClose, onSuccess, userCoun
   // Заполняем форму данными студента при открытии
   useEffect(() => {
     if (student) {
+      const courseId = student.course_id ? student.course_id.toString() : '';
+      setSelectedSubject(courseId);
       setFormData({
         name: student.name || student.full_name || '',
-        birth_date: student.birth_date ? student.birth_date.split('T')[0] : '', // Преобразуем ISO дату в формат input[type="date"]
+        birth_date: student.birth_date ? student.birth_date.split('T')[0] : '',
         school: student.school || '',
         phone: student.phone || '',
         email: student.email || '',
         country: student.country || userCountry || '',
         city: student.city || '',
-        course_id: student.course_id ? student.course_id.toString() : '',
+        course_id: courseId,
         category_id: student.category_id ? student.category_id.toString() : ''
       });
     }
@@ -42,15 +45,21 @@ export default function EditStudentModal({ student, onClose, onSuccess, userCoun
 
   // Автоматически вычисляем категорию при изменении даты рождения
   const handleBirthDateChange = (date) => {
-    console.log('📅 Birth date changed:', date);
-    const categoryId = calculateCategory(date);
-    console.log('🏷️ Calculated category:', categoryId);
+    let categoryId = null;
+    
+    if (selectedSubject) {
+      categoryId = calculateCategory(date, selectedSubject);
+    }
     
     setFormData({
       ...formData,
       birth_date: date,
       category_id: categoryId ? categoryId.toString() : ''
     });
+    
+    if (!categoryId && selectedSubject) {
+      console.warn('⚠️ Age does not fit any category for selected subject');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -206,35 +215,48 @@ export default function EditStudentModal({ student, onClose, onSuccess, userCoun
               />
             </div>
 
-            <div className="md:col-span-2">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Subject *
-              </label>
-              <div className="grid grid-cols-2 gap-4">
-                {courses.map(course => (
-                  <label
-                    key={course.id}
-                    className={`cursor-pointer p-4 border-2 rounded-lg text-center transition-all ${
-                      formData.course_id === course.id.toString()
-                        ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                        : 'border-gray-300 hover:border-gray-400'
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="course_id"
-                      value={course.id}
-                      checked={formData.course_id === course.id.toString()}
-                      onChange={(e) => setFormData({...formData, course_id: e.target.value})}
-                      className="sr-only"
-                      required
-                    />
-                    <div className="text-3xl mb-2">{course.icon}</div>
-                    <div className="font-medium">{course.name}</div>
-                  </label>
-                ))}
-              </div>
-            </div>
+            <div>
+  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
+  <select
+    value={selectedSubject}
+    onChange={(e) => {
+      const newSubject = e.target.value;
+      setSelectedSubject(newSubject);
+      setFormData({ 
+        ...formData, 
+        course_id: newSubject,
+        category_id: '' // Сбрасываем категорию при смене предмета
+      });
+    }}
+    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    required
+  >
+    <option value="">Select subject</option>
+    {SUBJECTS.map(subject => (
+      <option key={subject.id} value={subject.id}>{subject.name}</option>
+    ))}
+  </select>
+</div>
+
+<div>
+  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
+  <select
+    value={formData.category_id}
+    onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    required
+    disabled={!selectedSubject}
+  >
+    <option value="">
+      {selectedSubject ? 'Select category' : 'Please select a subject first'}
+    </option>
+    {selectedSubject && getCategoriesBySubject(selectedSubject).map(category => (
+      <option key={category.id} value={category.id}>
+        {category.name}
+      </option>
+    ))}
+  </select>
+</div>
           </div>
 
           <div className="flex justify-end space-x-3 mt-6">
