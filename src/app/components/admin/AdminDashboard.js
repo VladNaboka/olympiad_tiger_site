@@ -1171,8 +1171,6 @@ function MainAdminDashboard({ user, onLogout }) {
             formData.get('email'),
             password || undefined, // Передаем пароль только если он введен
             formData.get('country'),
-            formData.get('city'),
-            formData.get('school'),
             formData.get('phone'),
             undefined  // role_id не меняем
           );
@@ -1267,26 +1265,6 @@ function MainAdminDashboard({ user, onLogout }) {
                 <option key={country} value={country}>{country}</option>
               ))}
             </select>
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">City</label>
-            <input
-              type="text"
-              name="city"
-              defaultValue={editingRepresentative.city}
-              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">Organization</label>
-            <input
-              type="text"
-              name="school"
-              defaultValue={editingRepresentative.school}
-              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
           </div>
         </div>
         
