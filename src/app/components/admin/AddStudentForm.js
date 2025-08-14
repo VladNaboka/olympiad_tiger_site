@@ -537,20 +537,29 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
                   </div>
 
                   <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                      Artwork File *
-                    </label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setArtworkFile(e.target.files[0])}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      required
-                    />
-                    <p className="text-sm text-gray-500 mt-1">
-                      Supported formats: JPG, PNG, GIF (max 10MB)
-                    </p>
-                  </div>
+  <label className="block text-gray-700 text-sm font-bold mb-2">
+    Artwork File *
+  </label>
+  <div className="relative">
+    <input
+      type="file"
+      accept="image/*"
+      onChange={(e) => setArtworkFile(e.target.files[0])}
+      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+      required
+    />
+    <div className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus-within:ring-2 focus-within:ring-purple-500 bg-white cursor-pointer hover:bg-gray-50">
+      {artworkFile ? (
+        <span className="text-gray-900">{artworkFile.name}</span>
+      ) : (
+        <span className="text-gray-500">Choose artwork file or drag and drop</span>
+      )}
+    </div>
+  </div>
+  <p className="text-sm text-gray-500 mt-1">
+    Supported formats: JPG, PNG, GIF (max 10MB)
+  </p>
+</div>
                 </div>
               ) : (
                 <div>
