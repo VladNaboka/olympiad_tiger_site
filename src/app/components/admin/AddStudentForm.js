@@ -15,7 +15,7 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
     email: '',
     country: userCountry || '',
     city: '',
-    course_id: '', // 1 = math, 2 = art
+    course_id: '', // 1 = art, 2 = math
     category_id: ''
   });
   const [artworkFile, setArtworkFile] = useState(null);
@@ -25,60 +25,76 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
   const [step, setStep] = useState(1);
   const [addedStudent, setAddedStudent] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState('');
+  const [ageValidation, setAgeValidation] = useState({ isValid: false, message: '', age: null, categoryName: '' });
 
   // Проверяем валидность формы для первого шага
   const isStep1Valid = () => {
     const requiredFields = ['name', 'birth_date', 'school', 'city', 'course_id'];
     const country = userCountry || formData.country;
     
-    console.log('🔍 Checking Step 1 validity:');
-    console.log('- formData:', formData);
-    console.log('- userCountry:', userCountry);
-    console.log('- country:', country);
-    console.log('- category_id:', formData.category_id);
-    
     // Проверяем обязательные поля
     const hasRequiredFields = requiredFields.every(field => {
-      const hasValue = formData[field] && formData[field].toString().trim() !== '';
-      console.log(`- ${field}: "${formData[field]}" (valid: ${hasValue})`);
-      return hasValue;
+      return formData[field] && formData[field].toString().trim() !== '';
     });
     
     const hasCountry = Boolean(country && country.trim() !== '');
     const hasValidCategory = Boolean(formData.category_id);
-
-    let hasValidAge = true;
-    if (selectedSubject && formData.birth_date) {
-      const age = calculateAge(formData.birth_date);
-      const categories = getCategoriesBySubject(selectedSubject);
-      const minAge = Math.min(...categories.map(cat => cat.minAge));
-      const maxAge = Math.max(...categories.map(cat => cat.maxAge));
-      hasValidAge = age >= minAge && age <= maxAge;
-    }
+    const hasValidAge = ageValidation.isValid;
     
-    console.log('- hasRequiredFields:', hasRequiredFields);
-    console.log('- hasCountry:', hasCountry);
-    console.log('- hasValidCategory:', hasValidCategory);
-    
-    const isValid = hasRequiredFields && hasCountry && hasValidCategory;
-    console.log('- STEP 1 VALID:', isValid);
-    
-    return isValid;
+    return hasRequiredFields && hasCountry && hasValidCategory && hasValidAge;
   };
 
-  // Автоматически предлагаем категорию на основе возраста
-  const suggestCategory = () => {
-    if (!formData.birth_date) {
-      alert('Please enter date of birth first');
+  // Автоматическое определение категории при изменении даты рождения или предмета
+  const updateCategoryAndValidation = (birthDate, subjectId) => {
+    if (!birthDate || !subjectId) {
+      setAgeValidation({ isValid: false, message: '', age: null, categoryName: '' });
+      setFormData(prev => ({ ...prev, category_id: '' }));
       return;
     }
-    
-    const categoryId = calculateCategory(formData.birth_date);
+
+    const age = calculateAge(birthDate);
+    if (!age) {
+      setAgeValidation({ isValid: false, message: 'Invalid date of birth', age: null, categoryName: '' });
+      setFormData(prev => ({ ...prev, category_id: '' }));
+      return;
+    }
+
+    const categories = getCategoriesBySubject(subjectId);
+    const minAge = Math.min(...categories.map(cat => cat.minAge));
+    const maxAge = Math.max(...categories.map(cat => cat.maxAge));
+    const subjectName = subjectId === '1' ? 'Art' : 'Mathematics';
+
+    // Проверяем, попадает ли возраст в допустимый диапазон
+    if (age < minAge || age > maxAge) {
+      setAgeValidation({
+        isValid: false,
+        message: `Age ${age} is not eligible for ${subjectName}. Required: ${minAge}-${maxAge} years`,
+        age: age,
+        categoryName: ''
+      });
+      setFormData(prev => ({ ...prev, category_id: '' }));
+      return;
+    }
+
+    // Автоматически определяем категорию
+    const categoryId = calculateCategory(birthDate, subjectId);
     if (categoryId) {
-      setFormData(prev => ({...prev, category_id: categoryId}));
-      console.log('🎯 Auto-suggested category:', categoryId);
+      const categoryName = getCategoryName(categoryId);
+      setAgeValidation({
+        isValid: true,
+        message: `Perfect! Age ${age} fits ${categoryName} category`,
+        age: age,
+        categoryName: categoryName
+      });
+      setFormData(prev => ({ ...prev, category_id: categoryId.toString() }));
     } else {
-      alert('Age must be between 6-17 years for competition eligibility');
+      setAgeValidation({
+        isValid: false,
+        message: `Age ${age} doesn't fit any ${subjectName} category`,
+        age: age,
+        categoryName: ''
+      });
+      setFormData(prev => ({ ...prev, category_id: '' }));
     }
   };
 
@@ -102,51 +118,32 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
     };
   };
 
-  // Отслеживаем изменения formData для отладки
+  // Отслеживаем изменения для автоматического определения категории
   useEffect(() => {
-    console.log('📝 FormData updated:', formData);
-    console.log('✅ Step 1 Valid:', isStep1Valid());
-  }, [formData]);
+    if (formData.birth_date && selectedSubject) {
+      updateCategoryAndValidation(formData.birth_date, selectedSubject);
+    }
+  }, [formData.birth_date, selectedSubject]);
 
   // Шаг 1: Добавление студента
   const handleStudentSubmit = async (e) => {
     e.preventDefault();
-    console.log('🚀 Starting student submission...');
     
     if (!isStep1Valid()) {
-      console.error('❌ Form is not valid!');
-      alert('Please fill in all required fields');
+      alert('Please fill in all required fields and ensure the age is valid for the selected subject');
       return;
-    }
-
-    if (selectedSubject && formData.birth_date) {
-      const age = calculateAge(formData.birth_date);
-      const categories = getCategoriesBySubject(selectedSubject);
-      const minAge = Math.min(...categories.map(cat => cat.minAge));
-      const maxAge = Math.max(...categories.map(cat => cat.maxAge));
-      
-      if (age < minAge || age > maxAge) {
-        alert(`Age must be between ${minAge}-${maxAge} years for ${selectedSubject === '1' ? 'Art' : 'Mathematics'}`);
-        return;
-      }
-      
-      if (!formData.category_id) {
-        alert('Please select a valid date of birth that fits into an age category');
-        return;
-      }
     }
     
     setLoading(true);
   
     try {
-      // ДОБАВЬТЕ ГЕНЕРАЦИЮ ID:
       const generatedId = generateStudentId(
         userCountry || formData.country, 
         formData.category_id
       );
       
       const studentData = {
-        id: generatedId, // Используем сгенерированный ID
+        id: generatedId,
         name: formData.name,
         birth_date: formData.birth_date,
         school: formData.school,
@@ -158,20 +155,13 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
         category_id: parseInt(formData.category_id)
       };
   
-      console.log('📤 Sending student data with generated ID:', studentData);
+      console.log('📤 Sending student data:', studentData);
       const response = await addStudent(studentData);
       console.log('📥 Response received:', response);
       
-      // Проверяем структуру ответа
       const student = response.data || response;
-      console.log('👤 Extracted student:', student);
       
-      if (!student) {
-        throw new Error('No student data in response');
-      }
-      
-      if (!student.id) {
-        console.error('❌ No student ID in response:', student);
+      if (!student || !student.id) {
         throw new Error('Student was created but no ID returned');
       }
       
@@ -181,11 +171,6 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
       
     } catch (error) {
       console.error('❌ Error adding student:', error);
-      console.error('Error details:', {
-        message: error.message,
-        stack: error.stack,
-        response: error.response
-      });
       alert('Error adding student: ' + error.message);
     }
     
@@ -195,7 +180,6 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
   // Шаг 2: Загрузка работы
   const handleWorkSubmit = async (e) => {
     e.preventDefault();
-    console.log('🎨📐 Starting work submission...');
     setLoading(true);
 
     try {
@@ -240,12 +224,6 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
     }
     
     setLoading(false);
-  };
-
-  // Получаем текущий возраст для отображения
-  const getCurrentAge = () => {
-    if (!formData.birth_date) return null;
-    return calculateAge(formData.birth_date);
   };
 
   return (
@@ -297,115 +275,89 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
               </div>
 
               <div>
-  <label className="block text-gray-700 text-sm font-bold mb-2">
-    Date of Birth *
-  </label>
-  <input
-    type="date"
-    value={formData.birth_date}
-    min={getDateLimits().min}
-    max={getDateLimits().max}
-    onChange={(e) => {
-      console.log('📅 Birth date changed:', e.target.value);
-      const date = e.target.value;
-      let categoryId = null;
-      
-      if (selectedSubject) {
-        categoryId = calculateCategory(date, selectedSubject);
-      }
-      
-      setFormData({
-        ...formData, 
-        birth_date: date,
-        category_id: categoryId ? categoryId.toString() : ''
-      });
-    }}
-    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-black"
-    disabled={!selectedSubject}
-    required
-  />
-  
-  {/* Показываем информацию о возрасте */}
-  {formData.birth_date && (
-    <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded">
-      <p className="text-sm text-blue-700 font-medium">
-        ℹ️ Age: {getCurrentAge()} years
-      </p>
-    </div>
-  )}
-  
-  {/* Показываем ограничения по возрасту */}
-  {selectedSubject && (
-    <div className="mt-2 p-2 bg-gray-50 border border-gray-200 rounded">
-      <p className="text-xs text-gray-600">
-        📅 Allowed age range for {selectedSubject === '1' ? 'Art' : 'Mathematics'}: 
-        {' '}
-        {getCategoriesBySubject(selectedSubject)[0]?.minAge}-
-        {getCategoriesBySubject(selectedSubject).slice(-1)[0]?.maxAge} years
-      </p>
-    </div>
-  )}
-  
-  {!selectedSubject && (
-    <p className="text-xs text-gray-500 mt-1">
-      Please select a subject first to enable date selection
-    </p>
-  )}
-</div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
+                <select
+                  value={selectedSubject}
+                  onChange={(e) => {
+                    const newSubject = e.target.value;
+                    setSelectedSubject(newSubject);
+                    setFormData({ 
+                      ...formData, 
+                      course_id: newSubject,
+                      category_id: '' // Сбрасываем категорию при смене предмета
+                    });
+                    setAgeValidation({ isValid: false, message: '', age: null, categoryName: '' });
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  required
+                >
+                  <option value="">Select subject</option>
+                  {SUBJECTS.map(subject => (
+                    <option key={subject.id} value={subject.id}>{subject.name}</option>
+                  ))}
+                </select>
               </div>
 
-              <div>
-  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
-  <select
-    value={selectedSubject}
-    onChange={(e) => {
-      const newSubject = e.target.value;
-      setSelectedSubject(newSubject);
-      setFormData({ 
-        ...formData, 
-        course_id: newSubject,
-        category_id: '' // Сбрасываем категорию при смене предмета
-      });
-    }}
-    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-    required
-  >
-    <option value="">Select subject</option>
-    {SUBJECTS.map(subject => (
-      <option key={subject.id} value={subject.id}>{subject.name}</option>
-    ))}
-  </select>
-</div>
+              <div className="md:col-span-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Date of Birth *
+                </label>
+                <input
+                  type="date"
+                  value={formData.birth_date}
+                  min={getDateLimits().min}
+                  max={getDateLimits().max}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData, 
+                      birth_date: e.target.value
+                    });
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-black"
+                  disabled={!selectedSubject}
+                  required
+                />
+                
+                {!selectedSubject && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Please select a subject first to enable date selection
+                  </p>
+                )}
 
-<div>
-  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
-  <select
-    value={formData.category_id}
-    onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-    required
-    disabled={!selectedSubject}
-  >
-    <option value="">
-      {selectedSubject ? 'Select category' : 'Please select a subject first'}
-    </option>
-    {selectedSubject && getCategoriesBySubject(selectedSubject).map(category => (
-      <option key={category.id} value={category.id}>
-        {category.name}
-      </option>
-    ))}
-  </select>
-  {!selectedSubject && (
-    <p className="text-xs text-gray-500 mt-1">
-      Please select a subject first to see available categories
-    </p>
-  )}
-  {selectedSubject && (
-    <p className="text-xs text-gray-500 mt-1">
-      {selectedSubject === '1' ? 'Art categories' : 'Mathematics categories'}
-    </p>
-  )}
-</div>
+                {/* Показываем информацию о возрасте и категории */}
+                {formData.birth_date && selectedSubject && (
+                  <div className={`mt-2 p-3 border rounded-md ${
+                    ageValidation.isValid 
+                      ? 'bg-green-50 border-green-200' 
+                      : 'bg-red-50 border-red-200'
+                  }`}>
+                    <div className="flex items-center space-x-2">
+                      <span className={`text-sm font-medium ${
+                        ageValidation.isValid ? 'text-green-700' : 'text-red-700'
+                      }`}>
+                        {ageValidation.isValid ? '✅' : '❌'} {ageValidation.message}
+                      </span>
+                    </div>
+                    {ageValidation.isValid && (
+                      <div className="mt-1 text-xs text-green-600">
+                        Auto-assigned to: <strong>{ageValidation.categoryName}</strong>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Показываем ограничения по возрасту */}
+                {selectedSubject && (
+                  <div className="mt-2 p-2 bg-gray-50 border border-gray-200 rounded">
+                    <p className="text-xs text-gray-600">
+                      📅 Allowed age range for {selectedSubject === '1' ? 'Art' : 'Mathematics'}: 
+                      {' '}
+                      {getCategoriesBySubject(selectedSubject)[0]?.minAge}-
+                      {getCategoriesBySubject(selectedSubject).slice(-1)[0]?.maxAge} years
+                    </p>
+                  </div>
+                )}
+              </div>
 
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -479,8 +431,6 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
                   required
                 />
               </div>
-
-              <div>
             </div>
 
             <div className="flex justify-end space-x-3 mt-6">
@@ -534,35 +484,35 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-black"
                       placeholder={`Artwork by ${formData.name}`}
                     />
-                    </div>
-
-                    <div className="mb-4">
-                      <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Artwork File *
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => setArtworkFile(e.target.files[0])}
-                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                          required
-                        />
-                        <div className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus-within:ring-2 focus-within:ring-purple-500 bg-white cursor-pointer hover:bg-gray-50">
-                          {artworkFile ? (
-                            <span className="text-gray-900">{artworkFile.name}</span>
-                          ) : (
-                            <span className="text-gray-500">Choose artwork file or drag and drop</span>
-                          )}
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-500 mt-1">
-                        Supported formats: JPG, PNG, GIF (max 10MB)
-                      </p>
-                    </div>
                   </div>
-                ) : (
-                  <div>
+
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Artwork File *
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setArtworkFile(e.target.files[0])}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        required
+                      />
+                      <div className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus-within:ring-2 focus-within:ring-purple-500 bg-white cursor-pointer hover:bg-gray-50">
+                        {artworkFile ? (
+                          <span className="text-gray-900">{artworkFile.name}</span>
+                        ) : (
+                          <span className="text-gray-500">Choose artwork file or drag and drop</span>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Supported formats: JPG, PNG, GIF (max 10MB)
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div>
                   <h4 className="text-lg font-semibold mb-4 text-blue-600">📐 Create Math Work</h4>
                   
                   <div className="mb-4">

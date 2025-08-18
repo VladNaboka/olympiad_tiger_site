@@ -101,13 +101,6 @@ export default function WorksManagement({ user }) {
             Manage works from {user.country} - {localFilters.category ? getCategoryName(localFilters.category) : 'All Categories'}
           </p>
         </div>
-        <button
-          onClick={() => setShowUploadModal(true)}
-          className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 flex items-center"
-        >
-          <span className="mr-2">+</span>
-          Add {activeTab === 'art' ? 'Artwork' : 'Math Work'}
-        </button>
       </div>
 
       {/* Локальные фильтры для Works */}

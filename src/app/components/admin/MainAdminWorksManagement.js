@@ -104,15 +104,6 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
             Manage artwork and math submissions from all countries
           </p>
         </div>
-        {filters.country && (
-          <button
-            onClick={() => setShowUploadModal(true)}
-            className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 flex items-center"
-          >
-            <span className="mr-2">+</span>
-            Add {activeTab === 'art' ? 'Artwork' : 'Math Work'}
-          </button>
-        )}
       </div>
 
       {/* Enhanced Filters for Main Admin Works */}

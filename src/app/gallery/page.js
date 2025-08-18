@@ -7,43 +7,97 @@ import Link from 'next/link';
 import { getArtWorksByCountryAndCategory } from '../api/student_art_works';
 import { getMathWorksByCountryAndCategory } from '../api/student_math_works';
 import { getStudentById } from '../api/students_api';
+import { ART_CATEGORIES, MATH_CATEGORIES, getCategoryName, getCategoriesBySubject, COUNTRIES, COUNTRY_CODES } from '../utils/constants';
 
 export default function Gallery() {
   // Устанавливаем значения по умолчанию
   const [country, setCountry] = useState('Kazakhstan');
-  const [category, setCategory] = useState(1);
+  const [category, setCategory] = useState(5); // Первая категория искусства
   const [subject, setSubject] = useState('Artworks');
   const [items, setItems] = useState([]);
   const [studentsCache, setStudentsCache] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const categoryNames = {
-    1: "6-9 years",
-    2: "10-13 years", 
-    3: "14-17 years"
+  // Создаем список стран с флагами на основе constants.js
+  const getCountriesWithFlags = () => {
+    const flagMap = {
+      'Kazakhstan': '🇰🇿',
+      'Russia': '🇷🇺',
+      'United States': '🇺🇸',
+      'United Kingdom': '🇬🇧',
+      'Germany': '🇩🇪',
+      'France': '🇫🇷',
+      'Italy': '🇮🇹',
+      'Spain': '🇪🇸',
+      'Canada': '🇨🇦',
+      'Australia': '🇦🇺',
+      'Japan': '🇯🇵',
+      'China': '🇨🇳',
+      'India': '🇮🇳',
+      'Brazil': '🇧🇷',
+      'Mexico': '🇲🇽',
+      'Turkey': '🇹🇷',
+      'Poland': '🇵🇱',
+      'Czech Republic': '🇨🇿',
+      'Ukraine': '🇺🇦',
+      'Belarus': '🇧🇾',
+      'Lithuania': '🇱🇹',
+      'Latvia': '🇱🇻',
+      'Estonia': '🇪🇪',
+      'Georgia': '🇬🇪',
+      'Armenia': '🇦🇲',
+      'Azerbaijan': '🇦🇿',
+      'Uzbekistan': '🇺🇿',
+      'Kyrgyzstan': '🇰🇬',
+      'Tajikistan': '🇹🇯',
+      'Turkmenistan': '🇹🇲',
+      'Mongolia': '🇲🇳'
+    };
+
+    return COUNTRIES.map(country => ({
+      code: COUNTRY_CODES[country] || country.substring(0, 2).toUpperCase(),
+      name: country,
+      flag: flagMap[country] || '🌍'
+    }));
   };
 
-  const countries = [
-    { code: 'KZ', name: 'Kazakhstan', flag: '🇰🇿' },
-    { code: 'RU', name: 'Russia', flag: '🇷🇺' },
-    { code: 'US', name: 'United States', flag: '🇺🇸' },
-    { code: 'IN', name: 'India', flag: '🇮🇳' },
-    { code: 'DE', name: 'Germany', flag: '🇩🇪' },
-    { code: 'FR', name: 'France', flag: '🇫🇷' },
-    { code: 'JP', name: 'Japan', flag: '🇯🇵' },
-    { code: 'BR', name: 'Brazil', flag: '🇧🇷' }
-  ];
+  const countries = getCountriesWithFlags();
 
   const subjects = [
-    { id: 'Artworks', name: 'Artworks', icon: '🎨', color: 'from-pink-500 to-rose-500' },
-    { id: 'Math', name: 'Mathematics', icon: '📐', color: 'from-blue-500 to-indigo-500' }
+    { id: 'Artworks', name: 'Artworks', icon: '🎨', color: 'from-pink-500 to-rose-500', subjectId: '1' },
+    { id: 'Math', name: 'Mathematics', icon: '📐', color: 'from-blue-500 to-indigo-500', subjectId: '2' }
   ];
 
-  const categories = [
-    { id: 1, name: '6-9 years', icon: '🧒', color: 'bg-green-100 text-green-800' },
-    { id: 2, name: '10-13 years', icon: '👦', color: 'bg-blue-100 text-blue-800' },
-    { id: 3, name: '14-17 years', icon: '👨', color: 'bg-purple-100 text-purple-800' }
-  ];
+  // Получаем категории в зависимости от выбранного предмета
+  const getAvailableCategories = () => {
+    if (subject === 'Artworks') {
+      return ART_CATEGORIES.map(cat => ({
+        id: cat.id,
+        name: cat.name,
+        icon: cat.minAge <= 9 ? '🧒' : cat.minAge <= 13 ? '👦' : '👨',
+        color: cat.minAge <= 9 ? 'bg-green-100 text-green-800' : 
+               cat.minAge <= 13 ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
+      }));
+    } else {
+      return MATH_CATEGORIES.map(cat => ({
+        id: cat.id,
+        name: cat.name,
+        icon: cat.minAge <= 12 ? '📚' : cat.minAge <= 14 ? '📖' : cat.minAge <= 16 ? '📊' : '🎓',
+        color: cat.minAge <= 12 ? 'bg-yellow-100 text-yellow-800' : 
+               cat.minAge <= 14 ? 'bg-green-100 text-green-800' :
+               cat.minAge <= 16 ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
+      }));
+    }
+  };
+
+  // Автоматически обновляем категорию при смене предмета
+  useEffect(() => {
+    const availableCategories = getAvailableCategories();
+    if (availableCategories.length > 0) {
+      // Выбираем первую доступную категорию для нового предмета
+      setCategory(availableCategories[0].id);
+    }
+  }, [subject]);
 
   // Функция для загрузки данных студента
   const fetchStudentData = async (studentId) => {
@@ -68,6 +122,7 @@ export default function Gallery() {
   useEffect(() => {
     if (country && category && subject) {
       setLoading(true);
+      console.log(`🔍 Loading ${subject} for ${country}, category ${category}`);
 
       let fetchData;
       if (subject === "Artworks") {
@@ -79,6 +134,7 @@ export default function Gallery() {
       fetchData
         .then(async (data) => {
           const works = Array.isArray(data) ? data : [];
+          console.log(`📊 Found ${works.length} ${subject.toLowerCase()} for category ${category}`);
           
           // Загружаем данные студентов для всех работ
           const worksWithStudents = await Promise.all(
@@ -103,6 +159,11 @@ export default function Gallery() {
         .finally(() => setLoading(false));
     }
   }, [country, category, subject]);
+
+  // Получаем название текущей категории
+  const getCurrentCategoryName = () => {
+    return getCategoryName(category) || 'Unknown Category';
+  };
 
   return (
     <div
@@ -189,24 +250,6 @@ export default function Gallery() {
                 </select>
               </div>
 
-              {/* Age Category Filter */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  👶 Age Category
-                </label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(parseInt(e.target.value))}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-800 bg-white shadow-sm hover:shadow-md"
-                >
-                  {categories.map(categoryOption => (
-                    <option key={categoryOption.id} value={categoryOption.id}>
-                      {categoryOption.icon} {categoryOption.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
               {/* Subject Filter */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -224,13 +267,31 @@ export default function Gallery() {
                   ))}
                 </select>
               </div>
+
+              {/* Age Category Filter */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  👶 Category
+                </label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(parseInt(e.target.value))}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-800 bg-white shadow-sm hover:shadow-md"
+                >
+                  {getAvailableCategories().map(categoryOption => (
+                    <option key={categoryOption.id} value={categoryOption.id}>
+                      {categoryOption.icon} {categoryOption.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Current Selection Display */}
             <div className="mt-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
               <p className="text-center text-gray-700">
                 <span className="font-semibold">Currently viewing:</span> {subject} from <span className="text-orange-600 font-semibold">{country}</span> 
-                {' '}• Age group: <span className="text-orange-600 font-semibold">{categoryNames[category]}</span>
+                {' '}• Category: <span className="text-orange-600 font-semibold">{getCurrentCategoryName()}</span>
                 {items.length > 0 && (
                   <span> • <span className="text-green-600 font-semibold">{items.length}</span> {items.length === 1 ? 'result' : 'results'} found</span>
                 )}
@@ -259,13 +320,17 @@ export default function Gallery() {
               <div className="text-8xl mb-6">🔍</div>
               <h3 className="text-3xl font-bold text-gray-700 mb-4">No works found</h3>
               <p className="text-gray-600 mb-8 text-lg">
-                No {subject.toLowerCase()} found for <strong>{country}</strong> in the <strong>{categoryNames[category]}</strong> category.
+                No {subject.toLowerCase()} found for <strong>{country}</strong> in the <strong>{getCurrentCategoryName()}</strong> category.
               </p>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 max-w-lg mx-auto">
                 <div className="text-4xl mb-3">💡</div>
                 <p className="text-yellow-800 font-medium">
-                  <strong>Tip:</strong> Try Kazakhstan and Artworks for sample data, or contact your representative to submit works!
+                  <strong>Tip:</strong> Try different combinations of country, subject, and category, or contact your representative to submit works!
                 </p>
+                <div className="mt-4 text-sm text-yellow-700">
+                  <p>📝 <strong>For Art:</strong> Categories are Age 6-9, Age 10-13, Age 14-17</p>
+                  <p>📊 <strong>For Math:</strong> Categories are Grade 5-6, Grade 7-8, Grade 9-10, Grade 11-12</p>
+                </div>
               </div>
             </div>
           ) : (
@@ -275,7 +340,7 @@ export default function Gallery() {
                   {subjects.find(s => s.id === subject)?.icon} {subject} Gallery
                 </h3>
                 <p className="text-xl text-gray-600">
-                  {categoryNames[category]} • {country} • {items.length} amazing {items.length === 1 ? 'work' : 'works'}
+                  {getCurrentCategoryName()} • {country} • {items.length} amazing {items.length === 1 ? 'work' : 'works'}
                 </p>
               </div>
               
@@ -292,6 +357,9 @@ export default function Gallery() {
                             src={item.file_path || "/image/artwork-sample.png"}
                             alt={item.title}
                             className="w-full h-56 object-cover"
+                            onError={(e) => {
+                              e.target.src = "/image/artwork-placeholder.png";
+                            }}
                           />
                           {/* Art badge */}
                           <div className="absolute top-4 left-4">
@@ -305,7 +373,7 @@ export default function Gallery() {
                           <div className="w-full h-56 bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-100 flex items-center justify-center">
                             <div className="text-center">
                               <div className="text-6xl mb-3">📐</div>
-                              <p className="text-gray-700 font-semibold text-lg">{item.title}</p>
+                              <p className="text-gray-700 font-semibold text-lg px-4">{item.title}</p>
                             </div>
                           </div>
                           {/* Math badge */}
@@ -333,7 +401,7 @@ export default function Gallery() {
                       {/* Student Information */}
                       {item.student ? (
                         <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                          <p className="font-semibold text-gray-800 mb-2">{item.student.full_name}</p>
+                          <p className="font-semibold text-gray-800 mb-2">{item.student.name || item.student.full_name}</p>
                           <div className="flex items-center justify-between text-sm text-gray-600">
                             <span className="flex items-center">
                               <span className="mr-1">👤</span>
@@ -361,9 +429,11 @@ export default function Gallery() {
                           <span className="mr-1">🌍</span>
                           {item.country}
                         </span>
-                        <span className={`flex items-center px-3 py-1 rounded-full ${categories.find(c => c.id === item.category_id)?.color || 'bg-gray-100 text-gray-800'}`}>
-                          <span className="mr-1">{categories.find(c => c.id === item.category_id)?.icon}</span>
-                          {categoryNames[item.category_id]}
+                        <span className={`flex items-center px-3 py-1 rounded-full ${
+                          getAvailableCategories().find(c => c.id === item.category_id)?.color || 'bg-gray-100 text-gray-800'
+                        }`}>
+                          <span className="mr-1">{getAvailableCategories().find(c => c.id === item.category_id)?.icon}</span>
+                          {getCurrentCategoryName()}
                         </span>
                       </div>
                     </div>
