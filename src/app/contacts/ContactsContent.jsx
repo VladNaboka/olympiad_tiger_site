@@ -130,7 +130,7 @@ export default function ContactsContent() {
               <div className="lg:w-1/5 pr-8 flex flex-col">
                 <h3 className="text-lg font-bold text-gray-800 mb-4">Stay connected:</h3>
                 <a href="https://instagram.com/tigers.olympiad" className="text-orange-500 hover:underline mb-2">📷 Instagram</a>
-                <a href="https://t.me/olympiadinkz" className="text-orange-500 hover:underline">💬 Telegram</a>
+                <a href="https://t.me/+esmA1x17nyI0OGMy" className="text-orange-500 hover:underline">💬 Telegram</a>
               </div>
               
               {/* Contact Form */}
