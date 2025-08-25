@@ -5,6 +5,7 @@ import { addStudent } from '../../api/students_api';
 import { uploadArtWork } from '../../api/student_art_works';
 import { createMathWork } from '../../api/student_math_works';
 import { COUNTRIES, SUBJECTS, getCategoriesBySubject, calculateCategory, calculateAge, generateStudentId, getCategoryName } from '../../utils/constants';
+import DateSelector from './DateSelector';
 
 export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
   const [formData, setFormData] = useState({
@@ -298,66 +299,30 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
                 </select>
               </div>
 
-              <div className="md:col-span-2">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Date of Birth *
-                </label>
-                <input
-                  type="date"
-                  value={formData.birth_date}
-                  min={getDateLimits().min}
-                  max={getDateLimits().max}
-                  onChange={(e) => {
-                    setFormData({
-                      ...formData, 
-                      birth_date: e.target.value
-                    });
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-black"
-                  disabled={!selectedSubject}
-                  required
-                />
-                
-                {!selectedSubject && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    Please select a subject first to enable date selection
-                  </p>
-                )}
-
-                {/* Показываем информацию о возрасте и категории */}
-                {formData.birth_date && selectedSubject && (
-                  <div className={`mt-2 p-3 border rounded-md ${
-                    ageValidation.isValid 
-                      ? 'bg-green-50 border-green-200' 
-                      : 'bg-red-50 border-red-200'
-                  }`}>
-                    <div className="flex items-center space-x-2">
-                      <span className={`text-sm font-medium ${
-                        ageValidation.isValid ? 'text-green-700' : 'text-red-700'
-                      }`}>
-                        {ageValidation.isValid ? '✅' : '❌'} {ageValidation.message}
-                      </span>
-                    </div>
-                    {ageValidation.isValid && (
-                      <div className="mt-1 text-xs text-green-600">
-                        Auto-assigned to: <strong>{ageValidation.categoryName}</strong>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Показываем ограничения по возрасту */}
-                {selectedSubject && (
-                  <div className="mt-2 p-2 bg-gray-50 border border-gray-200 rounded">
-                    <p className="text-xs text-gray-600">
-                      📅 Allowed age range for {selectedSubject === '1' ? 'Art' : 'Mathematics'}: 
-                      {' '}
-                      {getCategoriesBySubject(selectedSubject)[0]?.minAge}-
-                      {getCategoriesBySubject(selectedSubject).slice(-1)[0]?.maxAge} years
-                    </p>
-                  </div>
-                )}
-              </div>
+              <DateSelector
+  label="Birth Date"
+  name="birth_date"
+  defaultValue=""
+  required={true}
+  selectedSubject={selectedSubject}
+  onDateChange={(date) => {
+    setFormData(prev => ({ ...prev, birth_date: date }));
+  }}
+  onAgeValidation={(validation) => {
+    setAgeValidation(validation);
+    if (validation.isValid && validation.categoryId) {
+      setFormData(prev => ({ 
+        ...prev, 
+        category_id: validation.categoryId.toString() 
+      }));
+    } else {
+      setFormData(prev => ({ 
+        ...prev, 
+        category_id: '' 
+      }));
+    }
+  }}
+/>
 
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -375,7 +340,7 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
 
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Phone
+                  Phone *
                 </label>
                 <input
                   type="tel"
@@ -388,7 +353,7 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
 
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Email
+                  Email *
                 </label>
                 <input
                   type="email"
