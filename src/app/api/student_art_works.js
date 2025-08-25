@@ -286,3 +286,40 @@ export function getArtWorksByCountry(country) {
         throw error;
     });
 }
+
+/**
+ * Обновить картинку художественной работы
+ * @param {number|string} id 
+ * @param {FormData} formData - данные формы (file обязателен)
+ */
+export function updateArtWorkImage(id, formData) {
+    console.log('🔄 updateArtWorkImage called with ID:', id);
+
+    // Логируем содержимое FormData
+    for (let [key, value] of formData.entries()) {
+        if (value instanceof File) {
+            console.log(`📤 FormData ${key}:`, value.name, value.size, 'bytes');
+        } else {
+            console.log(`📤 FormData ${key}:`, value);
+        }
+    }
+
+    return fetch(`${API_URL}/artworks/${id}/image`, {
+        method: "PUT",
+        body: formData // НЕ ставим Content-Type
+    }).then((response) => {
+        console.log('📡 Update image response status:', response.status);
+
+        if (!response.ok) {
+            throw new Error(`Update image failed: ${response.status} ${response.statusText}`);
+        }
+
+        return response.json();
+    }).then((result) => {
+        console.log('✅ Update artwork image API response:', result);
+        return result;
+    }).catch((error) => {
+        console.error('❌ Update artwork image API error:', error);
+        throw error;
+    });
+}
