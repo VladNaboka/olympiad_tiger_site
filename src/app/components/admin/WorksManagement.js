@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { getStudentsByCountry } from '../../api/students_api';
-import { getAllArtWorksByCountry, getArtWorksByCountryAndCategory, uploadArtWork, setArtWorkScore } from '../../api/student_art_works';
-import { getAllMathWorksByCountry, getMathWorksByCountryAndCategory, createMathWork, setMathWorkScore } from '../../api/student_math_works';
-import { CATEGORIES, getCategoryName } from '../../utils/constants';
+import { getArtWorksByCountryAndCategory, uploadArtWork, setArtWorkScore } from '../../api/student_art_works';
+import { getMathWorksByCountryAndCategory, createMathWork, setMathWorkScore } from '../../api/student_math_works';
+import { CATEGORIES, ART_CATEGORIES, MATH_CATEGORIES, getCategoryName } from '../../utils/constants';
 
 export default function WorksManagement({ user }) {
   const [activeTab, setActiveTab] = useState('art'); // 'art' or 'math'
@@ -47,28 +47,44 @@ export default function WorksManagement({ user }) {
   const loadWorks = async () => {
     setLoading(true);
     try {
-      let worksData;
+      let worksData = [];
       
       if (activeTab === 'art') {
         if (localFilters.category) {
           // Загружаем работы для конкретной категории
           worksData = await getArtWorksByCountryAndCategory(user.country, parseInt(localFilters.category));
         } else {
-          // Загружаем все художественные работы
-          worksData = await getAllArtWorksByCountry(user.country);
+          // Загружаем все художественные работы - используем ART_CATEGORIES (ID 5, 6, 7)
+          const artPromises = ART_CATEGORIES.map(category => 
+            getArtWorksByCountryAndCategory(user.country, category.id).catch(() => [])
+          );
+          const artResults = await Promise.all(artPromises);
+          worksData = artResults.flat();
         }
       } else {
         if (localFilters.category) {
           // Загружаем работы для конкретной категории
           worksData = await getMathWorksByCountryAndCategory(user.country, parseInt(localFilters.category));
         } else {
-          // Загружаем все математические работы
-          worksData = await getAllMathWorksByCountry(user.country);
+          // Загружаем все математические работы - используем MATH_CATEGORIES (ID 1, 2, 3, 4)
+          const mathPromises = MATH_CATEGORIES.map(category => 
+            getMathWorksByCountryAndCategory(user.country, category.id).catch(() => [])
+          );
+          const mathResults = await Promise.all(mathPromises);
+          worksData = mathResults.flat();
         }
       }
       
-      setWorks(worksData || []);
-      console.log(`📊 Loaded ${worksData?.length || 0} ${activeTab} works for ${user.country} ${localFilters.category ? `(category ${localFilters.category})` : '(all categories)'}`);
+      // Фильтруем null/undefined значения и проверяем, что у объектов есть обязательные поля
+      const validWorks = (worksData || []).filter(work => 
+        work && 
+        typeof work === 'object' && 
+        work.id && 
+        work.title
+      );
+      
+      setWorks(validWorks);
+      console.log(`📊 Loaded ${validWorks.length} valid ${activeTab} works for ${user.country} ${localFilters.category ? `(category ${localFilters.category})` : '(all categories)'}`);
     } catch (error) {
       console.error('Error loading works:', error);
       setWorks([]);
@@ -85,13 +101,6 @@ export default function WorksManagement({ user }) {
             Manage works from {user.country} - {localFilters.category ? getCategoryName(localFilters.category) : 'All Categories'}
           </p>
         </div>
-        <button
-          onClick={() => setShowUploadModal(true)}
-          className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 flex items-center"
-        >
-          <span className="mr-2">+</span>
-          Add {activeTab === 'art' ? 'Artwork' : 'Math Work'}
-        </button>
       </div>
 
       {/* Локальные фильтры для Works */}
@@ -106,7 +115,7 @@ export default function WorksManagement({ user }) {
               className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
             >
               <option value="">All Categories</option>
-              {CATEGORIES.map(category => (
+              {(activeTab === 'art' ? ART_CATEGORIES : MATH_CATEGORIES).map(category => (
                 <option key={category.id} value={category.id}>{category.name}</option>
               ))}
             </select>
@@ -142,14 +151,14 @@ export default function WorksManagement({ user }) {
         <div className="bg-green-50 p-4 rounded-lg">
           <h3 className="text-sm font-semibold text-green-800">Scored Works</h3>
           <p className="text-2xl font-bold text-green-600">
-            {works.filter(w => w.score).length}
+            {works.filter(w => w && w.score).length}
           </p>
         </div>
         <div className="bg-yellow-50 p-4 rounded-lg">
           <h3 className="text-sm font-semibold text-yellow-800">Avg Score</h3>
           <p className="text-2xl font-bold text-yellow-600">
             {(() => {
-              const scoredWorks = works.filter(w => w.score);
+              const scoredWorks = works.filter(w => w && w.score);
               return scoredWorks.length > 0 
                 ? (scoredWorks.reduce((sum, w) => sum + w.score, 0) / scoredWorks.length).toFixed(1)
                 : '0.0';
@@ -219,7 +228,7 @@ export default function WorksManagement({ user }) {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {works.map((work) => (
+          {works.filter(work => work && work.id).map((work) => (
             <div key={work.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
               {activeTab === 'art' ? (
                 <div className="relative">
@@ -300,19 +309,19 @@ export default function WorksManagement({ user }) {
             <div>
               <span className="font-medium text-gray-700">Scored:</span>
               <span className="ml-2 text-green-600 font-semibold">
-                {works.filter(w => w.score).length}
+                {works.filter(w => w && w.score).length}
               </span>
             </div>
             <div>
               <span className="font-medium text-gray-700">Unscored:</span>
               <span className="ml-2 text-orange-600 font-semibold">
-                {works.filter(w => !w.score).length}
+                {works.filter(w => w && !w.score).length}
               </span>
             </div>
             <div>
               <span className="font-medium text-gray-700">Categories:</span>
               <span className="ml-2 text-purple-600 font-semibold">
-                {[...new Set(works.map(w => w.category_id))].length}
+                {[...new Set(works.filter(w => w && w.category_id).map(w => w.category_id))].length}
               </span>
             </div>
           </div>
@@ -468,21 +477,30 @@ function UploadWorkModal({ user, students, activeTab, onClose, onSuccess }) {
           </div>
 
           {activeTab === 'art' && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Artwork File *
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setArtworkFile(e.target.files[0])}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                required
-              />
-              <p className="text-sm text-gray-500 mt-1">
-                Supported formats: JPG, PNG, GIF (max 10MB)
-              </p>
-            </div>
+                    <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Artwork File *
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setArtworkFile(e.target.files[0])}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        required
+                      />
+                      <div className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus-within:ring-2 focus-within:ring-purple-500 bg-white cursor-pointer hover:bg-gray-50">
+                        {artworkFile ? (
+                          <span className="text-gray-900">{artworkFile.name}</span>
+                        ) : (
+                          <span className="text-gray-500">Choose artwork file or drag and drop</span>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Supported formats: JPG, PNG, GIF (max 10MB)
+                    </p>
+                  </div>
           )}
 
           <div className="flex justify-end space-x-3">

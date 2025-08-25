@@ -137,33 +137,6 @@ function AddRepresentativeForm({ onClose, onSuccess }) {
                 ))}
               </select>
             </div>
-
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                City *
-              </label>
-              <input
-                type="text"
-                value={formData.city}
-                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Organization *
-              </label>
-              <input
-                type="text"
-                value={formData.school}
-                onChange={(e) => setFormData({ ...formData, school: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                placeholder="School or educational organization"
-                required
-              />
-            </div>
           </div>
 
           <div className="flex justify-end space-x-3 mt-6">
@@ -1171,8 +1144,6 @@ function MainAdminDashboard({ user, onLogout }) {
             formData.get('email'),
             password || undefined, // Передаем пароль только если он введен
             formData.get('country'),
-            formData.get('city'),
-            formData.get('school'),
             formData.get('phone'),
             undefined  // role_id не меняем
           );
@@ -1268,26 +1239,6 @@ function MainAdminDashboard({ user, onLogout }) {
               ))}
             </select>
           </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">City</label>
-            <input
-              type="text"
-              name="city"
-              defaultValue={editingRepresentative.city}
-              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">Organization</label>
-            <input
-              type="text"
-              name="school"
-              defaultValue={editingRepresentative.school}
-              className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-          </div>
         </div>
         
         <div className="flex justify-end space-x-3 mt-6">
@@ -1326,13 +1277,38 @@ function RegionalAdminDashboard({ user, onLogout }) {
   });
   const [loading, setLoading] = useState(false);
 
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [deletingStudent, setDeletingStudent] = useState(null);
+
+  const handleEditStudent = (student) => {
+    setEditingStudent(student);
+  };
+  
+  const handleDeleteStudent = (student) => {
+    setDeletingStudent(student);
+  };
+  
+  const confirmDeleteStudent = async (studentId) => {
+    try {
+      await deleteStudent(studentId);
+      await loadData();
+      setDeletingStudent(null);
+      alert('Student deleted successfully');
+    } catch (error) {
+      alert('Error deleting student: ' + error.message);
+    }
+  };
+
   // Загрузка данных для регионального админа
   const loadData = async () => {
     if (!user.country) return;
     setLoading(true);
 
     try {
+      console.log('🔄 Loading students for country:', user.country);
       const studentsData = await getStudentsByCountry(user.country);
+      console.log('📊 Students loaded:', studentsData?.length || 0, 'students');
+      console.log('📋 First student example:', studentsData?.[0]);
       setStudents(studentsData || []);
 
       // Загружаем работы если выбрана категория
@@ -1481,6 +1457,7 @@ function RegionalAdminDashboard({ user, onLogout }) {
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">School</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -1507,6 +1484,22 @@ function RegionalAdminDashboard({ user, onLogout }) {
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                             {getCategoryName(student.category_id)}
                           </span>
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <div className="flex items-center space-x-2">
+                            <button
+                              onClick={() => handleEditStudent(student)}
+                              className="text-blue-600 hover:text-blue-800 font-medium"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteStudent(student)}
+                              className="text-red-600 hover:text-red-800 font-medium"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -1547,6 +1540,240 @@ function RegionalAdminDashboard({ user, onLogout }) {
           }}
           userCountry={user.country} // Региональный админ может добавлять только в свою страну
         />
+      )}
+            {/* Модальное окно редактирования студента для регионального админа */}
+            {editingStudent && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-orange-600">Edit Student</h3>
+              <button 
+                onClick={() => setEditingStudent(null)} 
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+            
+            <form onSubmit={async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  
+  console.log('📝 Form data entries:');
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}: ${value}`);
+  }
+  
+  const studentData = {
+    id: editingStudent.id,
+    name: formData.get('name'),
+    birth_date: formData.get('birth_date'),
+    school: formData.get('school'),
+    phone: formData.get('phone'),
+    email: formData.get('email'),
+    country: formData.get('country'),
+    city: formData.get('city'),
+    course_id: formData.get('course_id'),
+    category_id: formData.get('category_id')
+  };
+  
+  console.log('🔍 Student data to send:', studentData);
+  console.log('🔍 Original editing student:', editingStudent);
+  
+  try {
+    const result = await updateStudent(studentData);
+    console.log('✅ Update result:', result);
+    await loadData();
+    setEditingStudent(null);
+    alert('Student updated successfully!');
+  } catch (error) {
+    console.error('❌ Update error:', error);
+    alert('Error updating student: ' + error.message);
+  }
+}}>
+              {/* ВСЕ ПОЛЯ ФОРМЫ - скопируйте из главного админа */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Full Name *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    defaultValue={editingStudent.name || editingStudent.full_name}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Birth Date *</label>
+                  <input
+                    type="date"
+                    name="birth_date"
+                    defaultValue={editingStudent.birth_date ? new Date(editingStudent.birth_date).toISOString().split('T')[0] : ''}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Email *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    defaultValue={editingStudent.email}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Phone *</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    defaultValue={editingStudent.phone}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Country *</label>
+                  <select
+                    name="country"
+                    defaultValue={editingStudent.country}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                    disabled
+                  >
+                    {COUNTRIES.map(country => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </select>
+                  <input
+                    type="hidden"
+                    name="country"
+                    value={editingStudent.country}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">City *</label>
+                  <input
+                    type="text"
+                    name="city"
+                    defaultValue={editingStudent.city}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+                
+                <div className="md:col-span-2">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">School *</label>
+                  <input
+                    type="text"
+                    name="school"
+                    defaultValue={editingStudent.school}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
+                  <select
+                    name="course_id"
+                    defaultValue={editingStudent.course_id}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  >
+                    {SUBJECTS.map(subject => (
+                      <option key={subject.id} value={subject.id}>{subject.name}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
+                  <select
+                    name="category_id"
+                    defaultValue={editingStudent.category_id}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  >
+                    {CATEGORIES.map(category => (
+                      <option key={category.id} value={category.id}>{category.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setEditingStudent(null)}
+                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+                >
+                  Update Student
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Модальное окно подтверждения удаления студента для регионального админа */}
+      {deletingStudent && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-red-600">Delete Student</h3>
+              <button 
+                onClick={() => setDeletingStudent(null)} 
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="mb-6">
+              <p className="text-gray-700 mb-4">
+                Are you sure you want to delete student <strong>{deletingStudent.name || deletingStudent.full_name}</strong>?
+              </p>
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <p className="text-sm text-gray-600">
+                  <strong>School:</strong> {deletingStudent.school}<br/>
+                  <strong>Country:</strong> {deletingStudent.country}<br/>
+                  <strong>City:</strong> {deletingStudent.city}
+                </p>
+              </div>
+              <p className="text-red-600 text-sm mt-3">
+                ⚠️ This action cannot be undone!
+              </p>
+            </div>
+            
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setDeletingStudent(null)}
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => confirmDeleteStudent(deletingStudent.id)}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Delete Student
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
