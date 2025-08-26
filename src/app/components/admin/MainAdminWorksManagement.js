@@ -12,6 +12,8 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
   const [activeTab, setActiveTab] = useState('art'); // 'art' or 'math'
   const [students, setStudents] = useState([]);
   const [works, setWorks] = useState([]);
+  const [allArtWorks, setAllArtWorks] = useState([]);
+  const [allMathWorks, setAllMathWorks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
@@ -29,9 +31,11 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
   // Загрузка работ при изменении фильтров
   useEffect(() => {
     if (filters.country) {
-      loadWorks();
+      loadAllWorks();
     } else {
       setWorks([]);
+      setAllArtWorks([]);
+      setAllMathWorks([]);
     }
   }, [filters.country, filters.category, activeTab]);
 
@@ -45,54 +49,81 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
     }
   };
 
-  const loadWorks = async () => {
+  const loadAllWorks = async () => {
     setLoading(true);
     try {
-      let worksData = [];
+      let artWorksData = [];
+      let mathWorksData = [];
       
-      if (activeTab === 'art') {
-        if (filters.category) {
-          // Загружаем работы для конкретной категории
-          worksData = await getArtWorksByCountryAndCategory(filters.country, parseInt(filters.category));
-        } else {
-          // Загружаем все художественные работы из страны
-          for (const category of CATEGORIES) {
-            try {
-              const categoryArtworks = await getArtWorksByCountryAndCategory(filters.country, category.id);
-              if (categoryArtworks && categoryArtworks.length > 0) {
-                worksData.push(...categoryArtworks);
-              }
-            } catch (error) {
-              console.warn(`No artworks for ${filters.country} category ${category.id}:`, error);
-            }
-          }
-        }
+      // Загружаем все художественные работы
+      if (filters.category) {
+        // Загружаем работы для конкретной категории
+        artWorksData = await getArtWorksByCountryAndCategory(filters.country, parseInt(filters.category));
+        mathWorksData = await getMathWorksByCountryAndCategory(filters.country, parseInt(filters.category));
       } else {
-        if (filters.category) {
-          // Загружаем работы для конкретной категории
-          worksData = await getMathWorksByCountryAndCategory(filters.country, parseInt(filters.category));
-        } else {
-          // Загружаем все математические работы из страны
-          for (const category of CATEGORIES) {
-            try {
-              const categoryMathworks = await getMathWorksByCountryAndCategory(filters.country, category.id);
-              if (categoryMathworks && categoryMathworks.length > 0) {
-                worksData.push(...categoryMathworks);
-              }
-            } catch (error) {
-              console.warn(`No math works for ${filters.country} category ${category.id}:`, error);
+        // Загружаем все работы из страны
+        for (const category of CATEGORIES) {
+          try {
+            const categoryArtworks = await getArtWorksByCountryAndCategory(filters.country, category.id);
+            if (categoryArtworks && categoryArtworks.length > 0) {
+              artWorksData.push(...categoryArtworks);
             }
+          } catch (error) {
+            console.warn(`No artworks for ${filters.country} category ${category.id}:`, error);
+          }
+
+          try {
+            const categoryMathworks = await getMathWorksByCountryAndCategory(filters.country, category.id);
+            if (categoryMathworks && categoryMathworks.length > 0) {
+              mathWorksData.push(...categoryMathworks);
+            }
+          } catch (error) {
+            console.warn(`No math works for ${filters.country} category ${category.id}:`, error);
           }
         }
       }
       
-      setWorks(worksData || []);
-      console.log(`📊 Main Admin: Loaded ${worksData?.length || 0} ${activeTab} works from ${filters.country} ${filters.category ? `(category ${filters.category})` : '(all categories)'}`);
+      setAllArtWorks(artWorksData || []);
+      setAllMathWorks(mathWorksData || []);
+      
+      // Устанавливаем работы для текущего активного таба
+      setWorks(activeTab === 'art' ? artWorksData || [] : mathWorksData || []);
+      
+      console.log(`📊 Main Admin: Loaded ${(artWorksData?.length || 0)} art works and ${(mathWorksData?.length || 0)} math works from ${filters.country} ${filters.category ? `(category ${filters.category})` : '(all categories)'}`);
     } catch (error) {
       console.error('Error loading works:', error);
       setWorks([]);
+      setAllArtWorks([]);
+      setAllMathWorks([]);
     }
     setLoading(false);
+  };
+
+  // Функция для валидации файлов
+  const validateFile = (file) => {
+    if (!file) {
+      return { isValid: false, error: 'Please select a file' };
+    }
+
+    // Проверка типа файла
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(file.type.toLowerCase())) {
+      return { 
+        isValid: false, 
+        error: 'Invalid file format. Only JPG, PNG, and GIF files are allowed.' 
+      };
+    }
+
+    // Проверка размера файла (10MB = 10 * 1024 * 1024 bytes)
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      return { 
+        isValid: false, 
+        error: `File is too large. Maximum size is 10MB. Your file is ${(file.size / (1024 * 1024)).toFixed(1)}MB.` 
+      };
+    }
+
+    return { isValid: true, error: '' };
   };
 
   return (
@@ -192,12 +223,12 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
       {/* Works Management Content */}
       {filters.country && (
         <>
-          {/* Statistics */}
+          {/* Statistics - Now shows both art and math counts */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="bg-purple-50 p-4 rounded-lg">
               <h3 className="text-sm font-semibold text-purple-800">Art Works</h3>
               <p className="text-2xl font-bold text-purple-600">
-                {activeTab === 'art' ? works.length : '-'}
+                {allArtWorks.length}
               </p>
               <p className="text-xs text-purple-600 mt-1">
                 {filters.category ? getCategoryName(filters.category) : 'All Categories'}
@@ -206,7 +237,7 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
             <div className="bg-blue-50 p-4 rounded-lg">
               <h3 className="text-sm font-semibold text-blue-800">Math Works</h3>
               <p className="text-2xl font-bold text-blue-600">
-                {activeTab === 'math' ? works.length : '-'}
+                {allMathWorks.length}
               </p>
               <p className="text-xs text-blue-600 mt-1">
                 Country: {filters.country}
@@ -220,7 +251,7 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
             <div className="bg-yellow-50 p-4 rounded-lg">
               <h3 className="text-sm font-semibold text-yellow-800">Scored</h3>
               <p className="text-2xl font-bold text-yellow-600">
-                {works.filter(w => w.score).length}
+                {allArtWorks.filter(w => w.score).length + allMathWorks.filter(w => w.score).length}
               </p>
               <p className="text-xs text-yellow-600 mt-1">
                 Works with scores
@@ -232,7 +263,10 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
           <div className="border-b border-gray-200 mb-6">
             <nav className="-mb-px flex space-x-8">
               <button
-                onClick={() => setActiveTab('art')}
+                onClick={() => {
+                  setActiveTab('art');
+                  setWorks(allArtWorks);
+                }}
                 className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
                   activeTab === 'art'
                     ? 'border-purple-500 text-purple-600'
@@ -242,11 +276,14 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
                 <span>🎨</span>
                 <span>Art Works</span>
                 <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">
-                  {activeTab === 'art' ? works.length : '-'}
+                  {allArtWorks.length}
                 </span>
               </button>
               <button
-                onClick={() => setActiveTab('math')}
+                onClick={() => {
+                  setActiveTab('math');
+                  setWorks(allMathWorks);
+                }}
                 className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
                   activeTab === 'math'
                     ? 'border-blue-500 text-blue-600'
@@ -256,7 +293,7 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
                 <span>📐</span>
                 <span>Math Works</span>
                 <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
-                  {activeTab === 'math' ? works.length : '-'}
+                  {allMathWorks.length}
                 </span>
               </button>
             </nav>
@@ -355,31 +392,33 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
           )}
 
           {/* Summary */}
-          {works.length > 0 && (
+          {(allArtWorks.length > 0 || allMathWorks.length > 0) && (
             <div className="mt-6 bg-gray-50 p-4 rounded-lg">
               <h4 className="text-sm font-semibold text-gray-700 mb-2">📊 Summary</h4>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-sm">
                 <div>
                   <span className="font-medium text-gray-700">Total Works:</span>
-                  <span className="ml-2 text-gray-900 font-semibold">{works.length}</span>
+                  <span className="ml-2 text-gray-900 font-semibold">{allArtWorks.length + allMathWorks.length}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Art Works:</span>
+                  <span className="ml-2 text-purple-600 font-semibold">{allArtWorks.length}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Math Works:</span>
+                  <span className="ml-2 text-blue-600 font-semibold">{allMathWorks.length}</span>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700">Scored:</span>
                   <span className="ml-2 text-green-600 font-semibold">
-                    {works.filter(w => w.score).length}
-                  </span>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-700">Unscored:</span>
-                  <span className="ml-2 text-orange-600 font-semibold">
-                    {works.filter(w => !w.score).length}
+                    {allArtWorks.filter(w => w.score).length + allMathWorks.filter(w => w.score).length}
                   </span>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700">Avg Score:</span>
-                  <span className="ml-2 text-purple-600 font-semibold">
+                  <span className="ml-2 text-orange-600 font-semibold">
                     {(() => {
-                      const scoredWorks = works.filter(w => w.score);
+                      const scoredWorks = [...allArtWorks, ...allMathWorks].filter(w => w.score);
                       return scoredWorks.length > 0 
                         ? (scoredWorks.reduce((sum, w) => sum + w.score, 0) / scoredWorks.length).toFixed(1)
                         : 'N/A';
@@ -399,10 +438,11 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
           students={students}
           activeTab={activeTab}
           userCountry={filters.country}
+          validateFile={validateFile}
           onClose={() => setShowUploadModal(false)}
           onSuccess={() => {
             setShowUploadModal(false);
-            loadWorks();
+            loadAllWorks();
           }}
         />
       )}
@@ -419,7 +459,7 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
           onSuccess={() => {
             setShowScoreModal(false);
             setSelectedWork(null);
-            loadWorks();
+            loadAllWorks();
           }}
         />
       )}
@@ -428,14 +468,36 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
 }
 
 // Upload Work Modal Component
-function UploadWorkModal({ user, students, activeTab, userCountry, onClose, onSuccess }) {
+function UploadWorkModal({ user, students, activeTab, userCountry, validateFile, onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     student_id: '',
     title: '',
     category_id: ''
   });
   const [artworkFile, setArtworkFile] = useState(null);
+  const [fileError, setFileError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Обработчик выбора файла с валидацией
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    setFileError('');
+    
+    if (file) {
+      const validation = validateFile(file);
+      if (validation.isValid) {
+        setArtworkFile(file);
+        setFileError('');
+      } else {
+        setArtworkFile(null);
+        setFileError(validation.error);
+        // Очищаем input
+        e.target.value = '';
+      }
+    } else {
+      setArtworkFile(null);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -445,6 +507,14 @@ function UploadWorkModal({ user, students, activeTab, userCountry, onClose, onSu
       if (activeTab === 'art') {
         if (!artworkFile) {
           alert('Please select an artwork file');
+          setLoading(false);
+          return;
+        }
+
+        // Дополнительная проверка файла перед отправкой
+        const validation = validateFile(artworkFile);
+        if (!validation.isValid) {
+          alert(validation.error);
           setLoading(false);
           return;
         }
@@ -541,30 +611,54 @@ function UploadWorkModal({ user, students, activeTab, userCountry, onClose, onSu
           </div>
 
           {activeTab === 'art' && (
-                    <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                      Artwork File *
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setArtworkFile(e.target.files[0])}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                        required
-                      />
-                      <div className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus-within:ring-2 focus-within:ring-purple-500 bg-white cursor-pointer hover:bg-gray-50">
-                        {artworkFile ? (
-                          <span className="text-gray-900">{artworkFile.name}</span>
-                        ) : (
-                          <span className="text-gray-500">Choose artwork file or drag and drop</span>
-                        )}
-                      </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Artwork File *
+              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif"
+                  onChange={handleFileSelect}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  required
+                />
+                <div className={`w-full px-3 py-2 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors ${
+                  fileError ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white focus-within:ring-2 focus-within:ring-orange-500'
+                }`}>
+                  {artworkFile ? (
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-900">{artworkFile.name}</span>
+                      <span className="text-sm text-gray-500">
+                        ({(artworkFile.size / (1024 * 1024)).toFixed(1)}MB)
+                      </span>
                     </div>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Supported formats: JPG, PNG, GIF (max 10MB)
-                    </p>
-                  </div>
+                  ) : (
+                    <span className="text-gray-500">Choose artwork file or drag and drop</span>
+                  )}
+                </div>
+              </div>
+              
+              {fileError ? (
+                <p className="text-sm text-red-600 mt-1 flex items-center">
+                  <span className="mr-1">⚠️</span>
+                  {fileError}
+                </p>
+              ) : (
+                <p className="text-sm text-gray-500 mt-1">
+                  Supported formats: JPG, PNG, GIF (max 10MB)
+                </p>
+              )}
+
+              {artworkFile && !fileError && (
+                <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded">
+                  <p className="text-sm text-green-700 flex items-center">
+                    <span className="mr-1">✅</span>
+                    Valid file selected: {artworkFile.name} ({(artworkFile.size / (1024 * 1024)).toFixed(1)}MB)
+                  </p>
+                </div>
+              )}
+            </div>
           )}
 
           <div className="flex justify-end space-x-3">
@@ -577,8 +671,12 @@ function UploadWorkModal({ user, students, activeTab, userCountry, onClose, onSu
             </button>
             <button
               type="submit"
-              disabled={loading}
-              className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 disabled:opacity-50"
+              disabled={loading || (activeTab === 'art' && (!artworkFile || fileError))}
+              className={`px-4 py-2 rounded-md transition-colors ${
+                !loading && (activeTab === 'math' || (artworkFile && !fileError))
+                  ? 'bg-orange-500 text-white hover:bg-orange-600'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
             >
               {loading ? 'Uploading...' : `Upload ${activeTab === 'art' ? 'Artwork' : 'Math Work'}`}
             </button>

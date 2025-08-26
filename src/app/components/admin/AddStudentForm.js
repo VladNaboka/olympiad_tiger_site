@@ -27,6 +27,55 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
   const [addedStudent, setAddedStudent] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState('');
   const [ageValidation, setAgeValidation] = useState({ isValid: false, message: '', age: null, categoryName: '' });
+  const [fileError, setFileError] = useState('');
+
+  // Валидация файла изображения
+  const validateFile = (file) => {
+    if (!file) {
+      return { isValid: false, error: 'Please select a file' };
+    }
+
+    // Проверка типа файла
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(file.type.toLowerCase())) {
+      return { 
+        isValid: false, 
+        error: 'Invalid file format. Only JPG, PNG, and GIF files are allowed.' 
+      };
+    }
+
+    // Проверка размера файла (10MB = 10 * 1024 * 1024 bytes)
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      return { 
+        isValid: false, 
+        error: `File is too large. Maximum size is 10MB. Your file is ${(file.size / (1024 * 1024)).toFixed(1)}MB.` 
+      };
+    }
+
+    return { isValid: true, error: '' };
+  };
+
+  // Обработчик выбора файла с валидацией
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    setFileError('');
+    
+    if (file) {
+      const validation = validateFile(file);
+      if (validation.isValid) {
+        setArtworkFile(file);
+        setFileError('');
+      } else {
+        setArtworkFile(null);
+        setFileError(validation.error);
+        // Очищаем input
+        e.target.value = '';
+      }
+    } else {
+      setArtworkFile(null);
+    }
+  };
 
   // Проверяем валидность формы для первого шага
   const isStep1Valid = () => {
@@ -43,6 +92,14 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
     const hasValidAge = ageValidation.isValid;
     
     return hasRequiredFields && hasCountry && hasValidCategory && hasValidAge;
+  };
+
+  // Проверяем валидность для второго шага
+  const isStep2Valid = () => {
+    if (formData.course_id === '1') { // Art
+      return artworkFile && !fileError;
+    }
+    return true; // Math не требует файла
   };
 
   // Автоматическое определение категории при изменении даты рождения или предмета
@@ -97,26 +154,6 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
       });
       setFormData(prev => ({ ...prev, category_id: '' }));
     }
-  };
-
-  const getDateLimits = () => {
-    if (!selectedSubject) return { min: '', max: '' };
-    
-    const categories = getCategoriesBySubject(selectedSubject);
-    const today = new Date();
-    
-    // Находим минимальный и максимальный возраст среди категорий
-    const minAge = Math.min(...categories.map(cat => cat.minAge));
-    const maxAge = Math.max(...categories.map(cat => cat.maxAge));
-    
-    // Вычисляем диапазон дат
-    const maxDate = new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate());
-    const minDate = new Date(today.getFullYear() - maxAge - 1, today.getMonth(), today.getDate());
-    
-    return {
-      min: minDate.toISOString().split('T')[0],
-      max: maxDate.toISOString().split('T')[0]
-    };
   };
 
   // Отслеживаем изменения для автоматического определения категории
@@ -181,12 +218,26 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
   // Шаг 2: Загрузка работы
   const handleWorkSubmit = async (e) => {
     e.preventDefault();
+    
+    if (formData.course_id === '1' && !isStep2Valid()) {
+      alert('Please select a valid artwork file (JPG, PNG, or GIF, max 10MB)');
+      return;
+    }
+    
     setLoading(true);
 
     try {
       if (formData.course_id === '1') { // Art
         if (!artworkFile) {
           alert('Please select an artwork file');
+          setLoading(false);
+          return;
+        }
+
+        // Дополнительная проверка файла перед отправкой
+        const validation = validateFile(artworkFile);
+        if (!validation.isValid) {
+          alert(validation.error);
           setLoading(false);
           return;
         }
@@ -300,29 +351,29 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
               </div>
 
               <DateSelector
-  label="Birth Date"
-  name="birth_date"
-  defaultValue=""
-  required={true}
-  selectedSubject={selectedSubject}
-  onDateChange={(date) => {
-    setFormData(prev => ({ ...prev, birth_date: date }));
-  }}
-  onAgeValidation={(validation) => {
-    setAgeValidation(validation);
-    if (validation.isValid && validation.categoryId) {
-      setFormData(prev => ({ 
-        ...prev, 
-        category_id: validation.categoryId.toString() 
-      }));
-    } else {
-      setFormData(prev => ({ 
-        ...prev, 
-        category_id: '' 
-      }));
-    }
-  }}
-/>
+                label="Birth Date"
+                name="birth_date"
+                defaultValue=""
+                required={true}
+                selectedSubject={selectedSubject}
+                onDateChange={(date) => {
+                  setFormData(prev => ({ ...prev, birth_date: date }));
+                }}
+                onAgeValidation={(validation) => {
+                  setAgeValidation(validation);
+                  if (validation.isValid && validation.categoryId) {
+                    setFormData(prev => ({ 
+                      ...prev, 
+                      category_id: validation.categoryId.toString() 
+                    }));
+                  } else {
+                    setFormData(prev => ({ 
+                      ...prev, 
+                      category_id: '' 
+                    }));
+                  }
+                }}
+              />
 
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -458,22 +509,46 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
                     <div className="relative">
                       <input
                         type="file"
-                        accept="image/*"
-                        onChange={(e) => setArtworkFile(e.target.files[0])}
+                        accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif"
+                        onChange={handleFileSelect}
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         required
                       />
-                      <div className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus-within:ring-2 focus-within:ring-purple-500 bg-white cursor-pointer hover:bg-gray-50">
+                      <div className={`w-full px-3 py-2 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors ${
+                        fileError ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white focus-within:ring-2 focus-within:ring-purple-500'
+                      }`}>
                         {artworkFile ? (
-                          <span className="text-gray-900">{artworkFile.name}</span>
+                          <div className="flex items-center justify-between">
+                            <span className="text-gray-900">{artworkFile.name}</span>
+                            <span className="text-sm text-gray-500">
+                              ({(artworkFile.size / (1024 * 1024)).toFixed(1)}MB)
+                            </span>
+                          </div>
                         ) : (
                           <span className="text-gray-500">Choose artwork file or drag and drop</span>
                         )}
                       </div>
                     </div>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Supported formats: JPG, PNG, GIF (max 10MB)
-                    </p>
+                    
+                    {fileError ? (
+                      <p className="text-sm text-red-600 mt-1 flex items-center">
+                        <span className="mr-1">⚠️</span>
+                        {fileError}
+                      </p>
+                    ) : (
+                      <p className="text-sm text-gray-500 mt-1">
+                        Supported formats: JPG, PNG, GIF (max 10MB)
+                      </p>
+                    )}
+
+                    {artworkFile && !fileError && (
+                      <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded">
+                        <p className="text-sm text-green-700 flex items-center">
+                          <span className="mr-1">✅</span>
+                          Valid file selected: {artworkFile.name} ({(artworkFile.size / (1024 * 1024)).toFixed(1)}MB)
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -518,8 +593,12 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
                 </button>
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 disabled:opacity-50"
+                  disabled={loading || (formData.course_id === '1' && !isStep2Valid())}
+                  className={`px-4 py-2 rounded-md transition-colors ${
+                    !loading && isStep2Valid()
+                      ? 'bg-orange-500 text-white hover:bg-orange-600'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
                 >
                   {loading ? 'Uploading...' : 'Complete Registration'}
                 </button>
