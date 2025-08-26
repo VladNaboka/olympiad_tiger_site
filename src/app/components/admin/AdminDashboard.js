@@ -14,6 +14,7 @@ import WorksManagement from './WorksManagement';
 import MainAdminWorksManagement from './MainAdminWorksManagement';
 import { getStudentsByCountry, updateStudent, deleteStudent } from '../../api/students_api';
 import DateSelector from './DateSelector';
+import { getCategoriesBySubject } from '../../utils/constants';
 
 // Форма добавления регионального представителя
 function AddRepresentativeForm({ onClose, onSuccess }) {
@@ -185,10 +186,10 @@ function MainAdminDashboard({ user, onLogout }) {
   });
 
   const [overviewStats, setOverviewStats] = useState({
-    totalUsers: 0,
-    totalStudents: 0,
-    totalArtworks: 0,
-    totalMathworks: 0
+    totalUsers: null,      // null означает загрузка
+    totalStudents: null,
+    totalArtworks: null,
+    totalMathworks: null
   });
 
   const [loading, setLoading] = useState(false);
@@ -196,76 +197,178 @@ function MainAdminDashboard({ user, onLogout }) {
   const [editingStudent, setEditingStudent] = useState(null);
   const [deletingStudent, setDeletingStudent] = useState(null);
   const [editingRepresentative, setEditingRepresentative] = useState(null);
+  const [editingStudentData, setEditingStudentData] = useState({});
 
   const handleEditRepresentative = (representative) => {
     setEditingRepresentative(representative);
   };
 
+  function AnimatedNumber({ value, label, color, icon }) {
+    const [displayValue, setDisplayValue] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [hasAnimated, setHasAnimated] = useState(false);
+  
+    useEffect(() => {
+      if (value !== null && value !== displayValue && !hasAnimated) {
+        setIsAnimating(true);
+        setHasAnimated(true);
+        
+        // Анимация счетчика от 0 до конечного значения
+        const duration = 800; // 0.8 секунды
+        const steps = 20;
+        const stepValue = value / steps;
+        const stepDuration = duration / steps;
+        
+        let currentStep = 0;
+        
+        const timer = setInterval(() => {
+          currentStep++;
+          const currentValue = Math.min(Math.round(stepValue * currentStep), value);
+          setDisplayValue(currentValue);
+          
+          if (currentStep >= steps || currentValue >= value) {
+            clearInterval(timer);
+            setDisplayValue(value);
+            setIsAnimating(false);
+          }
+        }, stepDuration);
+  
+        return () => clearInterval(timer);
+      } else if (value !== null && hasAnimated) {
+        // Если данные уже загружались, обновляем без анимации
+        setDisplayValue(value);
+      }
+    }, [value, hasAnimated]);
+  
+    if (value === null) {
+      return (
+        <div className={`${color} p-6 rounded-lg relative overflow-hidden`}>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+          <h3 className="text-lg font-semibold mb-2">{label}</h3>
+          <div className="flex items-center space-x-2">
+            <span className="text-3xl">{icon}</span>
+            <div className="flex space-x-1">
+              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+            </div>
+          </div>
+          <p className="text-sm mt-2 opacity-75">Loading...</p>
+        </div>
+      );
+    }
+  
+    return (
+      <div className={`${color} p-6 rounded-lg transition-all duration-300 ${isAnimating ? 'scale-105' : 'scale-100'}`}>
+        <h3 className="text-lg font-semibold mb-2">{label}</h3>
+        <div className="flex items-center space-x-3">
+          <span className="text-3xl">{icon}</span>
+          <div className="text-3xl font-bold relative">
+            <span className={`transition-all duration-200`}>
+              {displayValue.toLocaleString()}
+            </span>
+            {isAnimating && (
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse rounded"></div>
+            )}
+          </div>
+        </div>
+        <p className="text-sm mt-2 opacity-75">
+          {isAnimating ? 'Counting...' : `${displayValue.toLocaleString()} total`}
+        </p>
+      </div>
+    );
+  }
+  
+
   const loadOverviewStats = async () => {
     try {
       console.log('🔄 Loading overview statistics...');
-
-      // Загружаем пользователей (это уже есть)
-      const usersData = await getAdminsAndTeachers();
-
-      // Загружаем всех студентов из всех стран
-      const allStudents = [];
-      for (const country of COUNTRIES) {
-        try {
-          const countryStudents = await getStudentsByCountry(country);
-          if (countryStudents && countryStudents.length > 0) {
-            allStudents.push(...countryStudents);
-          }
-        } catch (error) {
-          console.warn(`No students in ${country}`);
-        }
-      }
-
-      // Загружаем все работы из всех стран и категорий
-      let allArtworks = [];
-      let allMathworks = [];
-
-      for (const country of COUNTRIES) {
-        for (const category of CATEGORIES) {
-          try {
-            const artworks = await getArtWorksByCountryAndCategory(country, category.id);
-            if (artworks && artworks.length > 0) {
-              allArtworks.push(...artworks);
-            }
-          } catch (error) {
-            // Игнорируем ошибки
-          }
-
-          try {
-            const mathworks = await getMathWorksByCountryAndCategory(country, category.id);
-            if (mathworks && mathworks.length > 0) {
-              allMathworks.push(...mathworks);
-            }
-          } catch (error) {
-            // Игнорируем ошибки
-          }
-        }
-      }
-
+      
+      // Сначала устанавливаем null для показа анимации загрузки
       setOverviewStats({
-        totalUsers: usersData?.length || 0,
-        totalStudents: allStudents.length,
-        totalArtworks: allArtworks.length,
-        totalMathworks: allMathworks.length
+        totalUsers: null,
+        totalStudents: null,
+        totalArtworks: null,
+        totalMathworks: null
       });
-
+  
+      // Загружаем пользователей
+      const usersData = await getAdminsAndTeachers();
+      
+      // Обновляем первую статистику
+      setOverviewStats(prev => ({
+        ...prev,
+        totalUsers: usersData?.length || 0
+      }));
+  
+      // Загружаем студентов с небольшой задержкой для эффекта
+      setTimeout(async () => {
+        const allStudents = [];
+        for (const country of COUNTRIES) {
+          try {
+            const countryStudents = await getStudentsByCountry(country);
+            if (countryStudents && countryStudents.length > 0) {
+              allStudents.push(...countryStudents);
+            }
+          } catch (error) {
+            console.warn(`No students in ${country}`);
+          }
+        }
+        
+        setOverviewStats(prev => ({
+          ...prev,
+          totalStudents: allStudents.length
+        }));
+      }, 300);
+  
+      // Загружаем работы с дополнительной задержкой
+      setTimeout(async () => {
+        let allArtworks = [];
+        let allMathworks = [];
+  
+        for (const country of COUNTRIES) {
+          for (const category of CATEGORIES) {
+            try {
+              const artworks = await getArtWorksByCountryAndCategory(country, category.id);
+              if (artworks && artworks.length > 0) {
+                allArtworks.push(...artworks);
+              }
+            } catch (error) {
+              // Игнорируем ошибки
+            }
+  
+            try {
+              const mathworks = await getMathWorksByCountryAndCategory(country, category.id);
+              if (mathworks && mathworks.length > 0) {
+                allMathworks.push(...mathworks);
+              }
+            } catch (error) {
+              // Игнорируем ошибки
+            }
+          }
+        }
+  
+        setOverviewStats(prev => ({
+          ...prev,
+          totalArtworks: allArtworks.length,
+          totalMathworks: allMathworks.length
+        }));
+      }, 600);
+  
       // Также обновляем пользователей для других вкладок
       setUsers(usersData || []);
-
-      console.log('📊 Overview stats loaded:', {
-        users: usersData?.length || 0,
-        students: allStudents.length,
-        artworks: allArtworks.length,
-        mathworks: allMathworks.length
-      });
-
+  
+      console.log('📊 Overview stats loading initiated');
+  
     } catch (error) {
       console.error('❌ Error loading overview stats:', error);
+      // В случае ошибки показываем 0 вместо null
+      setOverviewStats({
+        totalUsers: 0,
+        totalStudents: 0,
+        totalArtworks: 0,
+        totalMathworks: 0
+      });
     }
   };
 
@@ -432,6 +535,10 @@ function MainAdminDashboard({ user, onLogout }) {
 
   const handleEditStudent = (student) => {
     setEditingStudent(student);
+    setEditingStudentData({
+      subject: student.course_id,
+      category: student.category_id
+    });
   };
 
   const handleDeleteStudent = (student) => {
@@ -550,57 +657,67 @@ function MainAdminDashboard({ user, onLogout }) {
             </div>
           )}
 
-          {!loading && activeTab === 'overview' && (
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-6">Global Overview</h2>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-blue-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold text-blue-800">Total Representatives</h3>
-                  <p className="text-3xl font-bold text-blue-600">{overviewStats.totalUsers}</p>
-                  <p className="text-sm text-blue-600 mt-2">Regional coordinators</p>
-                </div>
-                <div className="bg-green-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold text-green-800">Total Participants</h3>
-                  <p className="text-3xl font-bold text-green-600">{overviewStats.totalStudents}</p>
-                  <p className="text-sm text-green-600 mt-2">From all countries</p>
-                </div>
-                <div className="bg-purple-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold text-purple-800">Art Works</h3>
-                  <p className="text-3xl font-bold text-purple-600">{overviewStats.totalArtworks}</p>
-                  <p className="text-sm text-purple-600 mt-2">Creative submissions</p>
-                </div>
-                <div className="bg-orange-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold text-orange-800">Math Works</h3>
-                  <p className="text-3xl font-bold text-orange-600">{overviewStats.totalMathworks}</p>
-                  <p className="text-sm text-orange-600 mt-2">Problem solutions</p>
-                </div>
-              </div>
+{!loading && activeTab === 'overview' && (
+  <div>
+    <h2 className="text-xl font-semibold text-gray-800 mb-6">Global Overview</h2>
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <AnimatedNumber
+        value={overviewStats.totalUsers}
+        label="Total Representatives"
+        color="bg-blue-50 text-blue-800"
+        icon="👥"
+      />
+      <AnimatedNumber
+        value={overviewStats.totalStudents}
+        label="Total Participants"
+        color="bg-green-50 text-green-800"
+        icon="🎓"
+      />
+      <AnimatedNumber
+        value={overviewStats.totalArtworks}
+        label="Art Works"
+        color="bg-purple-50 text-purple-800"
+        icon="🎨"
+      />
+      <AnimatedNumber
+        value={overviewStats.totalMathworks}
+        label="Math Works"
+        color="bg-orange-50 text-orange-800"
+        icon="📊"
+      />
+    </div>
 
-              {/* Quick Actions Cards */}
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-2">👤 Manage Representatives</h3>
-                  <p className="text-sm mb-4">Add, edit, or remove regional representatives</p>
-                  <button
-                    onClick={() => setActiveTab('representatives')}
-                    className="bg-white text-orange-600 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
-                  >
-                    Manage Representatives
-                  </button>
-                </div>
-                <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-2">👥 Add Participant</h3>
-                  <p className="text-sm mb-4">Register new participants from any country</p>
-                  <button
-                    onClick={() => setShowAddStudentForm(true)}
-                    className="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
-                  >
-                    Add Participant
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+    {/* Enhanced Quick Actions Cards with hover animations */}
+    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <div className="flex items-center space-x-3 mb-2">
+          <span className="text-2xl">👤</span>
+          <h3 className="text-lg font-semibold">Manage Representatives</h3>
+        </div>
+        <p className="text-sm mb-4 opacity-90">Add, edit, or remove regional representatives</p>
+        <button
+          onClick={() => setActiveTab('representatives')}
+          className="bg-white text-orange-600 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors transform hover:scale-105"
+        >
+          Manage Representatives
+        </button>
+      </div>
+      <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <div className="flex items-center space-x-3 mb-2">
+          <span className="text-2xl">👥</span>
+          <h3 className="text-lg font-semibold">Add Participant</h3>
+        </div>
+        <p className="text-sm mb-4 opacity-90">Register new participants from any country</p>
+        <button
+          onClick={() => setShowAddStudentForm(true)}
+          className="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors transform hover:scale-105"
+        >
+          Add Participant
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
           {!loading && activeTab === 'representatives' && (
             <div>
@@ -946,12 +1063,20 @@ function MainAdminDashboard({ user, onLogout }) {
                 </div>
 
                 <DateSelector
-                  label="Birth Date"
-                  name="birth_date"
-                  defaultValue={editingStudent.birth_date}
-                  required={true}
-                  selectedSubject={editingStudent.course_id}
-                />
+  label="Birth Date"
+  name="birth_date"
+  defaultValue={editingStudent.birth_date}
+  required={true}
+  selectedSubject={editingStudentData.subject || editingStudent.course_id}
+  onAgeValidation={(validation) => {
+    if (validation.isValid && validation.categoryId) {
+      setEditingStudentData(prev => ({
+        ...prev,
+        category: validation.categoryId
+      }));
+    }
+  }}
+/>
 
                 <div>
                   <label className="block text-gray-700 text-sm font-bold mb-2">Email *</label>
@@ -1012,32 +1137,44 @@ function MainAdminDashboard({ user, onLogout }) {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
-                  <select
-                    name="course_id"
-                    defaultValue={editingStudent.course_id}
-                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    required
-                  >
-                    {SUBJECTS.map(subject => (
-                      <option key={subject.id} value={subject.id}>{subject.name}</option>
-                    ))}
-                  </select>
-                </div>
+  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
+  <select
+    name="course_id"
+    value={editingStudentData.subject || editingStudent.course_id}
+    onChange={(e) => {
+      const newSubject = e.target.value;
+      setEditingStudentData({
+        subject: newSubject,
+        category: ''
+      });
+    }}
+    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+    required
+  >
+    {SUBJECTS.map(subject => (
+      <option key={subject.id} value={subject.id}>{subject.name}</option>
+    ))}
+  </select>
+</div>
 
-                <div>
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
-                  <select
-                    name="category_id"
-                    defaultValue={editingStudent.category_id}
-                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    required
-                  >
-                    {CATEGORIES.map(category => (
-                      <option key={category.id} value={category.id}>{category.name}</option>
-                    ))}
-                  </select>
-                </div>
+<div>
+  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
+  <select
+    name="category_id"
+    value={editingStudentData.category || editingStudent.category_id}
+    onChange={(e) => setEditingStudentData(prev => ({
+      ...prev,
+      category: parseInt(e.target.value)
+    }))}
+    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+    required
+  >
+    <option value="">Select category</option>
+    {getCategoriesBySubject(editingStudentData.subject || editingStudent.course_id).map(category => (
+      <option key={category.id} value={category.id}>{category.name}</option>
+    ))}
+  </select>
+</div>
               </div>
 
               <div className="flex justify-end space-x-3 mt-6">
@@ -1277,10 +1414,16 @@ function RegionalAdminDashboard({ user, onLogout }) {
 
   const [editingStudent, setEditingStudent] = useState(null);
   const [deletingStudent, setDeletingStudent] = useState(null);
+  const [editingStudentData, setEditingStudentData] = useState({});
 
-  const handleEditStudent = (student) => {
-    setEditingStudent(student);
-  };
+// При открытии модального окна редактирования
+const handleEditStudent = (student) => {
+  setEditingStudent(student);
+  setEditingStudentData({
+    subject: student.course_id,
+    category: student.category_id
+  });
+};
 
   const handleDeleteStudent = (student) => {
     setDeletingStudent(student);
@@ -1611,12 +1754,20 @@ function RegionalAdminDashboard({ user, onLogout }) {
                 </div>
 
                 <DateSelector
-                  label="Birth Date"
-                  name="birth_date"
-                  defaultValue={editingStudent.birth_date}
-                  required={true}
-                  selectedSubject={editingStudent.course_id}
-                />
+  label="Birth Date"
+  name="birth_date"
+  defaultValue={editingStudent.birth_date}
+  required={true}
+  selectedSubject={editingStudentData.subject || editingStudent.course_id}
+  onAgeValidation={(validation) => {
+    if (validation.isValid && validation.categoryId) {
+      setEditingStudentData(prev => ({
+        ...prev,
+        category: validation.categoryId
+      }));
+    }
+  }}
+/>
 
                 <div>
                   <label className="block text-gray-700 text-sm font-bold mb-2">Email *</label>
@@ -1683,33 +1834,44 @@ function RegionalAdminDashboard({ user, onLogout }) {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
-                  <select
-                    name="course_id"
-                    defaultValue={editingStudent.course_id}
-                    onChange={(e) => setEditingStudentSubject(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    required
-                  >
-                    {SUBJECTS.map(subject => (
-                      <option key={subject.id} value={subject.id}>{subject.name}</option>
-                    ))}
-                  </select>
-                </div>
+  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
+  <select
+    name="course_id"
+    value={editingStudentData.subject || editingStudent.course_id}
+    onChange={(e) => {
+      const newSubject = e.target.value;
+      setEditingStudentData({
+        subject: newSubject,
+        category: '' // Сбрасываем категорию при смене предмета
+      });
+    }}
+    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+    required
+  >
+    {SUBJECTS.map(subject => (
+      <option key={subject.id} value={subject.id}>{subject.name}</option>
+    ))}
+  </select>
+</div>
 
                 <div>
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
-                  <select
-                    name="category_id"
-                    defaultValue={editingStudent.category_id}
-                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    required
-                  >
-                    {CATEGORIES.map(category => (
-                      <option key={category.id} value={category.id}>{category.name}</option>
-                    ))}
-                  </select>
-                </div>
+  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
+  <select
+    name="category_id"
+    value={editingStudentData.category || editingStudent.category_id}
+    onChange={(e) => setEditingStudentData(prev => ({
+      ...prev,
+      category: parseInt(e.target.value)
+    }))}
+    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+    required
+  >
+    <option value="">Select category</option>
+    {getCategoriesBySubject(editingStudentData.subject || editingStudent.course_id).map(category => (
+      <option key={category.id} value={category.id}>{category.name}</option>
+    ))}
+  </select>
+</div>
               </div>
 
               <div className="flex justify-end space-x-3 mt-6">
