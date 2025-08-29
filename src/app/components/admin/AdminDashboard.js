@@ -207,39 +207,39 @@ function MainAdminDashboard({ user, onLogout }) {
     const [displayValue, setDisplayValue] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
     const [hasAnimated, setHasAnimated] = useState(false);
-  
+
     useEffect(() => {
       if (value !== null && value !== displayValue && !hasAnimated) {
         setIsAnimating(true);
         setHasAnimated(true);
-        
+
         // Анимация счетчика от 0 до конечного значения
         const duration = 800; // 0.8 секунды
         const steps = 20;
         const stepValue = value / steps;
         const stepDuration = duration / steps;
-        
+
         let currentStep = 0;
-        
+
         const timer = setInterval(() => {
           currentStep++;
           const currentValue = Math.min(Math.round(stepValue * currentStep), value);
           setDisplayValue(currentValue);
-          
+
           if (currentStep >= steps || currentValue >= value) {
             clearInterval(timer);
             setDisplayValue(value);
             setIsAnimating(false);
           }
         }, stepDuration);
-  
+
         return () => clearInterval(timer);
       } else if (value !== null && hasAnimated) {
         // Если данные уже загружались, обновляем без анимации
         setDisplayValue(value);
       }
     }, [value, hasAnimated]);
-  
+
     if (value === null) {
       return (
         <div className={`${color} p-6 rounded-lg relative overflow-hidden`}>
@@ -248,16 +248,16 @@ function MainAdminDashboard({ user, onLogout }) {
           <div className="flex items-center space-x-2">
             <span className="text-3xl">{icon}</span>
             <div className="flex space-x-1">
-              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
-              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
-              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
             </div>
           </div>
           <p className="text-sm mt-2 opacity-75">Loading...</p>
         </div>
       );
     }
-  
+
     return (
       <div className={`${color} p-6 rounded-lg transition-all duration-300 ${isAnimating ? 'scale-105' : 'scale-100'}`}>
         <h3 className="text-lg font-semibold mb-2">{label}</h3>
@@ -278,12 +278,12 @@ function MainAdminDashboard({ user, onLogout }) {
       </div>
     );
   }
-  
+
 
   const loadOverviewStats = async () => {
     try {
       console.log('🔄 Loading overview statistics...');
-      
+
       // Сначала устанавливаем null для показа анимации загрузки
       setOverviewStats({
         totalUsers: null,
@@ -291,16 +291,16 @@ function MainAdminDashboard({ user, onLogout }) {
         totalArtworks: null,
         totalMathworks: null
       });
-  
+
       // Загружаем пользователей
       const usersData = await getAdminsAndTeachers();
-      
+
       // Обновляем первую статистику
       setOverviewStats(prev => ({
         ...prev,
         totalUsers: usersData?.length || 0
       }));
-  
+
       // Загружаем студентов с небольшой задержкой для эффекта
       setTimeout(async () => {
         const allStudents = [];
@@ -314,18 +314,18 @@ function MainAdminDashboard({ user, onLogout }) {
             console.warn(`No students in ${country}`);
           }
         }
-        
+
         setOverviewStats(prev => ({
           ...prev,
           totalStudents: allStudents.length
         }));
       }, 300);
-  
+
       // Загружаем работы с дополнительной задержкой
       setTimeout(async () => {
         let allArtworks = [];
         let allMathworks = [];
-  
+
         for (const country of COUNTRIES) {
           for (const category of CATEGORIES) {
             try {
@@ -336,7 +336,7 @@ function MainAdminDashboard({ user, onLogout }) {
             } catch (error) {
               // Игнорируем ошибки
             }
-  
+
             try {
               const mathworks = await getMathWorksByCountryAndCategory(country, category.id);
               if (mathworks && mathworks.length > 0) {
@@ -347,19 +347,19 @@ function MainAdminDashboard({ user, onLogout }) {
             }
           }
         }
-  
+
         setOverviewStats(prev => ({
           ...prev,
           totalArtworks: allArtworks.length,
           totalMathworks: allMathworks.length
         }));
       }, 600);
-  
+
       // Также обновляем пользователей для других вкладок
       setUsers(usersData || []);
-  
+
       console.log('📊 Overview stats loading initiated');
-  
+
     } catch (error) {
       console.error('❌ Error loading overview stats:', error);
       // В случае ошибки показываем 0 вместо null
@@ -657,67 +657,67 @@ function MainAdminDashboard({ user, onLogout }) {
             </div>
           )}
 
-{!loading && activeTab === 'overview' && (
-  <div>
-    <h2 className="text-xl font-semibold text-gray-800 mb-6">Global Overview</h2>
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <AnimatedNumber
-        value={overviewStats.totalUsers}
-        label="Total Representatives"
-        color="bg-blue-50 text-blue-800"
-        icon="👥"
-      />
-      <AnimatedNumber
-        value={overviewStats.totalStudents}
-        label="Total Participants"
-        color="bg-green-50 text-green-800"
-        icon="🎓"
-      />
-      <AnimatedNumber
-        value={overviewStats.totalArtworks}
-        label="Art Works"
-        color="bg-purple-50 text-purple-800"
-        icon="🎨"
-      />
-      <AnimatedNumber
-        value={overviewStats.totalMathworks}
-        label="Math Works"
-        color="bg-orange-50 text-orange-800"
-        icon="📊"
-      />
-    </div>
+          {!loading && activeTab === 'overview' && (
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-6">Global Overview</h2>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <AnimatedNumber
+                  value={overviewStats.totalUsers}
+                  label="Total Representatives"
+                  color="bg-blue-50 text-blue-800"
+                  icon="👥"
+                />
+                <AnimatedNumber
+                  value={overviewStats.totalStudents}
+                  label="Total Participants"
+                  color="bg-green-50 text-green-800"
+                  icon="🎓"
+                />
+                <AnimatedNumber
+                  value={overviewStats.totalArtworks}
+                  label="Art Works"
+                  color="bg-purple-50 text-purple-800"
+                  icon="🎨"
+                />
+                <AnimatedNumber
+                  value={overviewStats.totalMathworks}
+                  label="Math Works"
+                  color="bg-orange-50 text-orange-800"
+                  icon="📊"
+                />
+              </div>
 
-    {/* Enhanced Quick Actions Cards with hover animations */}
-    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-        <div className="flex items-center space-x-3 mb-2">
-          <span className="text-2xl">👤</span>
-          <h3 className="text-lg font-semibold">Manage Representatives</h3>
-        </div>
-        <p className="text-sm mb-4 opacity-90">Add, edit, or remove regional representatives</p>
-        <button
-          onClick={() => setActiveTab('representatives')}
-          className="bg-white text-orange-600 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors transform hover:scale-105"
-        >
-          Manage Representatives
-        </button>
-      </div>
-      <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-        <div className="flex items-center space-x-3 mb-2">
-          <span className="text-2xl">👥</span>
-          <h3 className="text-lg font-semibold">Add Participant</h3>
-        </div>
-        <p className="text-sm mb-4 opacity-90">Register new participants from any country</p>
-        <button
-          onClick={() => setShowAddStudentForm(true)}
-          className="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors transform hover:scale-105"
-        >
-          Add Participant
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              {/* Enhanced Quick Actions Cards with hover animations */}
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <span className="text-2xl">👤</span>
+                    <h3 className="text-lg font-semibold">Manage Representatives</h3>
+                  </div>
+                  <p className="text-sm mb-4 opacity-90">Add, edit, or remove regional representatives</p>
+                  <button
+                    onClick={() => setActiveTab('representatives')}
+                    className="bg-white text-orange-600 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors transform hover:scale-105"
+                  >
+                    Manage Representatives
+                  </button>
+                </div>
+                <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <span className="text-2xl">👥</span>
+                    <h3 className="text-lg font-semibold">Add Participant</h3>
+                  </div>
+                  <p className="text-sm mb-4 opacity-90">Register new participants from any country</p>
+                  <button
+                    onClick={() => setShowAddStudentForm(true)}
+                    className="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors transform hover:scale-105"
+                  >
+                    Add Participant
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {!loading && activeTab === 'representatives' && (
             <div>
@@ -1063,20 +1063,20 @@ function MainAdminDashboard({ user, onLogout }) {
                 </div>
 
                 <DateSelector
-  label="Birth Date"
-  name="birth_date"
-  defaultValue={editingStudent.birth_date}
-  required={true}
-  selectedSubject={editingStudentData.subject || editingStudent.course_id}
-  onAgeValidation={(validation) => {
-    if (validation.isValid && validation.categoryId) {
-      setEditingStudentData(prev => ({
-        ...prev,
-        category: validation.categoryId
-      }));
-    }
-  }}
-/>
+                  label="Birth Date"
+                  name="birth_date"
+                  defaultValue={editingStudent.birth_date}
+                  required={true}
+                  selectedSubject={editingStudentData.subject || editingStudent.course_id}
+                  onAgeValidation={(validation) => {
+                    if (validation.isValid && validation.categoryId) {
+                      setEditingStudentData(prev => ({
+                        ...prev,
+                        category: validation.categoryId
+                      }));
+                    }
+                  }}
+                />
 
                 <div>
                   <label className="block text-gray-700 text-sm font-bold mb-2">Email *</label>
@@ -1137,44 +1137,44 @@ function MainAdminDashboard({ user, onLogout }) {
                 </div>
 
                 <div>
-  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
-  <select
-    name="course_id"
-    value={editingStudentData.subject || editingStudent.course_id}
-    onChange={(e) => {
-      const newSubject = e.target.value;
-      setEditingStudentData({
-        subject: newSubject,
-        category: ''
-      });
-    }}
-    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-    required
-  >
-    {SUBJECTS.map(subject => (
-      <option key={subject.id} value={subject.id}>{subject.name}</option>
-    ))}
-  </select>
-</div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
+                  <select
+                    name="course_id"
+                    value={editingStudentData.subject || editingStudent.course_id}
+                    onChange={(e) => {
+                      const newSubject = e.target.value;
+                      setEditingStudentData({
+                        subject: newSubject,
+                        category: ''
+                      });
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  >
+                    {SUBJECTS.map(subject => (
+                      <option key={subject.id} value={subject.id}>{subject.name}</option>
+                    ))}
+                  </select>
+                </div>
 
-<div>
-  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
-  <select
-    name="category_id"
-    value={editingStudentData.category || editingStudent.category_id}
-    onChange={(e) => setEditingStudentData(prev => ({
-      ...prev,
-      category: parseInt(e.target.value)
-    }))}
-    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-    required
-  >
-    <option value="">Select category</option>
-    {getCategoriesBySubject(editingStudentData.subject || editingStudent.course_id).map(category => (
-      <option key={category.id} value={category.id}>{category.name}</option>
-    ))}
-  </select>
-</div>
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
+                  <select
+                    name="category_id"
+                    value={editingStudentData.category || editingStudent.category_id}
+                    onChange={(e) => setEditingStudentData(prev => ({
+                      ...prev,
+                      category: parseInt(e.target.value)
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  >
+                    <option value="">Select category</option>
+                    {getCategoriesBySubject(editingStudentData.subject || editingStudent.course_id).map(category => (
+                      <option key={category.id} value={category.id}>{category.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="flex justify-end space-x-3 mt-6">
@@ -1416,14 +1416,14 @@ function RegionalAdminDashboard({ user, onLogout }) {
   const [deletingStudent, setDeletingStudent] = useState(null);
   const [editingStudentData, setEditingStudentData] = useState({});
 
-// При открытии модального окна редактирования
-const handleEditStudent = (student) => {
-  setEditingStudent(student);
-  setEditingStudentData({
-    subject: student.course_id,
-    category: student.category_id
-  });
-};
+  // При открытии модального окна редактирования
+  const handleEditStudent = (student) => {
+    setEditingStudent(student);
+    setEditingStudentData({
+      subject: student.course_id,
+      category: student.category_id
+    });
+  };
 
   const handleDeleteStudent = (student) => {
     setDeletingStudent(student);
@@ -1754,20 +1754,20 @@ const handleEditStudent = (student) => {
                 </div>
 
                 <DateSelector
-  label="Birth Date"
-  name="birth_date"
-  defaultValue={editingStudent.birth_date}
-  required={true}
-  selectedSubject={editingStudentData.subject || editingStudent.course_id}
-  onAgeValidation={(validation) => {
-    if (validation.isValid && validation.categoryId) {
-      setEditingStudentData(prev => ({
-        ...prev,
-        category: validation.categoryId
-      }));
-    }
-  }}
-/>
+                  label="Birth Date"
+                  name="birth_date"
+                  defaultValue={editingStudent.birth_date}
+                  required={true}
+                  selectedSubject={editingStudentData.subject || editingStudent.course_id}
+                  onAgeValidation={(validation) => {
+                    if (validation.isValid && validation.categoryId) {
+                      setEditingStudentData(prev => ({
+                        ...prev,
+                        category: validation.categoryId
+                      }));
+                    }
+                  }}
+                />
 
                 <div>
                   <label className="block text-gray-700 text-sm font-bold mb-2">Email *</label>
@@ -1834,44 +1834,44 @@ const handleEditStudent = (student) => {
                 </div>
 
                 <div>
-  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
-  <select
-    name="course_id"
-    value={editingStudentData.subject || editingStudent.course_id}
-    onChange={(e) => {
-      const newSubject = e.target.value;
-      setEditingStudentData({
-        subject: newSubject,
-        category: '' // Сбрасываем категорию при смене предмета
-      });
-    }}
-    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-    required
-  >
-    {SUBJECTS.map(subject => (
-      <option key={subject.id} value={subject.id}>{subject.name}</option>
-    ))}
-  </select>
-</div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Subject *</label>
+                  <select
+                    name="course_id"
+                    value={editingStudentData.subject || editingStudent.course_id}
+                    onChange={(e) => {
+                      const newSubject = e.target.value;
+                      setEditingStudentData({
+                        subject: newSubject,
+                        category: '' // Сбрасываем категорию при смене предмета
+                      });
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  >
+                    {SUBJECTS.map(subject => (
+                      <option key={subject.id} value={subject.id}>{subject.name}</option>
+                    ))}
+                  </select>
+                </div>
 
                 <div>
-  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
-  <select
-    name="category_id"
-    value={editingStudentData.category || editingStudent.category_id}
-    onChange={(e) => setEditingStudentData(prev => ({
-      ...prev,
-      category: parseInt(e.target.value)
-    }))}
-    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-    required
-  >
-    <option value="">Select category</option>
-    {getCategoriesBySubject(editingStudentData.subject || editingStudent.course_id).map(category => (
-      <option key={category.id} value={category.id}>{category.name}</option>
-    ))}
-  </select>
-</div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">Category *</label>
+                  <select
+                    name="category_id"
+                    value={editingStudentData.category || editingStudent.category_id}
+                    onChange={(e) => setEditingStudentData(prev => ({
+                      ...prev,
+                      category: parseInt(e.target.value)
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  >
+                    <option value="">Select category</option>
+                    {getCategoriesBySubject(editingStudentData.subject || editingStudent.course_id).map(category => (
+                      <option key={category.id} value={category.id}>{category.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="flex justify-end space-x-3 mt-6">

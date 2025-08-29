@@ -281,7 +281,7 @@ export default function WorksManagement({ user }) {
                   <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
                     {getCategoryName(work.category_id)}
                   </span>
-                  <button
+                  {/* <button
                     onClick={() => {
                       setSelectedWork(work);
                       setShowScoreModal(true);
@@ -289,7 +289,7 @@ export default function WorksManagement({ user }) {
                     className="text-orange-500 hover:text-orange-600 text-sm font-medium"
                   >
                     {work.score ? 'Update Score' : 'Add Score'}
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>

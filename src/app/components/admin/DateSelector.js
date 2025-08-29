@@ -162,7 +162,7 @@ export default function DateSelector({
   return (
     <div className={className}>
       <label className="block text-gray-700 text-sm font-bold mb-2">
-        {label} {required && <span className="text-red-500">*</span>}
+        {label} {required && <span>*</span>}
       </label>
       
       <div className="grid grid-cols-3 gap-2">
