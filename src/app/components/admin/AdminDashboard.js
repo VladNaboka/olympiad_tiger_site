@@ -199,6 +199,8 @@ function MainAdminDashboard({ user, onLogout }) {
   const [editingRepresentative, setEditingRepresentative] = useState(null);
   const [editingStudentData, setEditingStudentData] = useState({});
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const handleEditRepresentative = (representative) => {
     setEditingRepresentative(representative);
   };
@@ -372,61 +374,61 @@ function MainAdminDashboard({ user, onLogout }) {
     }
   };
 
-// Загрузка данных для главного админа - СТУДЕНТЫ
-const loadStudentsData = async () => {
-  setLoading(true);
-  try {
-    console.log('🔄 Loading students data with filters:', studentsFilters);
+  // Загрузка данных для главного админа - СТУДЕНТЫ
+  const loadStudentsData = async () => {
+    setLoading(true);
+    try {
+      console.log('🔄 Loading students data with filters:', studentsFilters);
 
-    // Загружаем всех пользователей
-    const usersData = await getAdminsAndTeachers();
-    setUsers(usersData || []);
-    console.log('👥 Users loaded:', usersData?.length || 0);
+      // Загружаем всех пользователей
+      const usersData = await getAdminsAndTeachers();
+      setUsers(usersData || []);
+      console.log('👥 Users loaded:', usersData?.length || 0);
 
-    // Загружаем студентов
-    let studentsData = []; // Инициализируем как пустой массив
+      // Загружаем студентов
+      let studentsData = []; // Инициализируем как пустой массив
 
-    if (studentsFilters.country) {
-      // Если выбрана конкретная страна
-      console.log('🌍 Loading students for specific country:', studentsFilters.country);
-      try {
-        const countryStudents = await getStudentsByCountry(studentsFilters.country);
-        studentsData = countryStudents || []; // Обеспечиваем, что это всегда массив
-      } catch (error) {
-        console.warn(`No students found in ${studentsFilters.country}:`, error);
-        studentsData = []; // Устанавливаем пустой массив в случае ошибки
-      }
-    } else {
-      // Если страна не выбрана, загружаем студентов из всех стран
-      console.log('🌍 Loading students from all countries...');
-      const allStudents = [];
-
-      for (const country of COUNTRIES) {
+      if (studentsFilters.country) {
+        // Если выбрана конкретная страна
+        console.log('🌍 Loading students for specific country:', studentsFilters.country);
         try {
-          const countryStudents = await getStudentsByCountry(country);
-          if (countryStudents && Array.isArray(countryStudents) && countryStudents.length > 0) {
-            allStudents.push(...countryStudents);
-          }
+          const countryStudents = await getStudentsByCountry(studentsFilters.country);
+          studentsData = countryStudents || []; // Обеспечиваем, что это всегда массив
         } catch (error) {
-          console.warn(`No students found in ${country}:`, error);
+          console.warn(`No students found in ${studentsFilters.country}:`, error);
+          studentsData = []; // Устанавливаем пустой массив в случае ошибки
         }
+      } else {
+        // Если страна не выбрана, загружаем студентов из всех стран
+        console.log('🌍 Loading students from all countries...');
+        const allStudents = [];
+
+        for (const country of COUNTRIES) {
+          try {
+            const countryStudents = await getStudentsByCountry(country);
+            if (countryStudents && Array.isArray(countryStudents) && countryStudents.length > 0) {
+              allStudents.push(...countryStudents);
+            }
+          } catch (error) {
+            console.warn(`No students found in ${country}:`, error);
+          }
+        }
+        studentsData = allStudents;
       }
-      studentsData = allStudents;
-    }
 
-    // Фильтруем по категории если нужно
-    if (studentsFilters.category && Array.isArray(studentsData)) {
-      studentsData = studentsData.filter(s => s.category_id === parseInt(studentsFilters.category));
-    }
+      // Фильтруем по категории если нужно
+      if (studentsFilters.category && Array.isArray(studentsData)) {
+        studentsData = studentsData.filter(s => s.category_id === parseInt(studentsFilters.category));
+      }
 
-    setStudents(studentsData || []);
-    console.log('👨‍🎓 Total students loaded:', studentsData?.length || 0);
-  } catch (error) {
-    console.error('❌ Error loading students data:', error);
-    setStudents([]); // В случае общей ошибки устанавливаем пустой массив
-  }
-  setLoading(false);
-};
+      setStudents(studentsData || []);
+      console.log('👨‍🎓 Total students loaded:', studentsData?.length || 0);
+    } catch (error) {
+      console.error('❌ Error loading students data:', error);
+      setStudents([]); // В случае общей ошибки устанавливаем пустой массив
+    }
+    setLoading(false);
+  };
 
   // Загрузка данных для главного админа - РАБОТЫ
   const loadWorksData = async () => {
@@ -569,24 +571,86 @@ const loadStudentsData = async () => {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center hover:opacity-80 transition-opacity mr-4">
-                <img src="/image/logonavbar.png" alt="Tigers Logo" className="h-10 w-auto" />
+            {/* Left side - адаптивный */}
+            <div className="flex items-center min-w-0 flex-1">
+              <Link href="/" className="flex items-center hover:opacity-80 transition-opacity mr-2 sm:mr-4 flex-shrink-0">
+                <img src="/image/logonavbar.png" alt="Tigers Logo" className="h-8 sm:h-10 w-auto" />
               </Link>
-              <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-3">
-                <span className="text-white font-bold">T</span>
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-500 rounded-full flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                <span className="text-white font-bold text-sm sm:text-base">T</span>
               </div>
-              <h1 className="text-xl font-bold text-gray-900">Tigers Olympiad - Main Admin</h1>
-              <span className="ml-3 px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">
-                👑 Main Administrator
-              </span>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-sm sm:text-xl font-bold text-gray-900 truncate">
+                  <span className="hidden lg:inline">Tigers Olympiad - </span>
+                  <span className="lg:hidden">Tigers </span>
+                  Main Admin
+                </h1>
+                <span className="hidden md:inline-block ml-0 md:ml-3 px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">
+                  <span className="hidden lg:inline">👑 Main Administrator</span>
+                  <span className="lg:hidden">👑 Admin</span>
+                </span>
+              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="text-gray-600 hover:text-orange-500 transition-colors">
-                ← Back to Site
+
+            {/* Right side - адаптивный */}
+            <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4 flex-shrink-0">
+              <Link
+                href="/"
+                className="hidden sm:block text-gray-600 hover:text-orange-500 transition-colors text-sm lg:text-base"
+              >
+                <span className="hidden lg:inline">← Back to Site</span>
+                <span className="lg:hidden">← Back</span>
               </Link>
-              <span className="text-gray-700">{user.full_name}</span>
-              <button onClick={onLogout} className="text-gray-500 hover:text-gray-700">
+
+              {/* User info - скрываем на очень маленьких экранах */}
+              <div className="hidden sm:block">
+                <span className="text-gray-700 text-xs sm:text-sm truncate max-w-20 sm:max-w-none">
+                  {user.full_name}
+                </span>
+              </div>
+
+              {/* Mobile user menu button */}
+              <div className="sm:hidden relative">
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="text-gray-500 hover:text-gray-700 p-2"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </button>
+
+                {/* Mobile dropdown */}
+                {mobileMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50 border">
+                    <div className="px-4 py-2 text-sm text-gray-700 border-b">
+                      {user.full_name}
+                    </div>
+                    <Link
+                      href="/"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      ← Back to Site
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onLogout();
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Desktop logout button */}
+              <button
+                onClick={onLogout}
+                className="hidden sm:block text-gray-500 hover:text-gray-700 px-2 py-1 text-sm lg:text-base"
+              >
                 Logout
               </button>
             </div>
@@ -740,54 +804,54 @@ const loadStudentsData = async () => {
               </div>
 
               <div className="overflow-x-auto">
-  <table className="min-w-full table-auto">
-    <thead>
-      <tr className="bg-gray-50">
-        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
-        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Country</th>
-        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-      </tr>
-    </thead>
-    <tbody className="bg-white divide-y divide-gray-200">
-    {(students && Array.isArray(students) ? students : []).map((student) => (
-        <tr key={rep.id} className="hover:bg-gray-50">
-          <td className="px-4 py-4 text-sm font-medium text-gray-900">{rep.full_name}</td>
-          <td className="px-4 py-4 text-sm text-gray-900">{rep.email}</td>
-          <td className="px-4 py-4 text-sm text-gray-900">{rep.phone}</td>
-          <td className="px-4 py-4 text-sm text-gray-900">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-              🌍 {rep.country}
-            </span>
-          </td>
-          <td className="px-4 py-4 text-sm text-gray-900">
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => handleEditRepresentative(rep)}
-                className="text-blue-600 hover:text-blue-800 font-medium"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDeleteUser(rep.id, rep.full_name)}
-                className="text-red-600 hover:text-red-800 font-medium"
-              >
-                Delete
-              </button>
-            </div>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
+                <table className="min-w-full table-auto">
+                  <thead>
+                    <tr className="bg-gray-50">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Country</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {users.map((rep) => (
+                      <tr key={rep.id} className="hover:bg-gray-50">
+                        <td className="px-4 py-4 text-sm font-medium text-gray-900">{rep.full_name}</td>
+                        <td className="px-4 py-4 text-sm text-gray-900">{rep.email}</td>
+                        <td className="px-4 py-4 text-sm text-gray-900">{rep.phone}</td>
+                        <td className="px-4 py-4 text-sm text-gray-900">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            🌍 {rep.country}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-900">
+                          <div className="flex items-center space-x-2">
+                            <button
+                              onClick={() => handleEditRepresentative(rep)}
+                              className="text-blue-600 hover:text-blue-800 font-medium"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteUser(rep.id, rep.full_name)}
+                              className="text-red-600 hover:text-red-800 font-medium"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-  {users.length === 0 && (
-    <div className="text-center py-8 text-gray-500">
-      No representatives found. Add some to get started!
-    </div>
-  )}
-</div>
+                {users.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    No representatives found. Add some to get started!
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
@@ -901,7 +965,7 @@ const loadStudentsData = async () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                  {(students && Array.isArray(students) ? students : []).map((student) => (
+                    {(students && Array.isArray(students) ? students : []).map((student) => (
                       <tr key={student.id} className="hover:bg-gray-50">
                         <td className="px-4 py-4 text-sm font-mono text-gray-900 bg-yellow-50">
                           {student.id}
@@ -1448,6 +1512,8 @@ function RegionalAdminDashboard({ user, onLogout }) {
 
   const [editingStudentSubject, setEditingStudentSubject] = useState('');
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     if (editingStudent) {
       setEditingStudentSubject(editingStudent.course_id);
@@ -1462,10 +1528,10 @@ function RegionalAdminDashboard({ user, onLogout }) {
     try {
       console.log('🔄 Loading students for country:', user.country);
       const studentsData = await getStudentsByCountry(user.country);
-      
+
       // Обеспечиваем, что studentsData всегда массив
       const safeStudentsData = studentsData && Array.isArray(studentsData) ? studentsData : [];
-      
+
       console.log('📊 Students loaded:', safeStudentsData.length, 'students');
       console.log('📋 First student example:', safeStudentsData[0]);
       setStudents(safeStudentsData);
@@ -1509,25 +1575,88 @@ function RegionalAdminDashboard({ user, onLogout }) {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center hover:opacity-80 transition-opacity mr-4">
-                <img src="/image/logonavbar.png" alt="Tigers Logo" className="h-10 w-auto" />
+            {/* Left side - адаптивный */}
+            <div className="flex items-center min-w-0 flex-1">
+              <Link href="/" className="flex items-center hover:opacity-80 transition-opacity mr-2 sm:mr-4 flex-shrink-0">
+                <img src="/image/logonavbar.png" alt="Tigers Logo" className="h-8 sm:h-10 w-auto" />
               </Link>
-              <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-3">
-                <span className="text-white font-bold">T</span>
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-500 rounded-full flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                <span className="text-white font-bold text-sm sm:text-base">T</span>
               </div>
-              <h1 className="text-xl font-bold text-gray-900">Tigers Olympiad - {user.country}</h1>
-              <span className="ml-3 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                🌍 Regional Representative
-              </span>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-sm sm:text-xl font-bold text-gray-900 truncate">
+                  <span className="hidden lg:inline">Tigers Olympiad - </span>
+                  <span className="lg:hidden">Tigers </span>
+                  {user.country}
+                </h1>
+                <span className="hidden md:inline-block ml-0 md:ml-3 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                  <span className="hidden lg:inline">🌍 Regional Representative</span>
+                  <span className="lg:hidden">🌍 Regional</span>
+                </span>
+              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="text-gray-600 hover:text-orange-500 transition-colors">
-                ← Back to Site
+
+            {/* Right side - адаптивный */}
+            <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4 flex-shrink-0">
+              <Link
+                href="/"
+                className="hidden sm:block text-gray-600 hover:text-orange-500 transition-colors text-sm lg:text-base"
+              >
+                <span className="hidden lg:inline">← Back to Site</span>
+                <span className="lg:hidden">← Back</span>
               </Link>
-              <span className="text-gray-700">{user.full_name}</span>
-              <span className="text-sm text-gray-500">({user.country})</span>
-              <button onClick={onLogout} className="text-gray-500 hover:text-gray-700">
+
+              {/* User info - адаптивный */}
+              <div className="hidden md:block">
+                <span className="text-gray-700 text-xs sm:text-sm truncate max-w-24 lg:max-w-none block">
+                  {user.full_name}
+                </span>
+                <span className="text-xs text-gray-500 hidden lg:block">({user.country})</span>
+              </div>
+
+              {/* Mobile user menu button */}
+              <div className="md:hidden relative">
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="text-gray-500 hover:text-gray-700 p-2"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </button>
+
+                {/* Mobile dropdown */}
+                {mobileMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg py-2 z-50 border">
+                    <div className="px-4 py-2 text-sm text-gray-700 border-b">
+                      <div className="font-medium">{user.full_name}</div>
+                      <div className="text-xs text-gray-500">({user.country})</div>
+                    </div>
+                    <Link
+                      href="/"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      ← Back to Site
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onLogout();
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Desktop logout button */}
+              <button
+                onClick={onLogout}
+                className="hidden md:block text-gray-500 hover:text-gray-700 px-2 py-1 text-sm lg:text-base"
+              >
                 Logout
               </button>
             </div>
@@ -1535,49 +1664,56 @@ function RegionalAdminDashboard({ user, onLogout }) {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Dashboard для регионального админа */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">
-              📍 {user.country} - Regional Dashboard
+
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        {/* Dashboard для регионального админа - Mobile Responsive */}
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6">
+          <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between mb-4">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
+              <span className="hidden sm:inline">📍 {user.country} - Regional Dashboard</span>
+              <span className="sm:hidden">📍 {user.country} Dashboard</span>
             </h2>
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
-                🌍 {user.country}
+            <div className="flex flex-wrap gap-2 text-sm text-gray-600">
+              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full whitespace-nowrap">
+                <span className="hidden sm:inline">🌍 {user.country}</span>
+                <span className="sm:hidden">🌍</span>
               </span>
-              <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                👥 {students.length} participants
+              <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full whitespace-nowrap">
+                <span className="hidden sm:inline">👥 {students.length} participants</span>
+                <span className="sm:hidden">👥 {students.length}</span>
               </span>
             </div>
           </div>
 
-          {/* Навигация для регионального админа */}
+          {/* Навигация для регионального админа - Mobile Responsive */}
           <div className="border-b border-gray-200">
-            <nav className="-mb-px flex">
+            <nav className="-mb-px flex overflow-x-auto scrollbar-hide">
               <button
                 onClick={() => setActiveTab('students')}
-                className={`py-4 px-6 text-sm font-medium border-b-2 flex items-center space-x-2 ${activeTab === 'students'
+                className={`py-3 px-3 sm:px-6 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap flex items-center space-x-1 sm:space-x-2 ${activeTab === 'students'
                   ? 'border-orange-500 text-orange-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}
               >
-                <span>👥</span>
-                <span>Participants</span>
-                <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">
+                <span className="text-sm sm:text-base">👥</span>
+                <span className="hidden sm:inline">Participants</span>
+                <span className="sm:hidden">Students</span>
+                <span className="bg-orange-100 text-orange-800 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs">
                   {students.length}
                 </span>
               </button>
               <button
                 onClick={() => setActiveTab('works')}
-                className={`py-4 px-6 text-sm font-medium border-b-2 flex items-center space-x-2 ${activeTab === 'works'
+                className={`py-3 px-3 sm:px-6 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap flex items-center space-x-1 sm:space-x-2 ${activeTab === 'works'
                   ? 'border-orange-500 text-orange-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}
               >
-                <span>📝</span>
-                <span>Manage Works</span>
-                <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">
+                <span className="text-sm sm:text-base">📝</span>
+                <span className="hidden sm:inline">Manage Works</span>
+                <span className="sm:hidden">Works</span>
+                <span className="bg-purple-100 text-purple-800 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs">
                   {artworks.length + mathworks.length}
                 </span>
               </button>
@@ -1621,7 +1757,7 @@ function RegionalAdminDashboard({ user, onLogout }) {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                  {(students && Array.isArray(students) ? students : []).map((student) => (
+                    {(students && Array.isArray(students) ? students : []).map((student) => (
                       <tr key={student.id} className="hover:bg-gray-50">
                         <td className="px-4 py-4 whitespace-nowrap text-sm font-mono text-gray-900 bg-yellow-50">
                           {student.id}
