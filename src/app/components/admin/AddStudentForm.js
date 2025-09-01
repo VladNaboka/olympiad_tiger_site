@@ -584,13 +584,13 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
                 >
                   Back
                 </button>
-                <button
+                {/* <button
                   type="button"
                   onClick={() => onSuccess(addedStudent?.id)}
                   className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
                 >
                   Skip Work Upload
-                </button>
+                </button> */}
                 <button
                   type="submit"
                   disabled={loading || (formData.course_id === '1' && !isStep2Valid())}
