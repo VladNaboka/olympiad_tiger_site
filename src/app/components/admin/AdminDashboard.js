@@ -733,56 +733,54 @@ function MainAdminDashboard({ user, onLogout }) {
               </div>
 
               <div className="overflow-x-auto">
-                <table className="min-w-full table-auto">
-                  <thead>
-                    <tr className="bg-gray-50">
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Country</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">City</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Organization</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {users.map((rep) => (
-                      <tr key={rep.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-4 text-sm font-medium text-gray-900">{rep.full_name}</td>
-                        <td className="px-4 py-4 text-sm text-gray-900">{rep.email}</td>
-                        <td className="px-4 py-4 text-sm text-gray-900">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            🌍 {rep.country}
-                          </span>
-                        </td>
-                        <td className="px-4 py-4 text-sm text-gray-900">{rep.city}</td>
-                        <td className="px-4 py-4 text-sm text-gray-900">{rep.school}</td>
-                        <td className="px-4 py-4 text-sm text-gray-900">
-                          <div className="flex items-center space-x-2">
-                            <button
-                              onClick={() => handleEditRepresentative(rep)}
-                              className="text-blue-600 hover:text-blue-800 font-medium"
-                            >
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => handleDeleteUser(rep.id, rep.full_name)}
-                              className="text-red-600 hover:text-red-800 font-medium"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+  <table className="min-w-full table-auto">
+    <thead>
+      <tr className="bg-gray-50">
+        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
+        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Country</th>
+        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+      </tr>
+    </thead>
+    <tbody className="bg-white divide-y divide-gray-200">
+      {users.map((rep) => (
+        <tr key={rep.id} className="hover:bg-gray-50">
+          <td className="px-4 py-4 text-sm font-medium text-gray-900">{rep.full_name}</td>
+          <td className="px-4 py-4 text-sm text-gray-900">{rep.email}</td>
+          <td className="px-4 py-4 text-sm text-gray-900">{rep.phone}</td>
+          <td className="px-4 py-4 text-sm text-gray-900">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+              🌍 {rep.country}
+            </span>
+          </td>
+          <td className="px-4 py-4 text-sm text-gray-900">
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => handleEditRepresentative(rep)}
+                className="text-blue-600 hover:text-blue-800 font-medium"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDeleteUser(rep.id, rep.full_name)}
+                className="text-red-600 hover:text-red-800 font-medium"
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
 
-                {users.length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
-                    No representatives found. Add some to get started!
-                  </div>
-                )}
-              </div>
+  {users.length === 0 && (
+    <div className="text-center py-8 text-gray-500">
+      No representatives found. Add some to get started!
+    </div>
+  )}
+</div>
             </div>
           )}
 
@@ -892,6 +890,7 @@ function MainAdminDashboard({ user, onLogout }) {
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Country</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">City</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -955,12 +954,12 @@ function MainAdminDashboard({ user, onLogout }) {
                         : 'No participants have been registered yet'
                       }
                     </p>
-                    <button
+                    {/* <button
                       onClick={() => setShowAddStudentForm(true)}
                       className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600"
                     >
                       Add First Participant
-                    </button>
+                    </button> */}
                   </div>
                 )}
               </div>
@@ -1660,12 +1659,12 @@ function RegionalAdminDashboard({ user, onLogout }) {
                     <div className="text-4xl mb-4">📚</div>
                     <h3 className="text-lg font-medium text-gray-900 mb-2">No participants yet</h3>
                     <p className="text-gray-500 mb-4">Start by adding participants from {user.country}</p>
-                    <button
+                    {/* <button
                       onClick={() => setShowAddForm(true)}
                       className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600"
                     >
                       Add First Participant
-                    </button>
+                    </button> */}
                   </div>
                 )}
               </div>
