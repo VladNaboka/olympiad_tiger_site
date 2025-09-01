@@ -372,54 +372,61 @@ function MainAdminDashboard({ user, onLogout }) {
     }
   };
 
-  // Загрузка данных для главного админа - СТУДЕНТЫ
-  const loadStudentsData = async () => {
-    setLoading(true);
-    try {
-      console.log('🔄 Loading students data with filters:', studentsFilters);
+// Загрузка данных для главного админа - СТУДЕНТЫ
+const loadStudentsData = async () => {
+  setLoading(true);
+  try {
+    console.log('🔄 Loading students data with filters:', studentsFilters);
 
-      // Загружаем всех пользователей
-      const usersData = await getAdminsAndTeachers();
-      setUsers(usersData || []);
-      console.log('👥 Users loaded:', usersData?.length || 0);
+    // Загружаем всех пользователей
+    const usersData = await getAdminsAndTeachers();
+    setUsers(usersData || []);
+    console.log('👥 Users loaded:', usersData?.length || 0);
 
-      // Загружаем студентов
-      let studentsData = [];
+    // Загружаем студентов
+    let studentsData = []; // Инициализируем как пустой массив
 
-      if (studentsFilters.country) {
-        // Если выбрана конкретная страна
-        console.log('🌍 Loading students for specific country:', studentsFilters.country);
-        studentsData = await getStudentsByCountry(studentsFilters.country);
-      } else {
-        // Если страна не выбрана, загружаем студентов из всех стран
-        console.log('🌍 Loading students from all countries...');
-        const allStudents = [];
+    if (studentsFilters.country) {
+      // Если выбрана конкретная страна
+      console.log('🌍 Loading students for specific country:', studentsFilters.country);
+      try {
+        const countryStudents = await getStudentsByCountry(studentsFilters.country);
+        studentsData = countryStudents || []; // Обеспечиваем, что это всегда массив
+      } catch (error) {
+        console.warn(`No students found in ${studentsFilters.country}:`, error);
+        studentsData = []; // Устанавливаем пустой массив в случае ошибки
+      }
+    } else {
+      // Если страна не выбрана, загружаем студентов из всех стран
+      console.log('🌍 Loading students from all countries...');
+      const allStudents = [];
 
-        for (const country of COUNTRIES) {
-          try {
-            const countryStudents = await getStudentsByCountry(country);
-            if (countryStudents && countryStudents.length > 0) {
-              allStudents.push(...countryStudents);
-            }
-          } catch (error) {
-            console.warn(`No students found in ${country}:`, error);
+      for (const country of COUNTRIES) {
+        try {
+          const countryStudents = await getStudentsByCountry(country);
+          if (countryStudents && Array.isArray(countryStudents) && countryStudents.length > 0) {
+            allStudents.push(...countryStudents);
           }
+        } catch (error) {
+          console.warn(`No students found in ${country}:`, error);
         }
-        studentsData = allStudents;
       }
-
-      // Фильтруем по категории если нужно
-      if (studentsFilters.category) {
-        studentsData = studentsData.filter(s => s.category_id === parseInt(studentsFilters.category));
-      }
-
-      setStudents(studentsData || []);
-      console.log('👨‍🎓 Total students loaded:', studentsData?.length || 0);
-    } catch (error) {
-      console.error('❌ Error loading students data:', error);
+      studentsData = allStudents;
     }
-    setLoading(false);
-  };
+
+    // Фильтруем по категории если нужно
+    if (studentsFilters.category && Array.isArray(studentsData)) {
+      studentsData = studentsData.filter(s => s.category_id === parseInt(studentsFilters.category));
+    }
+
+    setStudents(studentsData || []);
+    console.log('👨‍🎓 Total students loaded:', studentsData?.length || 0);
+  } catch (error) {
+    console.error('❌ Error loading students data:', error);
+    setStudents([]); // В случае общей ошибки устанавливаем пустой массив
+  }
+  setLoading(false);
+};
 
   // Загрузка данных для главного админа - РАБОТЫ
   const loadWorksData = async () => {
@@ -744,7 +751,7 @@ function MainAdminDashboard({ user, onLogout }) {
       </tr>
     </thead>
     <tbody className="bg-white divide-y divide-gray-200">
-      {users.map((rep) => (
+    {(students && Array.isArray(students) ? students : []).map((student) => (
         <tr key={rep.id} className="hover:bg-gray-50">
           <td className="px-4 py-4 text-sm font-medium text-gray-900">{rep.full_name}</td>
           <td className="px-4 py-4 text-sm text-gray-900">{rep.email}</td>
@@ -894,7 +901,7 @@ function MainAdminDashboard({ user, onLogout }) {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {students.map((student) => (
+                  {(students && Array.isArray(students) ? students : []).map((student) => (
                       <tr key={student.id} className="hover:bg-gray-50">
                         <td className="px-4 py-4 text-sm font-mono text-gray-900 bg-yellow-50">
                           {student.id}
@@ -1455,9 +1462,13 @@ function RegionalAdminDashboard({ user, onLogout }) {
     try {
       console.log('🔄 Loading students for country:', user.country);
       const studentsData = await getStudentsByCountry(user.country);
-      console.log('📊 Students loaded:', studentsData?.length || 0, 'students');
-      console.log('📋 First student example:', studentsData?.[0]);
-      setStudents(studentsData || []);
+      
+      // Обеспечиваем, что studentsData всегда массив
+      const safeStudentsData = studentsData && Array.isArray(studentsData) ? studentsData : [];
+      
+      console.log('📊 Students loaded:', safeStudentsData.length, 'students');
+      console.log('📋 First student example:', safeStudentsData[0]);
+      setStudents(safeStudentsData);
 
       // Загружаем работы если выбрана категория
       if (filters.category) {
@@ -1482,6 +1493,7 @@ function RegionalAdminDashboard({ user, onLogout }) {
       }
     } catch (error) {
       console.error('Error loading data:', error);
+      setStudents([]);
     }
 
     setLoading(false);
@@ -1609,7 +1621,7 @@ function RegionalAdminDashboard({ user, onLogout }) {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {students.map((student) => (
+                  {(students && Array.isArray(students) ? students : []).map((student) => (
                       <tr key={student.id} className="hover:bg-gray-50">
                         <td className="px-4 py-4 whitespace-nowrap text-sm font-mono text-gray-900 bg-yellow-50">
                           {student.id}

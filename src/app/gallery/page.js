@@ -17,6 +17,11 @@ export default function Gallery() {
   const [items, setItems] = useState([]);
   const [studentsCache, setStudentsCache] = useState({});
   const [loading, setLoading] = useState(false);
+  
+  // Новые состояния для поиска
+  const [searchStudentId, setSearchStudentId] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   // Создаем список стран с флагами на основе constants.js
   const getCountriesWithFlags = () => {
@@ -99,6 +104,16 @@ export default function Gallery() {
     }
   }, [subject]);
 
+  // Получаем правильные ID категорий для текущего предмета
+  const getCategoryIdsForSubject = (subjectType) => {
+    if (subjectType === 'Artworks') {
+      return [5, 6, 7]; // ART_CATEGORIES IDs
+    } else if (subjectType === 'Math') {
+      return [1, 2, 3, 4]; // MATH_CATEGORIES IDs  
+    }
+    return [];
+  };
+
   // Функция для загрузки данных студента
   const fetchStudentData = async (studentId) => {
     if (studentsCache[studentId]) {
@@ -118,9 +133,100 @@ export default function Gallery() {
     }
   };
 
+  // Функция для поиска работ по ID студента
+  const searchByStudentId = async () => {
+    if (!searchStudentId.trim()) {
+      alert('Please enter a Student ID');
+      return;
+    }
+
+    setIsSearching(true);
+    console.log(`🔍 Searching for works by student ID: ${searchStudentId}`);
+
+    try {
+      const results = [];
+      
+      // Ищем во всех странах
+      for (const countryOption of countries) {
+        // Ищем художественные работы (категории 5-7)
+        const artCategoryIds = [5, 6, 7];
+        for (const categoryId of artCategoryIds) {
+          try {
+            const artWorks = await getArtWorksByCountryAndCategory(countryOption.name, categoryId);
+            if (artWorks && Array.isArray(artWorks)) {
+              const studentWorks = artWorks.filter(work => 
+                work.student_id && work.student_id.toString() === searchStudentId.trim()
+              );
+              if (studentWorks.length > 0) {
+                results.push(...studentWorks.map(work => ({
+                  ...work,
+                  subject: 'Artworks',
+                  country: countryOption.name
+                })));
+              }
+            }
+          } catch (error) {
+            // Игнорируем ошибки для стран/категорий без данных
+          }
+        }
+
+        // Ищем математические работы (категории 1-4)
+        const mathCategoryIds = [1, 2, 3, 4];
+        for (const categoryId of mathCategoryIds) {
+          try {
+            const mathWorks = await getMathWorksByCountryAndCategory(countryOption.name, categoryId);
+            if (mathWorks && Array.isArray(mathWorks)) {
+              const studentWorks = mathWorks.filter(work => 
+                work.student_id && work.student_id.toString() === searchStudentId.trim()
+              );
+              if (studentWorks.length > 0) {
+                results.push(...studentWorks.map(work => ({
+                  ...work,
+                  subject: 'Math',
+                  country: countryOption.name
+                })));
+              }
+            }
+          } catch (error) {
+            // Игнорируем ошибки для стран/категорий без данных
+          }
+        }
+      }
+
+      // Загружаем данные студента для всех найденных работ
+      const worksWithStudents = await Promise.all(
+        results.map(async (work) => {
+          if (work.student_id) {
+            const student = await fetchStudentData(work.student_id);
+            return {
+              ...work,
+              student: student
+            };
+          }
+          return work;
+        })
+      );
+
+      setSearchResults(worksWithStudents);
+      console.log(`📊 Found ${worksWithStudents.length} works for student ID ${searchStudentId}`);
+      
+    } catch (error) {
+      console.error('Error searching by student ID:', error);
+      alert('Error occurred while searching');
+    }
+    
+    setIsSearching(false);
+  };
+
+  // Функция для очистки поиска
+  const clearSearch = () => {
+    setSearchStudentId('');
+    setSearchResults([]);
+  };
+
   // Загрузка данных при изменении фильтров
   useEffect(() => {
-    if (country && category && subject) {
+    if (country && category && subject && !searchResults.length) {
       setLoading(true);
       console.log(`🔍 Loading ${subject} for ${country}, category ${category}`);
 
@@ -133,8 +239,14 @@ export default function Gallery() {
 
       fetchData
         .then(async (data) => {
-          const works = Array.isArray(data) ? data : [];
+          // Обеспечиваем, что data всегда массив
+          const works = data && Array.isArray(data) ? data : [];
+          console.log(`📊 API returned:`, data);
           console.log(`📊 Found ${works.length} ${subject.toLowerCase()} for category ${category}`);
+          
+          if (works.length === 0) {
+            console.log(`⚠️ No works found for ${country}, category ${category}, subject ${subject}`);
+          }
           
           // Загружаем данные студентов для всех работ
           const worksWithStudents = await Promise.all(
@@ -158,12 +270,16 @@ export default function Gallery() {
         })
         .finally(() => setLoading(false));
     }
-  }, [country, category, subject]);
+  }, [country, category, subject, searchResults.length]);
 
   // Получаем название текущей категории
   const getCurrentCategoryName = () => {
     return getCategoryName(category) || 'Unknown Category';
   };
+
+  // Определяем какие данные показывать
+  const displayItems = searchResults.length > 0 ? searchResults : items;
+  const isShowingSearchResults = searchResults.length > 0;
 
   return (
     <div
@@ -194,7 +310,7 @@ export default function Gallery() {
               </h1>
               <p className="text-lg text-gray-600 max-w-xl mx-auto">
                 Explore amazing artworks and math achievements from Tigers participants around the world.
-                Filter by country, age category, and subject to discover incredible talent.
+                Filter by country, age category, and subject or search by student ID.
               </p>
             </div>
             
@@ -225,133 +341,202 @@ export default function Gallery() {
         </div>
       </div>
 
-      {/* Beautiful Filters Section */}
-      <div className="px-4 mb-12">
-        <div className="container mx-auto max-w-6xl">
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">🎯 Filter Gallery</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Country Filter */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  🌍 Country
-                </label>
-                <select
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all text-gray-800 bg-white shadow-sm hover:shadow-md"
-                >
-                  {countries.map(countryOption => (
-                    <option key={countryOption.code} value={countryOption.name}>
-                      {countryOption.flag} {countryOption.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Subject Filter */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  📚 Subject
-                </label>
-                <select
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-gray-800 bg-white shadow-sm hover:shadow-md"
-                >
-                  {subjects.map(subjectOption => (
-                    <option key={subjectOption.id} value={subjectOption.id}>
-                      {subjectOption.icon} {subjectOption.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Age Category Filter */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  👶 Category
-                </label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(parseInt(e.target.value))}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-800 bg-white shadow-sm hover:shadow-md"
-                >
-                  {getAvailableCategories().map(categoryOption => (
-                    <option key={categoryOption.id} value={categoryOption.id}>
-                      {categoryOption.icon} {categoryOption.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Current Selection Display */}
-            <div className="mt-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
-              <p className="text-center text-gray-700">
-                <span className="font-semibold">Currently viewing:</span> {subject} from <span className="text-orange-600 font-semibold">{country}</span> 
-                {' '}• Category: <span className="text-orange-600 font-semibold">{getCurrentCategoryName()}</span>
-                {items.length > 0 && (
-                  <span> • <span className="text-green-600 font-semibold">{items.length}</span> {items.length === 1 ? 'result' : 'results'} found</span>
+      {/* Beautiful Filters Section - Hide when showing search results */}
+      {!isShowingSearchResults && (
+        <div className="px-4 mb-12">
+          <div className="container mx-auto max-w-6xl">
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">🎯 Filter Gallery</h3>
+              
+              {/* Search by Student ID in Filter Gallery */}
+              <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
+                <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">🔍 Search by Student ID</h4>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center items-center max-w-lg mx-auto">
+                  <input
+                    type="text"
+                    value={searchStudentId}
+                    onChange={(e) => setSearchStudentId(e.target.value)}
+                    placeholder="Enter Student ID (e.g., 123)"
+                    className="flex-1 px-4 py-3 rounded-lg border-2 border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onKeyPress={(e) => e.key === 'Enter' && searchByStudentId()}
+                  />
+                  <button
+                    onClick={searchByStudentId}
+                    disabled={isSearching}
+                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors disabled:opacity-50 min-w-[100px]"
+                  >
+                    {isSearching ? '🔍 Searching...' : '🔍 Search'}
+                  </button>
+                  {searchResults.length > 0 && (
+                    <button
+                      onClick={clearSearch}
+                      className="bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600 transition-colors"
+                    >
+                      ❌ Clear
+                    </button>
+                  )}
+                </div>
+                {searchResults.length > 0 && (
+                  <p className="mt-3 text-center text-green-700 font-medium">
+                    Found {searchResults.length} work(s) for Student ID: {searchStudentId}
+                  </p>
                 )}
-              </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Country Filter */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    🌍 Country
+                  </label>
+                  <select
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all text-gray-800 bg-white shadow-sm hover:shadow-md"
+                  >
+                    {countries.map(countryOption => (
+                      <option key={countryOption.code} value={countryOption.name}>
+                        {countryOption.flag} {countryOption.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Subject Filter */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    📚 Subject
+                  </label>
+                  <select
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-gray-800 bg-white shadow-sm hover:shadow-md"
+                  >
+                    {subjects.map(subjectOption => (
+                      <option key={subjectOption.id} value={subjectOption.id}>
+                        {subjectOption.icon} {subjectOption.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Age Category Filter */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    👶 Category
+                  </label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(parseInt(e.target.value))}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-800 bg-white shadow-sm hover:shadow-md"
+                  >
+                    {getAvailableCategories().map(categoryOption => (
+                      <option key={categoryOption.id} value={categoryOption.id}>
+                        {categoryOption.icon} {categoryOption.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Current Selection Display */}
+              <div className="mt-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
+                <p className="text-center text-gray-700">
+                  <span className="font-semibold">Currently viewing:</span> {subject} from <span className="text-orange-600 font-semibold">{country}</span> 
+                  {' '}• Category: <span className="text-orange-600 font-semibold">{getCurrentCategoryName()}</span>
+                  {items.length > 0 && (
+                    <span> • <span className="text-green-600 font-semibold">{items.length}</span> {items.length === 1 ? 'result' : 'results'} found</span>
+                  )}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Gallery Content */}
       <div className="px-4 pb-16">
         <div className="container mx-auto max-w-6xl">
-          {loading ? (
+          {loading || isSearching ? (
             <div className="text-center py-16">
               <div className="relative">
                 <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-orange-500 mx-auto mb-6"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-2xl">{subjects.find(s => s.id === subject)?.icon}</div>
+                  <div className="text-2xl">{isSearching ? '🔍' : subjects.find(s => s.id === subject)?.icon}</div>
                 </div>
               </div>
-              <p className="text-gray-600 text-xl font-medium">Loading incredible works...</p>
-              <p className="text-gray-500 text-sm mt-2">Discovering talent from {country}</p>
+              <p className="text-gray-600 text-xl font-medium">
+                {isSearching ? 'Searching for works...' : 'Loading incredible works...'}
+              </p>
+              <p className="text-gray-500 text-sm mt-2">
+                {isSearching ? `Looking for Student ID ${searchStudentId}` : `Discovering talent from ${country}`}
+              </p>
             </div>
-          ) : (items && items.length === 0) ? (
+          ) : displayItems.length === 0 ? (
             <div className="text-center py-16">
               <div className="text-8xl mb-6">🔍</div>
-              <h3 className="text-3xl font-bold text-gray-700 mb-4">No works found</h3>
+              <h3 className="text-3xl font-bold text-gray-700 mb-4">
+                {isShowingSearchResults ? 'No works found for this Student ID' : 'No works found'}
+              </h3>
               <p className="text-gray-600 mb-8 text-lg">
-                No {subject.toLowerCase()} found for <strong>{country}</strong> in the <strong>{getCurrentCategoryName()}</strong> category.
+                {isShowingSearchResults 
+                  ? `No works found for Student ID: ${searchStudentId}. They may not have submitted any works yet, or the ID may not exist.`
+                  : `No ${subject.toLowerCase()} found for ${country} in the ${getCurrentCategoryName()} category.`
+                }
               </p>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 max-w-lg mx-auto">
                 <div className="text-4xl mb-3">💡</div>
                 <p className="text-yellow-800 font-medium">
-                  <strong>Tip:</strong> Try different combinations of country, subject, and category, or contact your representative to submit works!
+                  <strong>Tip:</strong> {isShowingSearchResults 
+                    ? 'Double-check the Student ID, or try browsing by country and category instead.'
+                    : 'Try different combinations of country, subject, and category, or contact your representative to submit works!'
+                  }
                 </p>
-                <div className="mt-4 text-sm text-yellow-700">
-                  <p>📝 <strong>For Art:</strong> Categories are Age 6-9, Age 10-13, Age 14-17</p>
-                  <p>📊 <strong>For Math:</strong> Categories are Grade 5-6, Grade 7-8, Grade 9-10, Grade 11-12</p>
-                </div>
+                {!isShowingSearchResults && (
+                  <div className="mt-4 text-sm text-yellow-700">
+                    <p>📝 <strong>For Art:</strong> Categories are Age 6-9, Age 10-13, Age 14-17</p>
+                    <p>📊 <strong>For Math:</strong> Categories are Grade 5-6, Grade 7-8, Grade 9-10, Grade 11-12</p>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
             <>
               <div className="text-center mb-12">
                 <h3 className="text-4xl font-bold text-gray-800 mb-2">
-                  {subjects.find(s => s.id === subject)?.icon} {subject} Gallery
+                  {isShowingSearchResults 
+                    ? `🔍 Search Results for Student ID: ${searchStudentId}` 
+                    : `${subjects.find(s => s.id === subject)?.icon} ${subject} Gallery`
+                  }
                 </h3>
                 <p className="text-xl text-gray-600">
-                  {getCurrentCategoryName()} • {country} • {items.length} amazing {items.length === 1 ? 'work' : 'works'}
+                  {isShowingSearchResults 
+                    ? `Found ${displayItems.length} work(s) • Multiple subjects & countries`
+                    : `${getCurrentCategoryName()} • ${country} • ${displayItems.length} amazing ${displayItems.length === 1 ? 'work' : 'works'}`
+                  }
                 </p>
+                {/* Back to Gallery Button when showing search results */}
+                {isShowingSearchResults && (
+                  <div className="mt-4">
+                    <button
+                      onClick={clearSearch}
+                      className="bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors inline-flex items-center"
+                    >
+                      <span className="mr-2">←</span>
+                      Back to Gallery
+                    </button>
+                  </div>
+                )}
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {items.map((item) => (
+                {displayItems.map((item) => (
                   <div
-                    key={item.id}
+                    key={`${item.id}-${item.subject || subject}`}
                     className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
                   >
                     <div className="relative">
-                      {subject === "Artworks" ? (
+                      {(item.subject === "Artworks" || subject === "Artworks") ? (
                         <div className="relative">
                           <img
                             src={item.file_path || "/image/artwork-sample.png"}
@@ -427,13 +612,13 @@ export default function Gallery() {
                       <div className="flex items-center justify-between text-sm text-gray-600">
                         <span className="flex items-center bg-gray-100 px-3 py-1 rounded-full">
                           <span className="mr-1">🌍</span>
-                          {item.country}
+                          {item.country || country}
                         </span>
                         <span className={`flex items-center px-3 py-1 rounded-full ${
                           getAvailableCategories().find(c => c.id === item.category_id)?.color || 'bg-gray-100 text-gray-800'
                         }`}>
                           <span className="mr-1">{getAvailableCategories().find(c => c.id === item.category_id)?.icon}</span>
-                          {getCurrentCategoryName()}
+                          {getCategoryName(item.category_id)}
                         </span>
                       </div>
                     </div>
@@ -445,34 +630,36 @@ export default function Gallery() {
         </div>
       </div>
 
-      {/* Call to Action */}
-      <div className="px-4 pb-16">
-        <div className="container mx-auto max-w-4xl">
-          <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl text-center border border-gray-200 shadow-lg">
-            <div className="text-5xl mb-4">🚀</div>
-            <h3 className="text-3xl font-bold text-gray-800 mb-4">Ready to Join the Tigers Experience?</h3>
-            <p className="text-gray-600 mb-8 text-lg">
-              Be part of the next generation of Tigers Olympiad participants and showcase your talent to the world.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                href="/register" 
-                className="inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-pink-500 text-white py-4 px-8 rounded-full text-lg font-semibold hover:from-orange-600 hover:to-pink-600 transition-all duration-200 transform hover:scale-105 shadow-lg"
-              >
-                <span className="mr-2">🎯</span>
-                Register Now
-              </Link>
-              <Link 
-                href="/representatives" 
-                className="inline-flex items-center justify-center bg-gradient-to-r from-gray-500 to-gray-600 text-white py-4 px-8 rounded-full text-lg font-semibold hover:from-gray-600 hover:to-gray-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
-              >
-                <span className="mr-2">🌍</span>
-                Find Your Representative
-              </Link>
+      {/* Call to Action - Hide when showing search results */}
+      {!isShowingSearchResults && (
+        <div className="px-4 pb-16">
+          <div className="container mx-auto max-w-4xl">
+            <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl text-center border border-gray-200 shadow-lg">
+              <div className="text-5xl mb-4">🚀</div>
+              <h3 className="text-3xl font-bold text-gray-800 mb-4">Ready to Join the Tigers Experience?</h3>
+              <p className="text-gray-600 mb-8 text-lg">
+                Be part of the next generation of Tigers Olympiad participants and showcase your talent to the world.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link 
+                  href="/register" 
+                  className="inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-pink-500 text-white py-4 px-8 rounded-full text-lg font-semibold hover:from-orange-600 hover:to-pink-600 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  <span className="mr-2">🎯</span>
+                  Register Now
+                </Link>
+                <Link 
+                  href="/representatives" 
+                  className="inline-flex items-center justify-center bg-gradient-to-r from-gray-500 to-gray-600 text-white py-4 px-8 rounded-full text-lg font-semibold hover:from-gray-600 hover:to-gray-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  <span className="mr-2">🌍</span>
+                  Find Your Representative
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <Footer />
     </div>
