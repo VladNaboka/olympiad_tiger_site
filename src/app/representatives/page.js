@@ -14,28 +14,28 @@ const representatives = [
   },
   {
     id: 2,
-    country: "United States",
+    country: "Malawi",
     name: "John Smith",
     role: "Country Representative",
     email: "tigers@example.us",
-    phone: "+1 800 555 0100"
+    phone: "+1 (425) 648-9813"
   },
   {
     id: 3,
-    country: "India", 
+    country: "Ghana", 
     name: "Ravi Kumar",
     role: "Country Representative",
     email: "tigers@example.in",
-    phone: "+91 98765 43210"
+    phone: "+233 20 738 5788"
   },
-  {
-    id: 4,
-    country: "Russia",
-    name: "Anna Petrova",
-    role: "Country Representative",
-    email: "tigers@example.ru",
-    phone: "+7 495 123 4567"
-  }
+  // {
+  //   id: 4,
+  //   country: "Russia",
+  //   name: "Anna Petrova",
+  //   role: "Country Representative",
+  //   email: "tigers@example.ru",
+  //   phone: "+7 495 123 4567"
+  // }
 ];
 
 export default function Representatives() {
