@@ -15,7 +15,7 @@ const representatives = [
   {
     id: 2,
     country: "Malawi",
-    name: "John Smith",
+    name: "Doreen Dalitso Kayoyo",
     role: "Country Representative",
     email: "info@discomcommunications.com",
     phone: "+1 (425) 648-9813"
@@ -31,7 +31,15 @@ const representatives = [
   {
     id: 4,
     country: "Kyrgyzstan",
-    name: "Anna Petrova",
+    name: "Mamiraliyeva Nurida Alibekovna",
+    role: "Country Representative",
+    email: "selfvisakg@gmail.com",
+    phone: "+996555349685"
+  },
+  {
+    id: 5,
+    country: "Uzbekistan",
+    name: "Mamiraliyeva Nurida Alibekovna",
     role: "Country Representative",
     email: "selfvisakg@gmail.com",
     phone: "+996555349685"
