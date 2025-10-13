@@ -23,19 +23,19 @@ const representatives = [
   {
     id: 3,
     country: "Ghana", 
-    name: "Ravi Kumar",
+    name: "SARAH AKUTEY KWAMEFIO",
     role: "Country Representative",
-    email: "tigers@example.in",
+    email: "info@tourifygh.com",
     phone: "+233 20 738 5788"
   },
-  // {
-  //   id: 4,
-  //   country: "Russia",
-  //   name: "Anna Petrova",
-  //   role: "Country Representative",
-  //   email: "tigers@example.ru",
-  //   phone: "+7 495 123 4567"
-  // }
+  {
+    id: 4,
+    country: "Kyrgyzstan",
+    name: "Anna Petrova",
+    role: "Country Representative",
+    email: "selfvisakg@gmail.com",
+    phone: "+996555349685"
+  }
 ];
 
 export default function Representatives() {

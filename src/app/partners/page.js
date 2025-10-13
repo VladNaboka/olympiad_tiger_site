@@ -16,7 +16,7 @@ const partners = [
     id: 2,
     name: "SIL Olympiad",
     description: "SiL Subject Tests, a rigorously designed, research-backed language assessment for Years 1-9. STEM and English Tests, developed by graduates from the University of Oxford’s Department of Education and marked by a team of Oxford and Cambridge (Oxbridge) specialists. Our test is aligned with the British National Curriculum and designed to challenge students while identifying high achievers both nationally and internationally.",
-    category: "Educational Partner",
+    category: "Art Partner",
     website: "https://sharingislearning.com/",
     logo: "/image/sil-olympiad.jpeg"
   },
@@ -61,6 +61,8 @@ const getCategoryColor = (category) => {
       return 'bg-blue-100 text-blue-800';
     case 'Cultural Partner':
       return 'bg-purple-100 text-purple-800';
+    case 'Art Partner':
+      return 'bg-orange-100 text-orange-800';
     case 'Venue Partner':
       return 'bg-green-100 text-green-800';
     case 'Development Partner':

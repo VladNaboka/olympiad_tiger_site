@@ -17,10 +17,12 @@ The Olympiad is conducted as part of a global educational project by the Tigers 
     id: 2,
     title: "🏢 Organizer",
     content: `The Olympiad is organized by TIGERS, an independent educational initiative launched in 2025. Our team has extensive experience in international collaboration and previously worked with global partners on educational and cultural projects.
-
-TIGERS operates under the umbrella of Owlwin, a trusted international educational company with over 10 years of experience in organizing academic camps and Olympiads abroad.
-
-Together, we aim to create inspiring opportunities for young talents around the world.`
+  
+  TIGERS operates under the umbrella of Owlwin, a trusted international educational company with over 10 years of experience in organizing academic camps and Olympiads abroad.
+  
+  We are proud to partner with SIL Olympiad, which offers SiL Subject Tests—a rigorously designed, research-backed language assessment for Years 1-9, as well as STEM and English Tests. These assessments are developed by graduates from the University of Oxford's Department of Education and marked by a team of Oxford and Cambridge (Oxbridge) specialists. The tests are aligned with the British National Curriculum and designed to challenge students while identifying high achievers both nationally and internationally.
+  
+  Together, we aim to create inspiring opportunities for young talents around the world.`
   },
   {
     id: 3,
