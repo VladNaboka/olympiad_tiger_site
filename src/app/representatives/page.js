@@ -17,7 +17,7 @@ const representatives = [
     country: "Malawi",
     name: "John Smith",
     role: "Country Representative",
-    email: "tigers@example.us",
+    email: "info@discomcommunications.com",
     phone: "+1 (425) 648-9813"
   },
   {
