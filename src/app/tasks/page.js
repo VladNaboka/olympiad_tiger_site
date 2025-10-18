@@ -11,14 +11,14 @@ export default function Tasks() {
   };
 
   return (
-    <div 
+    <div
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
       style={{
-        backgroundImage: 'url("/image/fonmain1.png")', 
+        backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
       <Navbar />
-      
+
       {/* Header Section */}
       <div className="py-12 px-2 relative">
         <div className="container mx-auto max-w-6xl">
@@ -33,18 +33,18 @@ export default function Tasks() {
                 className="relative z-10"
               />
             </div>
-            
+
             <h2 className="text-3xl font-bold text-orange-600 mt-2 mb-4">
               Math Tiger Olympiad Syllabus
             </h2>
-            
+
             <p className="text-lg text-gray-700 max-w-2xl mx-auto text-center">
               Comprehensive Course Structure for Grades 5-12
             </p>
           </div>
         </div>
       </div>
-      
+
       {/* Mathematics Syllabus Section */}
       <div className="px-2 pb-12">
         <div className="container mx-auto max-w-6xl">
@@ -60,14 +60,14 @@ export default function Tasks() {
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-2xl font-bold text-[#0a1741]">
-                  Category 1: Grades 5-6 (Elementary Level)
+                  Category 1: Grades 5-6
                 </h3>
                 <span className="text-3xl text-orange-500">
                   {openCategory === 'cat1' ? '−' : '+'}
                 </span>
               </div>
             </button>
-            
+
             {openCategory === 'cat1' && (
               <div className="bg-white rounded-b-xl shadow-sm p-8 mt-2">
                 <div className="space-y-6">
@@ -108,7 +108,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-blue-700">Section 2: Mathematical Reasoning</h4>
                     <div className="space-y-4">
@@ -149,7 +149,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-green-700">Section 3: Everyday Mathematics</h4>
                     <div className="space-y-4">
@@ -191,7 +191,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-orange-700">Section 4: Achievers Section</h4>
                     <div className="space-y-4">
@@ -228,14 +228,14 @@ export default function Tasks() {
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-2xl font-bold text-[#0a1741]">
-                  Category 2: Grades 7-8 (Middle Level)
+                  Category 2: Grades 7-8
                 </h3>
                 <span className="text-3xl text-orange-500">
                   {openCategory === 'cat2' ? '−' : '+'}
                 </span>
               </div>
             </button>
-            
+
             {openCategory === 'cat2' && (
               <div className="bg-white rounded-b-xl shadow-sm p-8 mt-2">
                 <div className="space-y-6">
@@ -279,7 +279,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-blue-700">Section 2: Mathematical Reasoning</h4>
                     <div className="space-y-4">
@@ -321,7 +321,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-green-700">Section 3: Everyday Mathematics</h4>
                     <div className="space-y-4">
@@ -363,7 +363,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-orange-700">Section 4: Achievers Section</h4>
                     <div className="space-y-4">
@@ -400,14 +400,14 @@ export default function Tasks() {
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-2xl font-bold text-[#0a1741]">
-                  Category 3: Grades 9-10 (Secondary Level)
+                  Category 3: Grades 9-10
                 </h3>
                 <span className="text-3xl text-orange-500">
                   {openCategory === 'cat3' ? '−' : '+'}
                 </span>
               </div>
             </button>
-            
+
             {openCategory === 'cat3' && (
               <div className="bg-white rounded-b-xl shadow-sm p-8 mt-2">
                 <div className="space-y-6">
@@ -452,7 +452,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-blue-700">Section 2: Mathematical Reasoning</h4>
                     <div className="space-y-4">
@@ -494,7 +494,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-green-700">Section 3: Everyday Mathematics</h4>
                     <div className="space-y-4">
@@ -536,7 +536,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-orange-700">Section 4: Achievers Section</h4>
                     <div className="space-y-4">
@@ -573,14 +573,14 @@ export default function Tasks() {
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-2xl font-bold text-[#0a1741]">
-                  Category 4: Grades 11-12 (Senior Level)
+                  Category 4: Grades 11-12
                 </h3>
                 <span className="text-3xl text-orange-500">
                   {openCategory === 'cat4' ? '−' : '+'}
                 </span>
               </div>
             </button>
-            
+
             {openCategory === 'cat4' && (
               <div className="bg-white rounded-b-xl shadow-sm p-8 mt-2">
                 <div className="space-y-6">
@@ -625,7 +625,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-blue-700">Section 2: Mathematical Reasoning</h4>
                     <div className="space-y-4">
@@ -667,7 +667,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-green-700">Section 3: Everyday Mathematics</h4>
                     <div className="space-y-4">
@@ -709,7 +709,7 @@ export default function Tasks() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-lg">
                     <h4 className="text-xl font-bold mb-4 text-orange-700">Section 4: Achievers Section</h4>
                     <div className="space-y-4">
@@ -751,7 +751,7 @@ export default function Tasks() {
                   <li>• Peer review activities</li>
                 </ul>
               </div>
-              
+
               <div className="bg-blue-50 p-6 rounded-lg">
                 <h4 className="text-xl font-bold mb-4 text-blue-600">Periodic Evaluations (40%)</h4>
                 <ul className="space-y-2 text-gray-700">
@@ -763,192 +763,8 @@ export default function Tasks() {
               </div>
             </div>
           </div>
-
-          {/* Art Examples Section */}
-          <h2 className="text-4xl font-bold text-center mb-10 text-gray-900 pt-16">
-            🎨 Art Examples
-          </h2>
-          
-          {/* Category 1: Grades 5-6 Art Theme */}
-          <div className="mb-12">
-            <div className="bg-white rounded-xl shadow-sm p-8 relative">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-3/5 pr-4">
-                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Category 1 Art Theme: "My Dreamworld" (Grades 5-6)</h3>
-                  
-                  <div className="mb-6">
-                    <p className="font-medium mb-1 text-gray-900">Task Description:</p>
-                    <p className="mb-4 text-gray-900">
-                      Create an artwork that illustrates a world from your imagination. 
-                      Think about what makes this world special - its landscapes, inhabitants, 
-                      or magical elements. Use your creativity to bring this world to 
-                      life through your chosen art medium.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-orange-500 text-white p-6 rounded-xl mb-4">
-                    <p className="font-semibold mb-2">Materials:</p>
-                    <p className="mb-3">Any traditional art materials (watercolors, colored pencils, pastels, etc.)</p>
-                    
-                    <p className="font-semibold mb-1">Evaluation Criteria:</p>
-                    <ul className="list-disc pl-5">
-                      <li>Originality and imagination</li>
-                      <li>Composition and use of space</li>
-                      <li>Technical skill appropriate for age group</li>
-                      <li>Creative interpretation of the theme</li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div className="md:w-2/5 mt-4 md:mt-0">
-                  <div className="rounded-lg overflow-hidden h-64 bg-gradient-to-br from-purple-200 to-pink-200 flex items-center justify-center">
-                    <div className="text-center text-gray-600">
-                      <div className="text-4xl mb-2">🎨</div>
-                      <p>Sample Artwork</p>
-                      <p className="text-sm">Dreamworld Theme</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Category 2: Grades 7-8 Art Theme */}
-          <div className="mb-12">
-            <div className="bg-white rounded-xl shadow-sm p-8 relative">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-3/5 pr-4">
-                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Category 2 Art Theme: "Connection Between Cultures" (Grades 7-8)</h3>
-                  
-                  <div className="mb-6">
-                    <p className="font-medium mb-1 text-gray-900">Task Description:</p>
-                    <p className="mb-4 text-gray-900">
-                      Create an artwork that explores the connections, similarities, 
-                      or exchanges between two or more different cultures. You might focus 
-                      on traditions, food, music, architecture, or any elements that 
-                      show how cultures can influence and enrich each other.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-orange-500 text-white p-6 rounded-xl mb-4">
-                    <p className="font-semibold mb-2">Materials:</p>
-                    <p className="mb-3">Any traditional art materials (watercolors, colored pencils, pastels, etc.)</p>
-                    
-                    <p className="font-semibold mb-1">Evaluation Criteria:</p>
-                    <ul className="list-disc pl-5">
-                      <li>Cultural sensitivity and understanding</li>
-                      <li>Depth of visual storytelling</li>
-                      <li>Technical execution and attention to detail</li>
-                      <li>Balance and visual harmony</li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div className="md:w-2/5 mt-4 md:mt-0">
-                  <div className="rounded-lg overflow-hidden h-64 bg-gradient-to-br from-blue-200 to-green-200 flex items-center justify-center">
-                    <div className="text-center text-gray-600">
-                      <div className="text-4xl mb-2">🌍</div>
-                      <p>Sample Artwork</p>
-                      <p className="text-sm">Cultural Connection Theme</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Category 3: Grades 9-10 Art Theme */}
-          <div className="mb-12">
-            <div className="bg-white rounded-xl shadow-sm p-8 relative">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-3/5 pr-4">
-                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Category 3 Art Theme: "Innovation and Tradition" (Grades 9-10)</h3>
-                  
-                  <div className="mb-6">
-                    <p className="font-medium mb-1 text-gray-900">Task Description:</p>
-                    <p className="mb-4 text-gray-900">
-                      Create an artwork that explores the relationship between innovation 
-                      and tradition. Consider how new technologies or ideas interact with 
-                      established customs and heritage. Your artwork should reflect on this 
-                      dynamic in a thoughtful and visually compelling way.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-orange-500 text-white p-6 rounded-xl mb-4">
-                    <p className="font-semibold mb-2">Materials:</p>
-                    <p className="mb-3">Any traditional art materials (watercolors, colored pencils, pastels, etc.)</p>
-                    
-                    <p className="font-semibold mb-1">Evaluation Criteria:</p>
-                    <ul className="list-disc pl-5">
-                      <li>Conceptual depth and thoughtfulness</li>
-                      <li>Technical excellence and mastery of chosen medium</li>
-                      <li>Sophisticated use of symbolism and visual metaphor</li>
-                      <li>Visual impact and originality</li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div className="md:w-2/5 mt-4 md:mt-0">
-                  <div className="rounded-lg overflow-hidden h-64 bg-gradient-to-br from-yellow-200 to-orange-200 flex items-center justify-center">
-                    <div className="text-center text-gray-600">
-                      <div className="text-4xl mb-2">⚡</div>
-                      <p>Sample Artwork</p>
-                      <p className="text-sm">Innovation & Tradition Theme</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Category 4: Grades 11-12 Art Theme */}
-          <div className="mb-12">
-            <div className="bg-white rounded-xl shadow-sm p-8 relative">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-3/5 pr-4">
-                  <h3 className="text-3xl font-bold mb-6 text-[#0a1741]">Category 4 Art Theme: "Future Visions" (Grades 11-12)</h3>
-                  
-                  <div className="mb-6">
-                    <p className="font-medium mb-1 text-gray-900">Task Description:</p>
-                    <p className="mb-4 text-gray-900">
-                      Create an artwork that envisions the future of humanity, technology, 
-                      or society. Your work should demonstrate sophisticated artistic 
-                      techniques while conveying a thoughtful perspective on where we 
-                      are heading as a civilization. Consider themes such as sustainability, 
-                      technological advancement, social evolution, or environmental change.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-orange-500 text-white p-6 rounded-xl mb-4">
-                    <p className="font-semibold mb-2">Materials:</p>
-                    <p className="mb-3">Any traditional art materials (watercolors, colored pencils, pastels, etc.)</p>
-                    
-                    <p className="font-semibold mb-1">Evaluation Criteria:</p>
-                    <ul className="list-disc pl-5">
-                      <li>Advanced technical proficiency and mastery</li>
-                      <li>Sophisticated conceptual depth and vision</li>
-                      <li>Originality and innovative approach</li>
-                      <li>Strong visual communication and impact</li>
-                      <li>Mature understanding of contemporary issues</li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div className="md:w-2/5 mt-4 md:mt-0">
-                  <div className="rounded-lg overflow-hidden h-64 bg-gradient-to-br from-indigo-200 to-purple-300 flex items-center justify-center">
-                    <div className="text-center text-gray-600">
-                      <div className="text-4xl mb-2">🚀</div>
-                      <p>Sample Artwork</p>
-                      <p className="text-sm">Future Visions Theme</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-      
       <div className="mt-auto">
         <Footer />
       </div>

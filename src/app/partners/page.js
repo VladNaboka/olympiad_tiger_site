@@ -22,19 +22,19 @@ const partners = [
   },
   {
     id: 3,
-    name: "Global Art Foundation",
-    description: "Promoting artistic excellence and cultural exchange among young artists internationally.",
+    name: "New Generation School (NGS)",
+    description: "NGS is a private school in Almaty that prepares students for the future, for the era of innovation and bright ideas.",
     category: "Cultural Partner",
-    website: "#",
-    logo: "/image/partner-placeholder.png"
+    website: "https://ngs-school.kz/",
+    logo: "/image/NGS_logo.png"
   },
   {
     id: 4,
-    name: "Prague Cultural Center",
-    description: "Hosting international events and exhibitions in the beautiful city of Prague.",
-    category: "Venue Partner",
-    website: "#",
-    logo: "/image/partner-placeholder.png"
+    name: "Art studio Safi",
+    description: "A modern creative workshop that unites artists, designers and art lovers.",
+    category: "Cultural Partner",
+    website: "https://wa.me/87077051404",
+    logo: "/image/art_studio_safi.jpeg"
   },
   {
     id: 5,
