@@ -12,6 +12,7 @@ import ResultsTab from './ResultsTab';
 import AddStudentForm from './AddStudentForm';
 import WorksManagement from './WorksManagement';
 import MainAdminWorksManagement from './MainAdminWorksManagement';
+import FeedbackTab from './FeedbackTab';
 import { getStudentsByCountry, updateStudent, deleteStudent } from '../../api/students_api';
 import DateSelector from './DateSelector';
 import { getCategoriesBySubject } from '../../utils/constants';
@@ -715,6 +716,15 @@ function MainAdminDashboard({ user, onLogout }) {
               >
                 🎨 All Works
               </button>
+              <button
+                onClick={() => setActiveTab('feedback')}
+                className={`py-4 px-6 text-sm font-medium border-b-2 ${activeTab === 'feedback'
+                  ? 'border-orange-500 text-orange-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+              >
+                📬 Feedback
+              </button>
             </nav>
           </div>
         </div>
@@ -1043,6 +1053,10 @@ function MainAdminDashboard({ user, onLogout }) {
               filters={worksFilters}
               setFilters={setWorksFilters}
             />
+          )}
+
+          {!loading && activeTab === 'feedback' && (
+            <FeedbackTab />
           )}
 
           {!loading && activeTab === 'statistics' && (
