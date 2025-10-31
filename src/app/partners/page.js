@@ -158,12 +158,12 @@ export default function OurPartners() {
             {partners.map((partner) => (
               <div key={partner.id} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 {/* Partner Logo */}
-                <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
+                <div className="h-48 bg-white rounded-xl shadow-sm flex items-center justify-center overflow-hidden">
                   {partner.logo && partner.logo !== "/image/partner-placeholder.png" ? (
                     <img 
                       src={partner.logo} 
                       alt={`${partner.name} logo`}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   ) : (
                     <div className="text-center text-gray-500">

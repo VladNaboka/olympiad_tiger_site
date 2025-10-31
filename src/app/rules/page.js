@@ -52,15 +52,15 @@ Participation is possible individually or through schools, studios, and clubs.`
 
 5.1. Preliminary Round (remote)
 • Format: online
-• Deadline: by October 1, 2025
+• Deadline: by April 1, 2026
 • Participants create an artwork on the theme "NeoWorld – The World of the Future"
 • Works are submitted digitally via Tigers representative
 • All participants receive certificates of participation
 • Winners and prizewinners are invited to the finals
 
 5.2. Final Round (in-person)
-• Location: Prague, Czech Republic
-• Dates: December 8–12, 2025
+• Location: QE has a prime location at the heart of the Yorkshire countryside in the North of England.
+• Dates: July 2026
 • Includes international exhibition and cultural program
 • Finalists' works are evaluated by an international jury`
   },
