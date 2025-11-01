@@ -40,6 +40,9 @@ export default function Navbar() {
             <Link href="/" className={isActive('/') ? activeStyle : defaultStyle}>
               Home
             </Link>
+            <Link href="/news" className={isActive('/news') ? activeStyle : defaultStyle}>
+              News
+            </Link>
             <Link href="/rules" className={isActive('/rules') ? activeStyle : defaultStyle}>
               Regulations and Structure
             </Link>
