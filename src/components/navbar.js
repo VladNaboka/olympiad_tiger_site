@@ -116,15 +116,22 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden px-2 pt-2 pb-4 bg-[#fffbf2]">
           <div className="flex flex-col space-y-2">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className={`px-3 py-2 rounded ${isActive('/') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Home
             </Link>
-            <Link 
-              href="/rules" 
+            <Link
+              href="/news"
+              className={`px-3 py-2 rounded ${isActive('/news') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              News
+            </Link>
+            <Link
+              href="/rules"
               className={`px-3 py-2 rounded ${isActive('/rules') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
