@@ -186,8 +186,8 @@ export default function News() {
               <div className="flex justify-center space-x-16 mt-16 pt-12 border-t border-gray-200">
                 {[
                   { src: "/eiffel_tower.png", alt: "Eiffel Tower", label: "Europe", isImage: true },
-                  { emoji: "🗽", label: "USA" },
-                  { emoji: "🏯", label: "Asia" },
+                  { src: "/statue_of_liberty.png", alt: "Statue of liberty", label: "USA", isImage: true },
+                  { src: "/building.png", alt: "Building", label: "Asia", isImage: true},
                   { src: "/soldier.png", alt: "British Soldier", label: "UK", isImage: true },
                 ].map((item, index) => (
                   <div
