@@ -6,14 +6,14 @@ import Image from 'next/image';
 
 export default function News() {
   return (
-    <div 
+    <div
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
       style={{
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
       <Navbar />
-      
+
       {/* Header Section */}
       <div className="py-12 px-4 relative">
         <div className="container mx-auto max-w-6xl">
@@ -101,7 +101,7 @@ export default function News() {
               <a href="http://www.wycombeabbey.com" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
                 www.wycombeabbey.com
               </a>
-              <p className="text-sm md:text-base text-gray-600 mt-2">download brochure</p>
+              <p className="text-sm md:text-base text-gray-600 mt-2">download the brochure</p>
             </div>
 
             {/* Row 1, Col 2: Math Image */}
@@ -143,7 +143,7 @@ export default function News() {
               <a href="http://www.qe.org" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
                 www.qe.org
               </a>
-              <p className="text-sm md:text-base text-gray-600 mt-2">download brochure</p>
+              <p className="text-sm md:text-base text-gray-600 mt-2">download the brochure</p>
             </div>
           </div>
         </div>
@@ -184,22 +184,33 @@ export default function News() {
 
               {/* Landmark icons placeholders - Made Much Bigger */}
               <div className="flex justify-center space-x-16 mt-16 pt-12 border-t border-gray-200">
-                <div className="text-center transform hover:scale-110 transition-transform">
-                  <div className="text-8xl mb-4">🗼</div>
-                  <p className="text-lg font-semibold text-gray-700">Europe</p>
-                </div>
-                <div className="text-center transform hover:scale-110 transition-transform">
-                  <div className="text-8xl mb-4">🗽</div>
-                  <p className="text-lg font-semibold text-gray-700">USA</p>
-                </div>
-                <div className="text-center transform hover:scale-110 transition-transform">
-                  <div className="text-8xl mb-4">🏯</div>
-                  <p className="text-lg font-semibold text-gray-700">Asia</p>
-                </div>
-                <div className="text-center transform hover:scale-110 transition-transform">
-                  <div className="text-8xl mb-4">🏰</div>
-                  <p className="text-lg font-semibold text-gray-700">UK</p>
-                </div>
+                {[
+                  { src: "/eiffel_tower.png", alt: "Eiffel Tower", label: "Europe", isImage: true },
+                  { emoji: "🗽", label: "USA" },
+                  { emoji: "🏯", label: "Asia" },
+                  { src: "/soldier.png", alt: "British Soldier", label: "UK", isImage: true },
+                ].map((item, index) => (
+                  <div
+                    key={index}
+                    className="text-center transform hover:scale-110 transition-transform"
+                  >
+                    <div className="w-32 h-32 md:w-40 md:h-40 mx-auto mb-4 flex items-center justify-center bg-white">
+                      {item.isImage ? (
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={item.src}
+                            alt={item.alt}
+                            fill
+                            className="object-contain"
+                          />
+                        </div>
+                      ) : (
+                        <span className="text-7xl md:text-8xl">{item.emoji}</span>
+                      )}
+                    </div>
+                    <p className="text-lg font-semibold text-gray-700">{item.label}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -304,18 +315,24 @@ export default function News() {
               <a href="http://www.lasell.edu" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
                 www.lasell.edu
               </a>
-              <p className="text-sm md:text-base text-gray-600 mt-2">download brochure</p>
+              <a
+                href="/files_download/STEM 2026.pdf"
+                download
+                className="text-sm md:text-base text-gray-600 mt-2 hover:text-purple-600 cursor-pointer underline block"
+              >
+                download the brochure
+              </a>
             </div>
 
-            {/* Row 1, Col 2: Image */}
-            <div className="rounded-xl overflow-hidden flex items-center justify-center">
-              <div className="relative w-full h-64 md:h-80 lg:h-full">
-                <Image
-                  src="/image/news/categoriaes_of.png"
-                  alt="Categories of Participants"
-                  fill
-                  className="object-contain"
-                />
+            {/* Row 1, Col 2: Prize */}
+            <div className="flex items-center justify-center">
+              <div className="flex items-center gap-4 md:gap-6">
+                <div className="text-7xl md:text-8xl">💰</div>
+                <div className="text-center">
+                  <h3 className="text-3xl md:text-5xl font-bold text-green-600 mb-2">PRIZE</h3>
+                  <h3 className="text-3xl md:text-5xl font-bold text-green-600">5000$</h3>
+                </div>
+                <div className="text-7xl md:text-8xl">💰</div>
               </div>
             </div>
 
@@ -323,7 +340,7 @@ export default function News() {
             <div className="rounded-xl overflow-hidden flex items-center justify-center">
               <div className="relative w-full h-64 md:h-80 lg:h-full">
                 <Image
-                  src="/image/news/look_head.png"
+                  src="/image/news/tiger_stem.png"
                   alt="Look Ahead"
                   fill
                   className="object-contain"
