@@ -53,12 +53,21 @@ export default function News() {
                 </div>
               </div>
 
+              {/* STEM Section */}
+              <div>
+                <h3 className="text-3xl font-bold text-black mb-4 underline decoration-2">STEM</h3>
+                <div className="space-y-2">
+                  <p className="text-xl font-semibold text-black">Registration Deadline</p>
+                  <p className="text-lg text-gray-800">March 1, 2026</p>
+                </div>
+              </div>
+
               {/* Art Section */}
               <div>
                 <h3 className="text-3xl font-bold text-black mb-4 underline decoration-2">ART</h3>
                 <div className="space-y-2">
                   <p className="text-xl font-semibold text-black">Registration Deadline</p>
-                  <p className="text-lg text-gray-800">one intake - April 1, 2026</p>
+                  <p className="text-lg text-gray-800">April 1, 2026</p>
                 </div>
               </div>
             </div>
@@ -263,6 +272,74 @@ export default function News() {
                 </div>
                 <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                   <p className="text-lg md:text-xl"><strong>Category IV</strong> — Grades 11-12</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* STEM competition USA Section */}
+      <div className="px-4 pb-12">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-red-600 mb-6">
+              STEM COMPETITION USA
+            </h2>
+          </div>
+
+          {/* 2x2 Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {/* Row 1, Col 1: STEM Text */}
+            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 flex flex-col justify-center items-center text-center">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">LASELL UNIVERSITY</h3>
+              <div className="relative h-20 md:h-24 w-full mb-4 md:mb-6">
+                <Image
+                  src="/image/news/lasell_logo.png"
+                  alt="LASELL UNIVERSITY"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <a href="http://www.lasell.edu" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
+                www.lasell.edu
+              </a>
+              <p className="text-sm md:text-base text-gray-600 mt-2">download brochure</p>
+            </div>
+
+            {/* Row 1, Col 2: Image */}
+            <div className="rounded-xl overflow-hidden flex items-center justify-center">
+              <div className="relative w-full h-64 md:h-80 lg:h-full">
+                <Image
+                  src="/image/news/categoriaes_of.png"
+                  alt="Categories of Participants"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+
+            {/* Row 2, Col 1: Look Ahead Image */}
+            <div className="rounded-xl overflow-hidden flex items-center justify-center">
+              <div className="relative w-full h-64 md:h-80 lg:h-full">
+                <Image
+                  src="/image/news/look_head.png"
+                  alt="Look Ahead"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+
+            {/* Row 2, Col 2: MATH Categories */}
+            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 text-center">
+              <h3 className="text-3xl font-bold text-orange-500 mb-6 md:mb-8">CATEGORIES</h3>
+              <div className="space-y-3 md:space-y-4 text-gray-800">
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  <p className="text-lg md:text-xl"><strong>Category I</strong> — Grades 5-8</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  <p className="text-lg md:text-xl"><strong>Category II</strong> — Grades 9-12</p>
                 </div>
               </div>
             </div>

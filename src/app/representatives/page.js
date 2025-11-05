@@ -30,19 +30,19 @@ const representatives = [
   },
   {
     id: 4,
-    country: "Kyrgyzstan",
-    name: "Mamiraliyeva Nurida Alibekovna",
+    country: "Ethiopia",
+    name: "Lamesgin Aylew Desta ",
     role: "Country Representative",
-    email: "selfvisakg@gmail.com",
-    phone: "+996555349685"
+    email: "Info@onestoptravelagent.com",
+    phone: "+0911888469"
   },
   {
     id: 5,
-    country: "Uzbekistan",
-    name: "Mamiraliyeva Nurida Alibekovna",
+    country: "Cameroon",
+    name: "",
     role: "Country Representative",
-    email: "selfvisakg@gmail.com",
-    phone: "+996555349685"
+    email: "info@gdiglobalinstitute.com",
+    phone: "+237694445032"
   }
 ];
 
