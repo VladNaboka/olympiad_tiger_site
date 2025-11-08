@@ -43,7 +43,39 @@ const representatives = [
     role: "Country Representative",
     email: "info@gdiglobalinstitute.com",
     phone: "+237694445032"
-  }
+  },
+  {
+    id: 6,
+    country: "Tchad",
+    name: "Dr NJAMEN NJANKE ALBERT",
+    role: "Global Dominium Services",
+    email: "info@gdiglobalinstitute.com",
+    phone: "+237694445032"
+  },
+  {
+    id: 7,
+    country: "Togo",
+    name: "Dr NJAMEN NJANKE ALBERT",
+    role: "Global Dominium Services",
+    email: "info@gdiglobalinstitute.com",
+    phone: "+237657385562"
+  },
+  {
+    id: 8,
+    country: "Mali",
+    name: "Dr NJAMEN NJANKE ALBERT",
+    role: "Global Dominium Services",
+    email: "info@gdiglobalinstitute.com",
+    phone: "+237695484321"
+  },
+  {
+    id: 9,
+    country: "Guinea",
+    name: "Dr NJAMEN NJANKE ALBERT",
+    role: "Global Dominium Services",
+    email: "info@gdiglobalinstitute.com",
+    phone: "+237695484321"
+  },
 ];
 
 export default function Representatives() {

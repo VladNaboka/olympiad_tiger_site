@@ -101,9 +101,9 @@ All types of techniques are accepted.`
     title: "🏅 Awards",
     content: `Based on the final results, winners and prizewinners receive:
 
-🏆 1st place: Trip to a summer camp in Greece (summer 2026)
-🥈 2nd place: Graphic tablet
-🥉 3rd place: Professional art set
+🏆 1st place: 2 weeks summer camp, 2027 (US or UK)
+🥈 2nd place: 2 weeks summer camp, 2027 (Europe or Asia)
+🥉 3rd place: graphic tablet
 
 All finalists receive international certificates and invitations to future Tigers exhibitions.`
   },

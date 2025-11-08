@@ -92,16 +92,22 @@ export default function News() {
               <div className="relative h-20 md:h-24 w-full mb-4 md:mb-6">
                 <Image
                   src="/image/news/mycombe_logo.png"
-                  alt="Wycombe Abbey School"
+                  alt="Wycombe Abbey International"
                   fill
                   className="object-contain"
                 />
               </div>
-              <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-2 md:mb-3">WYCOMBE ABBEY SCHOOL</h4>
+              <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-2 md:mb-3">WYCOMBE ABBEY INTERNATIONAL</h4>
               <a href="http://www.wycombeabbey.com" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
                 www.wycombeabbey.com
               </a>
-              <p className="text-sm md:text-base text-gray-600 mt-2">download the brochure</p>
+              <a
+                href="/files_download/MATH 2026.pdf"
+                download
+                className="text-sm md:text-base text-gray-600 mt-2 hover:text-purple-600 cursor-pointer underline block"
+              >
+                download the brochure
+              </a>            
             </div>
 
             {/* Row 1, Col 2: Math Image */}
@@ -163,7 +169,7 @@ export default function News() {
                 <div className="text-7xl mr-6 flex-shrink-0">
                   🥇
                 </div>
-                <span className="text-xl font-bold text-gray-900">2-week camp SUMMER 2027 (US or UK)</span>
+                <span className="text-xl font-bold text-gray-900">2 weeks summer camp, 2027 (US or UK)</span>
               </div>
 
               {/* Silver Prize */}
@@ -171,7 +177,7 @@ export default function News() {
                 <div className="text-7xl mr-6 flex-shrink-0">
                   🥈
                 </div>
-                <span className="text-xl font-bold text-gray-900">2-week camp SUMMER 2027 (Europe or Asia)</span>
+                <span className="text-xl font-bold text-gray-900">2 weeks summer camp, 2027 (Europe or Asia)</span>
               </div>
 
               {/* Bronze Prize */}
