@@ -14,6 +14,22 @@ const representatives = [
   },
   {
     id: 2,
+    country: "Hungary",
+    name: "Tsovoo Enkhzaya",
+    role: "Oner Education",
+    email: "admissions@onereducation.eu",
+    phone: "+36702039596"
+  },
+  {
+    id: 3,
+    country: "Mongolia",
+    name: "Temuujin Naidandorj",
+    role: "Oner Vision Academy",
+    email: "temuujin@onervisionacademy.com",
+    phone: "+976 8696 4264"
+  },
+  {
+    id: 4,
     country: "Malawi",
     name: "Doreen Dalitso Kayoyo",
     role: "Country Representative",
@@ -21,7 +37,7 @@ const representatives = [
     phone: "+1 (425) 648-9813"
   },
   {
-    id: 3,
+    id: 5,
     country: "Ghana", 
     name: "SARAH AKUTEY KWAMEFIO",
     role: "Country Representative",
@@ -29,7 +45,7 @@ const representatives = [
     phone: "+233 20 738 5788"
   },
   {
-    id: 4,
+    id: 6,
     country: "Ethiopia",
     name: "Lamesgin Aylew Desta ",
     role: "Country Representative",
@@ -37,7 +53,7 @@ const representatives = [
     phone: "+0911888469"
   },
   {
-    id: 5,
+    id: 7,
     country: "Cameroon",
     name: "",
     role: "Country Representative",
@@ -45,7 +61,7 @@ const representatives = [
     phone: "+237694445032"
   },
   {
-    id: 6,
+    id: 8,
     country: "Tchad",
     name: "Dr NJAMEN NJANKE ALBERT",
     role: "Global Dominium Services",
@@ -53,7 +69,7 @@ const representatives = [
     phone: "+237694445032"
   },
   {
-    id: 7,
+    id: 9,
     country: "Togo",
     name: "Dr NJAMEN NJANKE ALBERT",
     role: "Global Dominium Services",
@@ -61,7 +77,7 @@ const representatives = [
     phone: "+237657385562"
   },
   {
-    id: 8,
+    id: 10,
     country: "Mali",
     name: "Dr NJAMEN NJANKE ALBERT",
     role: "Global Dominium Services",
@@ -69,7 +85,7 @@ const representatives = [
     phone: "+237695484321"
   },
   {
-    id: 9,
+    id: 11,
     country: "Guinea",
     name: "Dr NJAMEN NJANKE ALBERT",
     role: "Global Dominium Services",
