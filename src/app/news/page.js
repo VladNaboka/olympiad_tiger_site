@@ -149,7 +149,13 @@ export default function News() {
               <a href="http://www.qe.org" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
                 www.qe.org
               </a>
-              <p className="text-sm md:text-base text-gray-600 mt-2">download the brochure</p>
+              <a
+                href="/files_download/ART 2026.pdf"
+                download
+                className="text-sm md:text-base text-gray-600 mt-2 hover:text-purple-600 cursor-pointer underline block"
+              >
+                download the brochure
+              </a>
             </div>
           </div>
         </div>

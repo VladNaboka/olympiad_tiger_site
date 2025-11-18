@@ -32,7 +32,7 @@ const representatives = [
     id: 4,
     country: "Malawi",
     name: "Doreen Dalitso Kayoyo",
-    role: "Country Representative",
+    role: "Discom Communications",
     email: "info@discomcommunications.com",
     phone: "+1 (425) 648-9813"
   },
@@ -40,7 +40,7 @@ const representatives = [
     id: 5,
     country: "Ghana", 
     name: "SARAH AKUTEY KWAMEFIO",
-    role: "Country Representative",
+    role: "Tourify Communications",
     email: "info@tourifygh.com",
     phone: "+233 20 738 5788"
   },
@@ -48,7 +48,7 @@ const representatives = [
     id: 6,
     country: "Ethiopia",
     name: "Lamesgin Aylew Desta ",
-    role: "Country Representative",
+    role: "One Stop Solution",
     email: "Info@onestoptravelagent.com",
     phone: "+0911888469"
   },
@@ -56,13 +56,13 @@ const representatives = [
     id: 7,
     country: "Cameroon",
     name: "",
-    role: "Country Representative",
+    role: "global dominium services",
     email: "info@gdiglobalinstitute.com",
     phone: "+237694445032"
   },
   {
     id: 8,
-    country: "Tchad",
+    country: "Chad",
     name: "Dr NJAMEN NJANKE ALBERT",
     role: "Global Dominium Services",
     email: "info@gdiglobalinstitute.com",
@@ -91,6 +91,30 @@ const representatives = [
     role: "Global Dominium Services",
     email: "info@gdiglobalinstitute.com",
     phone: "+237695484321"
+  },
+  {
+    id: 12,
+    country: "Tanzania",
+    name: "Sarfraz Kassam",
+    role: "EduKwanza",
+    email: "sarfraz.kassam@edukwanza.com",
+    phone: "+255787001786"
+  },
+  {
+    id: 13,
+    country: "Nigeria",
+    name: "Dr. Daniel OLA",
+    role: "The WorldXplorers Ltd.",
+    email: "info@worldxplorer.co",
+    phone: "+2348032073056"
+  },
+  {
+    id: 14,
+    country: "Iran",
+    name: "Mehdi Aghaei",
+    role: "Ava Mahd Tadbir",
+    email: "MA@avaapply.com",
+    phone: "+989126484541"
   },
 ];
 
