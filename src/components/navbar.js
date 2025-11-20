@@ -43,6 +43,9 @@ export default function Navbar() {
             <Link href="/news" className={isActive('/news') ? activeStyle : defaultStyle}>
               News
             </Link>
+            <Link href="/scholarships" className={isActive('/scholarships') ? activeStyle : defaultStyle}>
+              Scholarships
+            </Link>
             <Link href="/rules" className={isActive('/rules') ? activeStyle : defaultStyle}>
               Regulations and Structure
             </Link>
@@ -129,6 +132,13 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               News
+            </Link>
+            <Link
+              href="/scholarships"
+              className={`px-3 py-2 rounded ${isActive('/scholarships') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Scholarships
             </Link>
             <Link
               href="/rules"
