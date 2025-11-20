@@ -9,117 +9,26 @@ import Link from 'next/link';
 const gifts = [
   {
     id: 1,
-    companyName: "Company Name 1",
-    giftName: "Gift Prize 1",
-    description: "A carousel made of 5 photos in PNG format",
-    sellingPhrase: "They provide",
-    website: "#",
-    companyLogo: "/image/gift-placeholder-1.png",
+    companyName: "Wycombe Abbey International",
+    giftName: "G2 complimentary summer camp 2027",
+    description: "For the schools - Every Child Can Excel",
+    sellingPhrase: "",
+    website: "http://www.wycombeabbeyasia.com",
+    companyLogo: "/image/mycome_logo.png",
     carousel: [
-      "/image/gift-1-1.png",
-      "/image/gift-1-2.png",
-      "/image/gift-1-3.png",
-      "/image/gift-1-4.png",
-      "/image/gift-1-5.png"
+      "/image/scholarships/wycome_1.jpg",
+      "/image/scholarships/wycome_2.jpg",
+      "/image/scholarships/wycome_3.jpg",
+      "/image/scholarships/wycome_4.jpg",
+      "/image/scholarships/wycome_5.jpg"
     ]
   },
-  {
-    id: 2,
-    companyName: "Company Name 2",
-    giftName: "Gift Prize 2",
-    description: "A carousel made of 5 photos in PNG format",
-    sellingPhrase: "They provide",
-    website: "#",
-    companyLogo: "/image/gift-placeholder-2.png",
-    carousel: [
-      "/image/gift-2-1.png",
-      "/image/gift-2-2.png",
-      "/image/gift-2-3.png",
-      "/image/gift-2-4.png",
-      "/image/gift-2-5.png"
-    ]
-  },
-  {
-    id: 3,
-    companyName: "Company Name 3",
-    giftName: "Gift Prize 3",
-    description: "A carousel made of 5 photos in PNG format",
-    sellingPhrase: "They provide",
-    website: "#",
-    companyLogo: "/image/gift-placeholder-3.png",
-    carousel: [
-      "/image/gift-3-1.png",
-      "/image/gift-3-2.png",
-      "/image/gift-3-3.png",
-      "/image/gift-3-4.png",
-      "/image/gift-3-5.png"
-    ]
-  },
-  {
-    id: 4,
-    companyName: "Company Name 4",
-    giftName: "Gift Prize 4",
-    description: "A carousel made of 5 photos in PNG format",
-    sellingPhrase: "They provide",
-    website: "#",
-    companyLogo: "/image/gift-placeholder-4.png",
-    carousel: [
-      "/image/gift-4-1.png",
-      "/image/gift-4-2.png",
-      "/image/gift-4-3.png",
-      "/image/gift-4-4.png",
-      "/image/gift-4-5.png"
-    ]
-  },
-  {
-    id: 5,
-    companyName: "Company Name 5",
-    giftName: "Gift Prize 5",
-    description: "A carousel made of 5 photos in PNG format",
-    sellingPhrase: "They provide",
-    website: "#",
-    companyLogo: "/image/gift-placeholder-5.png",
-    carousel: [
-      "/image/gift-5-1.png",
-      "/image/gift-5-2.png",
-      "/image/gift-5-3.png",
-      "/image/gift-5-4.png",
-      "/image/gift-5-5.png"
-    ]
-  },
-  {
-    id: 6,
-    companyName: "Company Name 6",
-    giftName: "Gift Prize 6",
-    description: "A carousel made of 5 photos in PNG format",
-    sellingPhrase: "They provide",
-    website: "#",
-    companyLogo: "/image/gift-placeholder-6.png",
-    carousel: [
-      "/image/gift-6-1.png",
-      "/image/gift-6-2.png",
-      "/image/gift-6-3.png",
-      "/image/gift-6-4.png",
-      "/image/gift-6-5.png"
-    ]
-  }
 ];
 
 export default function Gifts() {
   return (
     <div className="min-h-screen flex flex-col bg-[#fffbf2]">
       <Navbar />
-
-      {/* Header Section */}
-      <section className="container mx-auto px-4 py-12">
-        <h1 className="text-5xl font-bold mb-4 text-black">
-          Prizes & <span className="text-orange-500">Gifts</span>
-        </h1>
-        <p className="text-lg text-gray-700 max-w-3xl">
-          Our amazing partners provide wonderful gifts and prizes for our participants. 
-          Discover the incredible opportunities and rewards awaiting our winners.
-        </p>
-      </section>
 
       {/* Gifts Grid */}
       <section className="container mx-auto px-4 py-12">
@@ -162,6 +71,7 @@ function ImagePlaceholder() {
 // GiftCard Component
 function GiftCard({ gift }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const goToPrevious = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -191,9 +101,17 @@ function GiftCard({ gift }) {
       </div>
 
       {/* Carousel */}
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
         <div className="w-full h-full flex items-center justify-center">
-          <ImagePlaceholder />
+          {!imageLoaded && <ImagePlaceholder />}
+          <img
+            src={gift.carousel[currentImageIndex]}
+            alt={`${gift.giftName} - Image ${currentImageIndex + 1}`}
+            className="w-full h-full object-cover"
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageLoaded(false)}
+            style={{ display: imageLoaded ? 'block' : 'none' }}
+          />
         </div>
 
         {/* Navigation Buttons */}
