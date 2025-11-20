@@ -10,8 +10,8 @@ const gifts = [
   {
     id: 1,
     companyName: "Wycombe Abbey International",
-    giftName: "Complimentary summer camp 2027",
-    description: "For the schools - Every Child Can Excel",
+    giftName: "Complimentary Summer Camp 2027",
+    description: "Every Child Can Excel",
     sellingPhrase: "",
     website: "http://www.wycombeabbeyasia.com",
     companyLogo: "/image/mycome_logo.png",
@@ -91,11 +91,11 @@ function GiftCard({ gift }) {
       <div className="p-6 border-b border-gray-200">
         <p className="text-lg font-bold text-black mb-2">
           {gift.companyName}
-        </p>
-        <h3 className="text-base font-semibold text-gray-700">
+        </p> 
+        <h3 className="text-lg font-bold mb-2" style={{ color: '#f97316' }}>
           {gift.giftName}
         </h3>
-        <p className="text-xs text-gray-600 mt-2">
+        <p className="text-lg font-bold text-black">
           {gift.description}
         </p>
       </div>
