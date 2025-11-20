@@ -95,7 +95,7 @@ function GiftCard({ gift }) {
         <h3 className="text-lg font-bold mb-2" style={{ color: '#f97316' }}>
           {gift.giftName}
         </h3>
-        <p className="text-lg font-bold text-black">
+        <p className="text-lg text-black">
           {gift.description}
         </p>
       </div>
