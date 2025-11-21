@@ -20,12 +20,12 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link href="/rules" className="text-gray-300 hover:text-pink-400 transition-colors">
-                  Regulations and Structure
+                  Regulations
                 </Link>
               </li>
               <li>
                 <Link href="/register" className="text-gray-300 hover:text-pink-400 transition-colors">
-                  Registration
+                  Results
                 </Link>
               </li>
               <li>

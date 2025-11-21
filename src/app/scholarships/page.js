@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
@@ -47,17 +47,26 @@ export default function Gifts() {
 // GiftCard Component
 function GiftCard({ gift }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const goToPrevious = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? gift.carousel.length - 1 : prevIndex - 1
-    );
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === 0 ? gift.carousel.length - 1 : prevIndex - 1
+      );
+      setIsTransitioning(false);
+    }, 150);
   };
 
   const goToNext = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === gift.carousel.length - 1 ? 0 : prevIndex + 1
-    );
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === gift.carousel.length - 1 ? 0 : prevIndex + 1
+      );
+      setIsTransitioning(false);
+    }, 150);
   };
 
   return (
@@ -66,8 +75,8 @@ function GiftCard({ gift }) {
       <div className="p-6 border-b border-gray-200">
         <p className="text-lg font-bold text-black mb-2">
           {gift.companyName}
-        </p> 
-        <h3 className="text-lg font-bold mb-2" style={{ color: '#f97316 !important'}}>
+        </p>
+        <h3 className="text-lg font-bold mb-2 gift-name-orange">
           {gift.giftName}
         </h3>
         <p className="text-lg text-black">
@@ -80,7 +89,9 @@ function GiftCard({ gift }) {
         <img
           src={gift.carousel[currentImageIndex]}
           alt={`${gift.giftName} - Image ${currentImageIndex + 1}`}
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover transition-all duration-300 ${
+            isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+          }`}
           loading="eager"
         />
 

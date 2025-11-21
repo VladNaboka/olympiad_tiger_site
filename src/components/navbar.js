@@ -47,10 +47,10 @@ export default function Navbar() {
               Scholarships
             </Link>
             <Link href="/rules" className={isActive('/rules') ? activeStyle : defaultStyle}>
-              Regulations and Structure
+              Regulations
             </Link>
             <Link href="/register" className={isActive('/register') ? activeStyle : defaultStyle}>
-              Registration
+              Results
             </Link>
             <Link href="/gallery" className={isActive('/gallery') ? activeStyle : defaultStyle}>
               Gallery
@@ -66,9 +66,6 @@ export default function Navbar() {
             </Link>
             <Link href="/partners" className={isActive('/partners') ? activeStyle : defaultStyle}>
               Our Partners
-            </Link>
-            <Link href="/contacts" className={isActive('/contacts') ? activeStyle : defaultStyle}>
-              Contacts
             </Link>
             <Link 
               href="/admin" 
@@ -145,14 +142,14 @@ export default function Navbar() {
               className={`px-3 py-2 rounded ${isActive('/rules') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
-              Regulations and Structure
+              Regulations
             </Link>
-            <Link 
-              href="/register" 
+            <Link
+              href="/register"
               className={`px-3 py-2 rounded ${isActive('/register') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
-              Registration
+              Results
             </Link>
             <Link 
               href="/gallery" 
@@ -182,19 +179,12 @@ export default function Navbar() {
             >
               Representatives
             </Link>
-            <Link 
-              href="/partners" 
+            <Link
+              href="/partners"
               className={`px-3 py-2 rounded ${isActive('/partners') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Our Partners
-            </Link>
-            <Link 
-              href="/contacts" 
-              className={`px-3 py-2 rounded ${isActive('/contacts') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Contacts
             </Link>
             <Link 
               href="/admin" 

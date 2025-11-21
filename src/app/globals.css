@@ -75,11 +75,13 @@ body {
 }
 
 /* Custom heading styles with strong contrast */
-h3.text-xl {
+h3.text-xl:not(.gift-name-orange) {
   color: #000000 !important;
 }
 
-.bg-gray-100 h3, .bg-orange-50 h3, .bg-white h3 {
+.bg-gray-100 h3:not(.gift-name-orange),
+.bg-orange-50 h3:not(.gift-name-orange),
+.bg-white h3:not(.gift-name-orange) {
   color: #000000 !important;
   font-weight: 700 !important;
 }
@@ -106,8 +108,17 @@ h3.text-xl {
 }
 
 /* Make all font-bold text elements dark on light backgrounds */
-.bg-orange-50 .font-bold, .bg-white .font-bold, .bg-gray-100 .font-bold, .bg-orange-100 .font-bold {
+.bg-orange-50 .font-bold:not(.gift-name-orange),
+.bg-white .font-bold:not(.gift-name-orange),
+.bg-gray-100 .font-bold:not(.gift-name-orange),
+.bg-orange-100 .font-bold:not(.gift-name-orange) {
   color: #000000 !important;
+}
+
+/* Exception for scholarship gift names - should be orange */
+.bg-white .gift-name-orange,
+.gift-name-orange {
+  color: #f97316 !important;
 }
 
 .no-select {

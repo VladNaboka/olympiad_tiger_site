@@ -325,7 +325,7 @@ export default function Regulations() {
             {/* Center - Title and Description */}
             <div className="md:w-2/4 text-center my-6 md:my-0">
               <h1 className="text-4xl md:text-5xl font-bold text-orange-600 mb-4 md:mb-6">
-                Regulations and Structure
+                Regulations
               </h1>
               <h2 className="text-2xl md:text-3xl font-semibold text-gray-700 mb-4">
                 International Tigers Olympiad
