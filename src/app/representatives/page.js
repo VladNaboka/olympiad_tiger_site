@@ -116,6 +116,38 @@ const representatives = [
     email: "MA@avaapply.com",
     phone: "+989126484541"
   },
+  {
+    id: 15,
+    country: "Kenya",
+    name: "Dr. Noah Migudo Winja",
+    role: "Wmeir-Winja & Partners",
+    email: "winjapartners@consultant.com",
+    phone: "+254726372941"
+  },
+  {
+    id: 16,
+    country: "Rwanda",
+    name: "Dr. Noah Migudo Winja",
+    role: "Wmeir-Winja & Partners",
+    email: "winjapartners@consultant.com",
+    phone: "+254726372941"
+  },
+  {
+    id: 17,
+    country: "Uganda",
+    name: "Dr. Noah Migudo Winja",
+    role: "Wmeir-Winja & Partners",
+    email: "winjapartners@consultant.com",
+    phone: "+254726372941"
+  },
+  {
+    id: 18,
+    country: "Turkey",
+    name: "Mucibur Rahman Sokak",
+    role: "YELS International Education and Consultancy",
+    email: "info@yelsdanismanlik.com",
+    phone: "+905365516820"
+  },
 ];
 
 export default function Representatives() {
