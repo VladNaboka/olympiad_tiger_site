@@ -48,6 +48,24 @@ export default function Gifts() {
 function GiftCard({ gift }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Auto-slide every 3.5 seconds
+  useEffect(() => {
+    if (isPaused || gift.carousel.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentImageIndex((prevIndex) =>
+          prevIndex === gift.carousel.length - 1 ? 0 : prevIndex + 1
+        );
+        setIsTransitioning(false);
+      }, 300);
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [isPaused, gift.carousel.length]);
 
   const goToPrevious = () => {
     setIsTransitioning(true);
@@ -56,7 +74,7 @@ function GiftCard({ gift }) {
         prevIndex === 0 ? gift.carousel.length - 1 : prevIndex - 1
       );
       setIsTransitioning(false);
-    }, 150);
+    }, 300);
   };
 
   const goToNext = () => {
@@ -66,7 +84,7 @@ function GiftCard({ gift }) {
         prevIndex === gift.carousel.length - 1 ? 0 : prevIndex + 1
       );
       setIsTransitioning(false);
-    }, 150);
+    }, 300);
   };
 
   return (
@@ -85,7 +103,11 @@ function GiftCard({ gift }) {
       </div>
 
       {/* Carousel */}
-      <div className="relative aspect-square overflow-hidden bg-gray-100">
+      <div
+        className="relative aspect-square overflow-hidden bg-gray-100"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
         <img
           src={gift.carousel[currentImageIndex]}
           alt={`${gift.giftName} - Image ${currentImageIndex + 1}`}
