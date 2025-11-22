@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
@@ -49,6 +49,9 @@ function GiftCard({ gift }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef(null);
 
   // Auto-slide every 3.5 seconds
   useEffect(() => {
@@ -87,8 +90,44 @@ function GiftCard({ gift }) {
     }, 300);
   };
 
+  // 3D Tilt effect handlers
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+    setTilt({ rotateX, rotateY });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    setIsPaused(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setIsPaused(false);
+    setTilt({ rotateX: 0, rotateY: 0 });
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="bg-white rounded-lg overflow-hidden transition-all duration-300 ease-out"
+      style={{
+        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(${isHovered ? 1.02 : 1})`,
+        boxShadow: isHovered
+          ? '0 25px 50px -12px rgba(249, 115, 22, 0.4), 0 0 30px rgba(249, 115, 22, 0.2)'
+          : '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+      }}
+    >
       {/* Header with company name and gift name */}
       <div className="p-6 border-b border-gray-200">
         <p className="text-lg font-bold text-black mb-2">
@@ -103,11 +142,7 @@ function GiftCard({ gift }) {
       </div>
 
       {/* Carousel */}
-      <div
-        className="relative aspect-square overflow-hidden bg-gray-100"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
         <img
           src={gift.carousel[currentImageIndex]}
           alt={`${gift.giftName} - Image ${currentImageIndex + 1}`}

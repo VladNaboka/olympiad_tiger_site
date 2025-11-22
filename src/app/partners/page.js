@@ -6,9 +6,9 @@ import Link from 'next/link';
 const partners = [
   {
     id: 1,
-    name: "Owlwin Educational Company",
+    name: "Owlwin Edu",
     description: "A trusted international educational company with over 10 years of experience in organizing academic camps and Olympiads abroad.",
-    category: "Educational Partner",
+    category: "Agency",
     website: "https://www.owlwinexchange.com",
     logo: "/image/logo-owlwin.jpeg"
   },
@@ -24,7 +24,7 @@ const partners = [
     id: 3,
     name: "New Generation School (NGS)",
     description: "NGS is a private school in Almaty that prepares students for the future, for the era of innovation and bright ideas.",
-    category: "Cultural Partner",
+    category: "Private School",
     website: "https://ngs-school.kz/",
     logo: "/image/NGS_logo.png"
   },
@@ -32,7 +32,7 @@ const partners = [
     id: 4,
     name: "Art studio Safi",
     description: "A modern creative workshop that unites artists, designers and art lovers.",
-    category: "Cultural Partner",
+    category: "Art Partner",
     website: "https://wa.me/87077051404",
     logo: "/image/art_studio_safi.jpeg"
   },
