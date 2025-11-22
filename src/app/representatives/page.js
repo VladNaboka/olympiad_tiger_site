@@ -2,63 +2,15 @@ import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
 
-// Updated representatives data - now focused on Julia Ovdiichuk as main representative
+// Representatives data sorted alphabetically by country
 const representatives = [
-  {
-    id: 1,
-    country: "Kazakhstan",
-    name: "Yuliya Ovdiichuk",
-    role: "National Coordinator",
-    email: "yuliya@tigersedu.com",
-    phone: "+7 700 595 1000"
-  },
-  {
-    id: 2,
-    country: "Hungary",
-    name: "Tsovoo Enkhzaya",
-    role: "Oner Education",
-    email: "admissions@onereducation.eu",
-    phone: "+36702039596"
-  },
-  {
-    id: 3,
-    country: "Mongolia",
-    name: "Temuujin Naidandorj",
-    role: "Oner Vision Academy",
-    email: "temuujin@onervisionacademy.com",
-    phone: "+976 8696 4264"
-  },
-  {
-    id: 4,
-    country: "Malawi",
-    name: "Doreen Dalitso Kayoyo",
-    role: "Discom Communications",
-    email: "info@discomcommunications.com",
-    phone: "+1 (425) 648-9813"
-  },
-  {
-    id: 5,
-    country: "Ghana", 
-    name: "SARAH AKUTEY KWAMEFIO",
-    role: "Tourify Communications",
-    email: "info@tourifygh.com",
-    phone: "+233 20 738 5788"
-  },
-  {
-    id: 6,
-    country: "Ethiopia",
-    name: "Lamesgin Aylew Desta ",
-    role: "One Stop Solution",
-    email: "Info@onestoptravelagent.com",
-    phone: "+0911888469"
-  },
   {
     id: 7,
     country: "Cameroon",
     name: "",
-    role: "global dominium services",
+    role: "Global Dominium Services",
     email: "info@gdiglobalinstitute.com",
-    phone: "+237694445032"
+    phone: "+237694445032",
   },
   {
     id: 8,
@@ -66,23 +18,23 @@ const representatives = [
     name: "Dr NJAMEN NJANKE ALBERT",
     role: "Global Dominium Services",
     email: "info@gdiglobalinstitute.com",
-    phone: "+237694445032"
+    phone: "+237694445032",
   },
   {
-    id: 9,
-    country: "Togo",
-    name: "Dr NJAMEN NJANKE ALBERT",
-    role: "Global Dominium Services",
-    email: "info@gdiglobalinstitute.com",
-    phone: "+237657385562"
+    id: 6,
+    country: "Ethiopia",
+    name: "Lamesgin Aylew Desta",
+    role: "One Stop Solution",
+    email: "Info@onestoptravelagent.com",
+    phone: "+0911888469",
   },
   {
-    id: 10,
-    country: "Mali",
-    name: "Dr NJAMEN NJANKE ALBERT",
-    role: "Global Dominium Services",
-    email: "info@gdiglobalinstitute.com",
-    phone: "+237695484321"
+    id: 5,
+    country: "Ghana",
+    name: "SARAH AKUTEY KWAMEFIO",
+    role: "Tourify Communications",
+    email: "info@tourifygh.com",
+    phone: "+233207385788",
   },
   {
     id: 11,
@@ -90,23 +42,15 @@ const representatives = [
     name: "Dr NJAMEN NJANKE ALBERT",
     role: "Global Dominium Services",
     email: "info@gdiglobalinstitute.com",
-    phone: "+237695484321"
+    phone: "+237695484321",
   },
   {
-    id: 12,
-    country: "Tanzania",
-    name: "Sarfraz Kassam",
-    role: "EduKwanza",
-    email: "sarfraz.kassam@edukwanza.com",
-    phone: "+255787001786"
-  },
-  {
-    id: 13,
-    country: "Nigeria",
-    name: "Dr. Daniel OLA",
-    role: "The WorldXplorers Ltd.",
-    email: "info@worldxplorer.co",
-    phone: "+2348032073056"
+    id: 2,
+    country: "Hungary",
+    name: "Tsovoo Enkhzaya",
+    role: "Oner Education",
+    email: "admissions@onereducation.eu",
+    phone: "+36702039596",
   },
   {
     id: 14,
@@ -114,7 +58,16 @@ const representatives = [
     name: "Mehdi Aghaei",
     role: "Ava Mahd Tadbir",
     email: "MA@avaapply.com",
-    phone: "+989126484541"
+    phone: "+989126484541",
+  },
+  {
+    id: 1,
+    country: "Kazakhstan",
+    name: "Yuliya Ovdiichuk",
+    role: "National Coordinator",
+    email: "yuliya@tigersedu.com",
+    phone: "+7 700 595 1000",
+    isMain: true
   },
   {
     id: 15,
@@ -122,7 +75,39 @@ const representatives = [
     name: "Dr. Noah Migudo Winja",
     role: "Wmeir-Winja & Partners",
     email: "winjapartners@consultant.com",
-    phone: "+254726372941"
+    phone: "+254726372941",
+  },
+  {
+    id: 4,
+    country: "Malawi",
+    name: "Doreen Dalitso Kayoyo",
+    role: "Discom Communications",
+    email: "info@discomcommunications.com",
+    phone: "+14256489813",
+  },
+  {
+    id: 10,
+    country: "Mali",
+    name: "Dr NJAMEN NJANKE ALBERT",
+    role: "Global Dominium Services",
+    email: "info@gdiglobalinstitute.com",
+    phone: "+237695484321",
+  },
+  {
+    id: 3,
+    country: "Mongolia",
+    name: "Temuujin Naidandorj",
+    role: "Oner Vision Academy",
+    email: "temuujin@onervisionacademy.com",
+    phone: "+97686964264",
+  },
+  {
+    id: 13,
+    country: "Nigeria",
+    name: "Dr. Daniel OLA",
+    role: "The WorldXplorers Ltd.",
+    email: "info@worldxplorer.co",
+    phone: "+2348032073056",
   },
   {
     id: 16,
@@ -130,15 +115,23 @@ const representatives = [
     name: "Dr. Noah Migudo Winja",
     role: "Wmeir-Winja & Partners",
     email: "winjapartners@consultant.com",
-    phone: "+254726372941"
+    phone: "+254726372941",
   },
   {
-    id: 17,
-    country: "Uganda",
-    name: "Dr. Noah Migudo Winja",
-    role: "Wmeir-Winja & Partners",
-    email: "winjapartners@consultant.com",
-    phone: "+254726372941"
+    id: 12,
+    country: "Tanzania",
+    name: "Sarfraz Kassam",
+    role: "EduKwanza",
+    email: "sarfraz.kassam@edukwanza.com",
+    phone: "+255787001786",
+  },
+  {
+    id: 9,
+    country: "Togo",
+    name: "Dr NJAMEN NJANKE ALBERT",
+    role: "Global Dominium Services",
+    email: "info@gdiglobalinstitute.com",
+    phone: "+237657385562",
   },
   {
     id: 18,
@@ -146,20 +139,32 @@ const representatives = [
     name: "Mucibur Rahman Sokak",
     role: "YELS International Education and Consultancy",
     email: "info@yelsdanismanlik.com",
-    phone: "+905365516820"
+    phone: "+905365516820",
+  },
+  {
+    id: 17,
+    country: "Uganda",
+    name: "Dr. Noah Migudo Winja",
+    role: "Wmeir-Winja & Partners",
+    email: "winjapartners@consultant.com",
+    phone: "+254726372941",
   },
 ];
 
 export default function Representatives() {
+  // Filter out the main representative for the grid
+  const otherReps = representatives.filter(rep => !rep.isMain);
+  const mainRep = representatives.find(rep => rep.isMain);
+
   return (
-    <div 
+    <div
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
       style={{
-        backgroundImage: 'url("/image/fonmain1.png")', 
+        backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
       <Navbar />
-      
+
       {/* Header Section with logo */}
       <div className="py-12 px-2 relative">
         <div className="container mx-auto max-w-6xl">
@@ -175,107 +180,107 @@ export default function Representatives() {
                 />
               </div>
             </div>
-            
+
             <h2 className="text-4xl font-bold text-orange-600 mb-5 text-center">
-              🌍 REPRESENTATIVES
+              REPRESENTATIVES
             </h2>
-            
-            <p className="text-lg text-gray-600 max-w-2xl text-center mb-12">
+
+            <p className="text-lg text-gray-600 max-w-2xl text-center mb-8">
               Connect with the Tigers Olympiad representatives in your country
             </p>
           </div>
         </div>
       </div>
-      
+
       {/* Info Block */}
       <div className="px-4 mb-12">
         <div className="container mx-auto max-w-5xl">
           <div className="bg-[#d686b7] text-white p-8 rounded-2xl relative overflow-hidden">
-            {/* Decorative circles */}
             <div className="absolute top-0 left-0 w-32 h-32 border-2 border-white rounded-full opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
             <div className="absolute top-0 right-0 w-32 h-32 border-2 border-white rounded-full opacity-20 translate-x-1/2 -translate-y-1/2"></div>
             <div className="absolute bottom-0 left-0 w-32 h-32 border-2 border-white rounded-full opacity-20 -translate-x-1/2 translate-y-1/2"></div>
             <div className="absolute bottom-0 right-0 w-32 h-32 border-2 border-white rounded-full opacity-20 translate-x-1/2 translate-y-1/2"></div>
-            
+
             <div className="relative z-10 text-center">
               <p className="text-lg mb-4">
-                The Tigers Olympiad is supported by a global team of passionate coordinators and educators 
+                The Tigers Olympiad is supported by a global team of passionate coordinators and educators
                 who guide students in their home countries.
               </p>
               <p className="text-lg">
-                These representatives are your personal connection to everything Tigers — from registration 
-                to local events and support. They help grow the spirit of academic excellence and creativity 
-                in every corner of the world.
+                These representatives are your personal connection to everything Tigers — from registration
+                to local events and support.
               </p>
             </div>
           </div>
         </div>
       </div>
-      
-      {/* Key Representative Highlight - Julia Ovdiichuk */}
-      <div className="px-4 mb-12">
-        <div className="container mx-auto max-w-4xl">
-          <div className="bg-orange-600 text-white p-8 rounded-xl shadow-lg">
-            <h3 className="text-2xl font-bold mb-6 text-center">📍 Key Representative</h3>
-            <div className="bg-white text-gray-800 p-6 rounded-lg">
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="flex-grow">
-                  <h4 className="text-xl font-bold text-orange-600 mb-2">🇰🇿 Kazakhstan</h4>
-                  <h5 className="text-lg font-semibold mb-2">Yuliya Ovdiichuk</h5>
-                  <p className="text-gray-600 mb-4">National Coordinator</p>
-                  
-                  <div className="flex items-center mb-2">
-                    <span className="flex-shrink-0 text-orange-500 mr-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                      </svg>
-                    </span>
-                    <span className="text-gray-700">📞 +7700 595 1000</span>
-                  </div>
-                  
-                  <div className="flex items-center">
-                    <span className="flex-shrink-0 text-orange-500 mr-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                      </svg>
-                    </span>
-                    <span className="text-gray-700">📧 yuliya@tigersedu.com</span>
+
+      {/* Key Representative Highlight */}
+      {mainRep && (
+        <div className="px-4 mb-12">
+          <div className="container mx-auto max-w-4xl">
+            <div className="bg-orange-600 text-white p-8 rounded-xl shadow-lg">
+              <h3 className="text-2xl font-bold mb-6 text-center">Key Representative</h3>
+              <div className="bg-white text-gray-800 p-6 rounded-lg">
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <div className="flex-grow">
+                    <h4 className="text-xl font-bold text-orange-600 mb-2">🇰🇿 {mainRep.country}</h4>
+                    <h5 className="text-lg font-semibold mb-2">{mainRep.name}</h5>
+                    <p className="text-gray-600 mb-4">{mainRep.role}</p>
+
+                    <div className="flex items-center mb-2">
+                      <span className="flex-shrink-0 text-orange-500 mr-2">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                        </svg>
+                      </span>
+                      <span className="text-gray-700">{mainRep.phone}</span>
+                    </div>
+
+                    <div className="flex items-center">
+                      <span className="flex-shrink-0 text-orange-500 mr-2">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                      </span>
+                      <span className="text-gray-700">{mainRep.email}</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      
-      {/* Representatives Grid - updated to 2x2 grid */}
+      )}
+
+      {/* All Representatives - Alphabetical Grid */}
       <div className="px-4 mb-16">
         <div className="container mx-auto max-w-6xl">
-          <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">Other Country Representatives</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-            {representatives.slice(1).map((rep) => (
-              <div key={rep.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-orange-600 mb-2">🌍 {rep.country}</h3>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-1">{rep.name}</h4>
-                  <p className="text-gray-700 mb-4">{rep.role}</p>
-                  
-                  <div className="flex items-center mb-2">
-                    <span className="flex-shrink-0 text-orange-500 mr-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                      </svg>
-                    </span>
-                    <span className="text-gray-700">{rep.email}</span>
+          <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">
+            All Country Representatives (A-Z)
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {otherReps.map((rep) => (
+              <div
+                key={rep.id}
+                className="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+              >
+                <h4 className="text-lg font-bold text-orange-600 mb-1">{rep.country}</h4>
+                {rep.name && <p className="font-medium text-gray-800">{rep.name}</p>}
+                <p className="text-gray-600 text-sm mb-3">{rep.role}</p>
+
+                <div className="space-y-1 text-sm">
+                  <div className="flex items-center text-gray-600">
+                    <svg className="w-4 h-4 text-orange-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span className="truncate">{rep.email}</span>
                   </div>
-                  
-                  <div className="flex items-center">
-                    <span className="flex-shrink-0 text-orange-500 mr-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                      </svg>
-                    </span>
-                    <span className="text-gray-700">{rep.phone}</span>
+                  <div className="flex items-center text-gray-600">
+                    <svg className="w-4 h-4 text-orange-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    <span>{rep.phone}</span>
                   </div>
                 </div>
               </div>
@@ -283,18 +288,18 @@ export default function Representatives() {
           </div>
         </div>
       </div>
-      
+
       {/* Become a Representative */}
       <div className="px-4 mb-16">
         <div className="container mx-auto max-w-4xl">
           <div className="bg-white p-8 rounded-xl shadow-sm text-center">
             <h2 className="text-3xl font-bold text-orange-600 mb-6">Become a Representative</h2>
             <p className="text-gray-700 mb-8 max-w-3xl mx-auto">
-              If your country is not listed and you're interested in becoming a Tigers Olympiad representative, 
+              If your country is not listed and you're interested in becoming a Tigers Olympiad representative,
               we'd love to hear from you! Help us bring this enriching experience to students in your region.
             </p>
-            <Link 
-              href="/contacts" 
+            <Link
+              href="/contacts"
               className="inline-block bg-orange-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors"
             >
               Get in Touch
@@ -302,20 +307,20 @@ export default function Representatives() {
           </div>
         </div>
       </div>
-      
+
       {/* Final Message */}
       <div className="px-4 mb-16">
         <div className="container mx-auto max-w-4xl">
           <div className="bg-yellow-50 p-8 rounded-xl text-center">
             <p className="text-gray-700 text-lg">
-              Through this network of representatives and brilliant participants like you, we're building 
-              a global community of dreamers, thinkers, and creators. Connect with your representative 
-              today — and start your Tigers journey! 🐯🌟
+              Through this network of representatives and brilliant participants like you, we're building
+              a global community of dreamers, thinkers, and creators. Connect with your representative
+              today — and start your Tigers journey!
             </p>
           </div>
         </div>
       </div>
-      
+
       <div className="mt-auto">
         <Footer />
       </div>
