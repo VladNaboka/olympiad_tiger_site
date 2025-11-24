@@ -136,7 +136,7 @@ const representatives = [
   {
     id: 18,
     country: "Turkey",
-    name: "Mucibur Rahman Sokak",
+    name: "Fatma Ince",
     role: "YELS International Education and Consultancy",
     email: "info@yelsdanismanlik.com",
     phone: "+905365516820",
