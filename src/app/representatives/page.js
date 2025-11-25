@@ -149,6 +149,30 @@ const representatives = [
     email: "winjapartners@consultant.com",
     phone: "+254726372941",
   },
+  {
+    id: 19,
+    country: "South Africa",
+    name: "Joseph Ogun",
+    role: "Linkproconsult Integrated Limited",
+    email: "joseph.ogun@linkproconsult.com",
+    phone: "+353877442271",
+  },
+  {
+    id: 20,
+    country: "Ireland",
+    name: "Joseph Ogun",
+    role: "Linkproconsult Integrated Limited",
+    email: "joseph.ogun@linkproconsult.com",
+    phone: "+353877442271",
+  },
+  {
+    id: 21,
+    country: "Estonia",
+    name: "Fatma Ince",
+    role: "Lumora Foundation",
+    email: "info@lumorafoundation.com",
+    phone: "+905365516820",
+  },
 ];
 
 export default function Representatives() {
