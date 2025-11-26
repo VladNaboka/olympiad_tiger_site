@@ -98,8 +98,8 @@ export default function News() {
                 />
               </div>
               <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-2 md:mb-3">WYCOMBE ABBEY INTERNATIONAL</h4>
-              <a href="http://www.wycombeabbey.com" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
-                www.wycombeabbey.com
+              <a href="http://www.wycombeabbeyasia.com" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
+                www.wycombeabbeyasia.com
               </a>
               <a
                 href="/files_download/MATH 2026.pdf"

@@ -2,10 +2,10 @@ import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
 
-// Representatives data sorted alphabetically by country
-const representatives = [
+// Representatives data - automatically sorted alphabetically by country
+const representativesData = [
   {
-    id: 7,
+    id: 1,
     country: "Cameroon",
     name: "",
     role: "Global Dominium Services",
@@ -13,7 +13,7 @@ const representatives = [
     phone: "+237694445032",
   },
   {
-    id: 8,
+    id: 2,
     country: "Chad",
     name: "Dr NJAMEN NJANKE ALBERT",
     role: "Global Dominium Services",
@@ -21,7 +21,15 @@ const representatives = [
     phone: "+237694445032",
   },
   {
-    id: 6,
+    id: 3,
+    country: "Estonia",
+    name: "Fatma Ince",
+    role: "Lumora Foundation",
+    email: "info@lumorafoundation.com",
+    phone: "+905365516820",
+  },
+  {
+    id: 4,
     country: "Ethiopia",
     name: "Lamesgin Aylew Desta",
     role: "One Stop Solution",
@@ -37,7 +45,7 @@ const representatives = [
     phone: "+233207385788",
   },
   {
-    id: 11,
+    id: 6,
     country: "Guinea",
     name: "Dr NJAMEN NJANKE ALBERT",
     role: "Global Dominium Services",
@@ -45,7 +53,7 @@ const representatives = [
     phone: "+237695484321",
   },
   {
-    id: 2,
+    id: 7,
     country: "Hungary",
     name: "Tsovoo Enkhzaya",
     role: "Oner Education",
@@ -53,7 +61,7 @@ const representatives = [
     phone: "+36702039596",
   },
   {
-    id: 14,
+    id: 8,
     country: "Iran",
     name: "Mehdi Aghaei",
     role: "Ava Mahd Tadbir",
@@ -61,7 +69,15 @@ const representatives = [
     phone: "+989126484541",
   },
   {
-    id: 1,
+    id: 9,
+    country: "Ireland",
+    name: "Joseph Ogun",
+    role: "Linkproconsult Integrated Limited",
+    email: "joseph.ogun@linkproconsult.com",
+    phone: "+353877442271",
+  },
+  {
+    id: 10,
     country: "Kazakhstan",
     name: "Yuliya Ovdiichuk",
     role: "National Coordinator",
@@ -70,7 +86,7 @@ const representatives = [
     isMain: true
   },
   {
-    id: 15,
+    id: 11,
     country: "Kenya",
     name: "Dr. Noah Migudo Winja",
     role: "Wmeir-Winja & Partners",
@@ -78,7 +94,7 @@ const representatives = [
     phone: "+254726372941",
   },
   {
-    id: 4,
+    id: 12,
     country: "Malawi",
     name: "Doreen Dalitso Kayoyo",
     role: "Discom Communications",
@@ -86,7 +102,7 @@ const representatives = [
     phone: "+14256489813",
   },
   {
-    id: 10,
+    id: 13,
     country: "Mali",
     name: "Dr NJAMEN NJANKE ALBERT",
     role: "Global Dominium Services",
@@ -94,7 +110,7 @@ const representatives = [
     phone: "+237695484321",
   },
   {
-    id: 3,
+    id: 14,
     country: "Mongolia",
     name: "Temuujin Naidandorj",
     role: "Oner Vision Academy",
@@ -102,7 +118,7 @@ const representatives = [
     phone: "+97686964264",
   },
   {
-    id: 13,
+    id: 15,
     country: "Nigeria",
     name: "Dr. Daniel OLA",
     role: "The WorldXplorers Ltd.",
@@ -118,39 +134,7 @@ const representatives = [
     phone: "+254726372941",
   },
   {
-    id: 12,
-    country: "Tanzania",
-    name: "Sarfraz Kassam",
-    role: "EduKwanza",
-    email: "sarfraz.kassam@edukwanza.com",
-    phone: "+255787001786",
-  },
-  {
-    id: 9,
-    country: "Togo",
-    name: "Dr NJAMEN NJANKE ALBERT",
-    role: "Global Dominium Services",
-    email: "info@gdiglobalinstitute.com",
-    phone: "+237657385562",
-  },
-  {
-    id: 18,
-    country: "Turkey",
-    name: "Fatma Ince",
-    role: "YELS International Education and Consultancy",
-    email: "info@yelsdanismanlik.com",
-    phone: "+905365516820",
-  },
-  {
     id: 17,
-    country: "Uganda",
-    name: "Dr. Noah Migudo Winja",
-    role: "Wmeir-Winja & Partners",
-    email: "winjapartners@consultant.com",
-    phone: "+254726372941",
-  },
-  {
-    id: 19,
     country: "South Africa",
     name: "Joseph Ogun",
     role: "Linkproconsult Integrated Limited",
@@ -158,22 +142,43 @@ const representatives = [
     phone: "+353877442271",
   },
   {
+    id: 18,
+    country: "Tanzania",
+    name: "Sarfraz Kassam",
+    role: "EduKwanza",
+    email: "sarfraz.kassam@edukwanza.com",
+    phone: "+255787001786",
+  },
+  {
+    id: 19,
+    country: "Togo",
+    name: "Dr NJAMEN NJANKE ALBERT",
+    role: "Global Dominium Services",
+    email: "info@gdiglobalinstitute.com",
+    phone: "+237657385562",
+  },
+  {
     id: 20,
-    country: "Ireland",
-    name: "Joseph Ogun",
-    role: "Linkproconsult Integrated Limited",
-    email: "joseph.ogun@linkproconsult.com",
-    phone: "+353877442271",
+    country: "Turkey",
+    name: "Fatma Ince",
+    role: "YELS International Education and Consultancy",
+    email: "info@yelsdanismanlik.com",
+    phone: "+905365516820",
   },
   {
     id: 21,
-    country: "Estonia",
-    name: "Fatma Ince",
-    role: "Lumora Foundation",
-    email: "info@lumorafoundation.com",
-    phone: "+905365516820",
+    country: "Uganda",
+    name: "Dr. Noah Migudo Winja",
+    role: "Wmeir-Winja & Partners",
+    email: "winjapartners@consultant.com",
+    phone: "+254726372941",
   },
 ];
+
+// Automatically sort by country name alphabetically
+const representatives = representativesData.sort((a, b) =>
+  a.country.localeCompare(b.country)
+);
 
 export default function Representatives() {
   // Filter out the main representative for the grid
