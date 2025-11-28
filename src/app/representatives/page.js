@@ -40,7 +40,7 @@ const representativesData = [
     id: 5,
     country: "Ghana",
     name: "SARAH AKUTEY KWAMEFIO",
-    role: "Tourify Communications",
+    role: "Tourify",
     email: "info@tourifygh.com",
     phone: "+233207385788",
   },
