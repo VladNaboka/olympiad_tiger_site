@@ -64,8 +64,8 @@ const representativesData = [
     id: 8,
     country: "Iran",
     name: "Mehdi Aghaei",
-    role: "Ava Mahd Tadbir",
-    email: "MA@avaapply.com",
+    role: "Nirvana Immigration Holding",
+    email: "mehdiaghaei01@gmail.com",
     phone: "+989126484541",
   },
   {
