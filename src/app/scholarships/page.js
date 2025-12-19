@@ -23,6 +23,22 @@ const gifts = [
       "/image/scholarships/wycome_5.jpg"
     ]
   },
+  {
+    id: 2,
+    companyName: "EDUEXPLORA",
+    giftName: "Complimentary Summer Camp 2027",
+    description: "Explore Your Potential at Top Universities",
+    sellingPhrase: "",
+    website: "https://www.eduexplora.com/",
+    companyLogo: "/image/mycome_logo.png",
+    carousel: [
+      "/image/scholarships/eduexplora_2.png",
+      "/image/scholarships/eduexplora_1.jpg",
+      "/image/scholarships/eduexplora_3.jpg",
+      "/image/scholarships/eduexplora_0.png",
+      "/image/scholarships/eduexplora_4.png"
+    ]
+  },
 ];
 
 export default function Gifts() {
