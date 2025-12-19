@@ -15,7 +15,7 @@ const representativesData = [
   {
     id: 2,
     country: "Chad",
-    name: "Dr NJAMEN NJANKE ALBERT",
+    name: "Dr Njamen Njanke Albert",
     role: "Global Dominium Services",
     email: "info@gdiglobalinstitute.com",
     phone: "+237694445032",
@@ -172,6 +172,14 @@ const representativesData = [
     role: "Wmeir-Winja & Partners",
     email: "winjapartners@consultant.com",
     phone: "+254726372941",
+  },
+  {
+    id: 22,
+    country: "Japan",
+    name: "TEMUULEN Batgerel",
+    role: "Oner International",
+    email: "temuulen@onereducation.eu",
+    phone: "+8107091397202",
   },
 ];
 

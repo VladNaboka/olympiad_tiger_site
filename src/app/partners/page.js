@@ -22,6 +22,14 @@ const partners = [
   },
   {
     id: 3,
+    name: "HIPPO the contest",
+    description: "English without borders",
+    category: "English Contest Partner",
+    website: "https://hippo-thecontest.org/",
+    logo: "/image/logo-hippo.png"
+  },
+  {
+    id: 4,
     name: "New Generation School (NGS)",
     description: "NGS is a private school in Almaty that prepares students for the future, for the era of innovation and bright ideas.",
     category: "Private School",
@@ -29,7 +37,7 @@ const partners = [
     logo: "/image/NGS_logo.png"
   },
   {
-    id: 4,
+    id: 5,
     name: "Art studio Safi",
     description: "A modern creative workshop that unites artists, designers and art lovers.",
     category: "Art Partner",
@@ -37,7 +45,7 @@ const partners = [
     logo: "/image/art_studio_safi.jpeg"
   },
   {
-    id: 5,
+    id: 6,
     name: "Youth Development Initiative",
     description: "Dedicated to fostering creativity and innovation in young minds across borders.",
     category: "Development Partner",
@@ -45,13 +53,13 @@ const partners = [
     logo: "/image/partner-placeholder.png"
   },
   {
-    id: 6,
+    id: 7,
     name: "Digital Art Academy",
     description: "Leading provider of digital art education and technological innovation in creative fields.",
     category: "Technology Partner",
     website: "#",
     logo: "/image/partner-placeholder.png"
-  }
+  },
 ];
 
 // Category colors
