@@ -39,7 +39,7 @@ const representativesData = [
   {
     id: 5,
     country: "Ghana",
-    name: "SARAH AKUTEY KWAMEFIO",
+    name: "Sarah Akutey Kwamefio",
     role: "Tourify",
     email: "info@tourifygh.com",
     phone: "+233207385788",
@@ -47,7 +47,7 @@ const representativesData = [
   {
     id: 6,
     country: "Guinea",
-    name: "Dr NJAMEN NJANKE ALBERT",
+    name: "Dr Njamen Njanke Albert",
     role: "Global Dominium Services",
     email: "info@gdiglobalinstitute.com",
     phone: "+237695484321",
@@ -104,7 +104,7 @@ const representativesData = [
   {
     id: 13,
     country: "Mali",
-    name: "Dr NJAMEN NJANKE ALBERT",
+    name: "Dr Njamen Njanke Albert",
     role: "Global Dominium Services",
     email: "info@gdiglobalinstitute.com",
     phone: "+237695484321",
@@ -152,7 +152,7 @@ const representativesData = [
   {
     id: 19,
     country: "Togo",
-    name: "Dr NJAMEN NJANKE ALBERT",
+    name: "Dr Njamen Njanke Albert",
     role: "Global Dominium Services",
     email: "info@gdiglobalinstitute.com",
     phone: "+237657385562",
@@ -176,7 +176,7 @@ const representativesData = [
   {
     id: 22,
     country: "Japan",
-    name: "TEMUULEN Batgerel",
+    name: "Temuulen Batgerel",
     role: "Oner International",
     email: "temuulen@onereducation.eu",
     phone: "+8107091397202",
