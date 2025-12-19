@@ -83,9 +83,9 @@ export default function Home() {
       </div>
 
       {/* Empowerment Section */}
-      <section className="relative container mx-auto px-4 py-24 overflow-hidden">
+      <section className="relative container mx-auto px-4 py-24">
         {/* Decorative background elements */}
-        <div className="absolute top-10 right-10 opacity-20 -z-10">
+        <div className="absolute top-10 right-10 opacity-30 pointer-events-none">
           <Image
             src="/image/lapa.png"
             alt="Decorative paw"
@@ -94,25 +94,25 @@ export default function Home() {
             className="rotate-45"
           />
         </div>
-        <div className="absolute bottom-20 right-20 opacity-15 -z-10">
+        <div className="absolute bottom-20 right-40 opacity-25 pointer-events-none">
           <Image
             src="/image/lapa.png"
             alt="Decorative paw"
-            width={100}
-            height={100}
+            width={120}
+            height={120}
             className="-rotate-12"
           />
         </div>
-        <div className="absolute top-1/2 left-10 opacity-10 -z-10 hidden lg:block">
+        <div className="absolute top-20 left-0 opacity-20 pointer-events-none hidden lg:block">
           <Image
             src="/image/fonmain1.png"
             alt="Background decoration"
-            width={200}
-            height={200}
+            width={250}
+            height={250}
           />
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center gap-12 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-12 relative">
           <div className="lg:w-1/2 order-2 lg:order-1">
             <div className="flex flex-col space-y-6 max-w-lg">
               <div className="relative w-72 h-48 rounded-lg overflow-hidden shadow-md ml-auto">
