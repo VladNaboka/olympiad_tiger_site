@@ -15,7 +15,7 @@ const representativesData = [
   {
     id: 2,
     country: "Chad",
-    name: "Dr NJAMEN NJANKE ALBERT",
+    name: "Dr Njamen Njanke Albert",
     role: "Global Dominium Services",
     email: "info@gdiglobalinstitute.com",
     phone: "+237694445032",
