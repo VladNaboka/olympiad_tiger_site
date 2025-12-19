@@ -173,6 +173,14 @@ const representativesData = [
     email: "winjapartners@consultant.com",
     phone: "+254726372941",
   },
+  {
+    id: 22,
+    country: "Japan",
+    name: "TEMUULEN Batgerel",
+    role: "Oner International",
+    email: "temuulen@onereducation.eu",
+    phone: "+8107091397202",
+  },
 ];
 
 // Automatically sort by country name alphabetically
