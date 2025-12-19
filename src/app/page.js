@@ -83,34 +83,72 @@ export default function Home() {
       </div>
 
       {/* Empowerment Section */}
-      <section className="container mx-auto px-4 py-24">
-        <div className="flex flex-col lg:flex-row items-center gap-8">
+      <section className="relative container mx-auto px-4 py-24 overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute top-10 right-10 opacity-20 -z-10">
+          <Image
+            src="/image/lapa.png"
+            alt="Decorative paw"
+            width={150}
+            height={150}
+            className="rotate-45"
+          />
+        </div>
+        <div className="absolute bottom-20 right-20 opacity-15 -z-10">
+          <Image
+            src="/image/lapa.png"
+            alt="Decorative paw"
+            width={100}
+            height={100}
+            className="-rotate-12"
+          />
+        </div>
+        <div className="absolute top-1/2 left-10 opacity-10 -z-10 hidden lg:block">
+          <Image
+            src="/image/fonmain1.png"
+            alt="Background decoration"
+            width={200}
+            height={200}
+          />
+        </div>
+
+        <div className="flex flex-col lg:flex-row items-center gap-12 relative z-10">
           <div className="lg:w-1/2 order-2 lg:order-1">
-            <div className="flex space-x-4">
-              <div className="relative w-48 h-64 rounded-lg overflow-hidden">
+            <div className="flex flex-col space-y-6 max-w-lg">
+              <div className="relative w-72 h-48 rounded-lg overflow-hidden shadow-md ml-auto">
                 <Image
-                  src="/image/main2-2.png"
-                  alt="Math Student"
+                  src="/image/home/image1-every-student.jpeg"
+                  alt="Student 1"
                   fill
-                  className="object-cover"
+                  className="object-cover object-[40%_center]"
                 />
               </div>
-              <div className="relative mt-12 w-48 h-64 rounded-lg overflow-hidden">
+              <div className="relative mr-auto">
+                <div className="relative w-72 h-48 rounded-lg overflow-hidden shadow-md">
+                  <Image
+                    src="/image/home/image2-every-student.jpeg"
+                    alt="Student 2"
+                    fill
+                    className="object-cover object-center"
+                  />
+                </div>
+                <div className="absolute -bottom-8 -left-8 z-10">
+                  <Image
+                    src="/image/lapa.png"
+                    alt="Tiger Paw"
+                    width={100}
+                    height={100}
+                  />
+                </div>
+              </div>
+              <div className="relative w-72 h-48 rounded-lg overflow-hidden shadow-md ml-auto">
                 <Image
-                  src="/image/main2-1.png"
-                  alt="Art Students"
+                  src="/image/home/image3-every-student.jpeg"
+                  alt="Student 3"
                   fill
-                  className="object-cover"
+                  className="object-cover object-center"
                 />
               </div>
-            </div>
-            <div className="relative -mt-24 -ml-8">
-              <Image
-                src="/image/lapa.png"
-                alt="Tiger Paw"
-                width={120}
-                height={120}
-              />
             </div>
           </div>
 
