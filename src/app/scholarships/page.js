@@ -32,10 +32,10 @@ const gifts = [
     website: "https://www.eduexplora.com/",
     companyLogo: "/image/mycome_logo.png",
     carousel: [
-      "/image/scholarships/eduexplora_2.png",
-      "/image/scholarships/eduexplora_1.png",
-      "/image/scholarships/eduexplora_3.png",
-      "/image/scholarships/eduexplora_0.png",
+      "/image/scholarships/eduexplora_2-1.jpg",
+      "/image/scholarships/eduexplora_1-1.jpg",
+      "/image/scholarships/eduexplora_3-1.jpg",
+      "/image/scholarships/eduexplora_0-1.jpg",
       "/image/scholarships/eduexplora_4.png"
     ]
   },
