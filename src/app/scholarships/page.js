@@ -33,8 +33,8 @@ const gifts = [
     companyLogo: "/image/mycome_logo.png",
     carousel: [
       "/image/scholarships/eduexplora_2.png",
-      "/image/scholarships/eduexplora_1.jpg",
-      "/image/scholarships/eduexplora_3.jpg",
+      "/image/scholarships/eduexplora_1.png",
+      "/image/scholarships/eduexplora_3.png",
       "/image/scholarships/eduexplora_0.png",
       "/image/scholarships/eduexplora_4.png"
     ]
