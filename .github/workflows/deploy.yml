@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main  # ← замени на свою ветку, если у тебя другая
+      - main
 
 jobs:
   deploy:
@@ -21,10 +21,35 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/olympiad_tiger_site
+            
+            # Сохранить текущий коммит для отката
+            CURRENT_COMMIT=$(git rev-parse HEAD)
+            
+            echo "📥 Pulling latest code..."
             git pull origin main
-            npm install
-            NODE_OPTIONS="--max-old-space-size=4096" npm run build
-            pm2 restart tigers
-
-
-
+            
+            echo "📦 Installing dependencies..."
+            npm ci --omit=dev
+            
+            echo "🛑 Stopping application..."
+            pm2 stop tigers || true
+            
+            echo "🗑️  Cleaning old build..."
+            rm -rf .next
+            
+            echo "🔨 Building application..."
+            if ! NODE_OPTIONS="--max-old-space-size=4096" npm run build; then
+              echo "❌ Build failed! Rolling back..."
+              git reset --hard $CURRENT_COMMIT
+              npm ci --omit=dev
+              npm run build
+              pm2 restart tigers
+              exit 1
+            fi
+            
+            echo "🚀 Starting application..."
+            pm2 delete tigers || true
+            pm2 start ecosystem.config.js
+            pm2 save
+            
+            echo "✅ Deployment complete!"
