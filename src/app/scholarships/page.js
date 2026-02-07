@@ -39,6 +39,20 @@ const gifts = [
       "/image/scholarships/eduexplora_4.png"
     ]
   },
+  {
+    id: 3,
+    companyName: "William Academy",
+    giftName: "Complimentary Summer Camp 2027",
+    description: "Summer Camps in Toronto — Best Affordable & Highly Rated for International Students",
+    sellingPhrase: "",
+    website: "https://williamacademy.ca",
+    companyLogo: "/image/william-academy-logo.png",
+    carousel: [
+      "/image/scholarships/william_1.jpg",
+      "/image/scholarships/william_2.jpg",
+      "/image/scholarships/william_3.jpg"
+    ]
+  },
 ];
 
 export default function Gifts() {

@@ -60,6 +60,14 @@ const partners = [
     website: "#",
     logo: "/image/partner-placeholder.png"
   },
+  {
+    id: 8,
+    name: "Liberated School",
+    description: "Educational partner from Armenia. Contact: +37444069198, admin@liberated.school. Administrator: Leonid Pasternak.",
+    category: "Educational Partner",
+    website: "mailto:admin@liberated.school",
+    logo: "/image/partner-placeholder.png"
+  },
 ];
 
 // Category colors
