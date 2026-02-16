@@ -9,7 +9,8 @@ module.exports = {
     max_memory_restart: '300M',
     env: {
       NODE_ENV: 'production',
-      NODE_OPTIONS: '--max-old-space-size=512'
+      NODE_OPTIONS: '--max-old-space-size=512',
+      PATH: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
     },
     error_file: '/home/ubuntu/.pm2/logs/tigers-error.log',
     out_file: '/home/ubuntu/.pm2/logs/tigers-out.log',
