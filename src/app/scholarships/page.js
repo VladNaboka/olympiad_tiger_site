@@ -150,12 +150,9 @@ function GiftCard({ gift }) {
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="bg-white rounded-lg overflow-hidden transition-all duration-300 ease-out"
+      className="bg-white rounded-lg overflow-hidden"
       style={{
-        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(${isHovered ? 1.02 : 1})`,
-        boxShadow: isHovered
-          ? '0 25px 50px -12px rgba(249, 115, 22, 0.4), 0 0 30px rgba(249, 115, 22, 0.2)'
-          : '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
       }}
     >
       {/* Header with company name and gift name */}
