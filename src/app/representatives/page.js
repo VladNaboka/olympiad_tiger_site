@@ -181,6 +181,14 @@ const representativesData = [
     email: "temuulen@onereducation.eu",
     phone: "+8107091397202",
   },
+  {
+    id: 23,
+    country: "Armenia",
+    name: "Leonid Pasternak",
+    role: "Liberated School",
+    email: "admin@liberated.school",
+    phone: "+37444069198",
+  },
 ];
 
 // Automatically sort by country name alphabetically
