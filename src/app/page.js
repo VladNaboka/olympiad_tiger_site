@@ -101,7 +101,7 @@ export default function Home() {
             width={120}
             height={120}
             className="-rotate-12"
-          />
+          /> 
         </div>
         <div className="absolute top-20 left-0 opacity-20 pointer-events-none hidden lg:block">
           <Image
