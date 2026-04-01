@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
+    const backendUrl = process.env.BACKEND_URL || "http://localhost:8080";
     return [
       {
         source: "/api/:path*",
-        destination: "http://tigersedu.com:8080/:path*",
+        destination: `${backendUrl}/:path*`,
       },
     ];
   },
