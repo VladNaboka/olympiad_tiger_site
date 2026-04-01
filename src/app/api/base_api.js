@@ -1,4 +1,4 @@
-export const API_URL = "https://tigersedu.com/api";
+export const API_URL = "/api";
 
 export async function apiRequest(endpoint, method = "GET", body = null) {
     const options = {
