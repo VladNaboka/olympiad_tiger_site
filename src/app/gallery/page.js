@@ -4,14 +4,13 @@ import { useState, useEffect } from 'react';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
-import { getArtWorksByCountryAndCategory } from '../api/student_art_works';
-import { getMathWorksByCountryAndCategory } from '../api/student_math_works';
+import { getAllArtWorks } from '../api/student_art_works';
+import { getAllMathWorks } from '../api/student_math_works';
 import { getStudentById } from '../api/students_api';
-import { ART_CATEGORIES, MATH_CATEGORIES, getCategoryName, getCategoriesBySubject, COUNTRIES, COUNTRY_CODES } from '../utils/constants';
+import { ART_CATEGORIES, MATH_CATEGORIES, getCategoryName, getCategoriesBySubject } from '../utils/constants';
 
 export default function Gallery() {
   // Устанавливаем значения по умолчанию
-  const [country, setCountry] = useState('Kazakhstan');
   const [category, setCategory] = useState(5); // Первая категория искусства
   const [subject, setSubject] = useState('Artworks');
   const [items, setItems] = useState([]);
@@ -22,51 +21,6 @@ export default function Gallery() {
   const [searchStudentId, setSearchStudentId] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
-
-  // Создаем список стран с флагами на основе constants.js
-  const getCountriesWithFlags = () => {
-    const flagMap = {
-      'Kazakhstan': '🇰🇿',
-      'Russia': '🇷🇺',
-      'United States': '🇺🇸',
-      'United Kingdom': '🇬🇧',
-      'Germany': '🇩🇪',
-      'France': '🇫🇷',
-      'Italy': '🇮🇹',
-      'Spain': '🇪🇸',
-      'Canada': '🇨🇦',
-      'Australia': '🇦🇺',
-      'Japan': '🇯🇵',
-      'China': '🇨🇳',
-      'India': '🇮🇳',
-      'Brazil': '🇧🇷',
-      'Mexico': '🇲🇽',
-      'Turkey': '🇹🇷',
-      'Poland': '🇵🇱',
-      'Czech Republic': '🇨🇿',
-      'Ukraine': '🇺🇦',
-      'Belarus': '🇧🇾',
-      'Lithuania': '🇱🇹',
-      'Latvia': '🇱🇻',
-      'Estonia': '🇪🇪',
-      'Georgia': '🇬🇪',
-      'Armenia': '🇦🇲',
-      'Azerbaijan': '🇦🇿',
-      'Uzbekistan': '🇺🇿',
-      'Kyrgyzstan': '🇰🇬',
-      'Tajikistan': '🇹🇯',
-      'Turkmenistan': '🇹🇲',
-      'Mongolia': '🇲🇳'
-    };
-
-    return COUNTRIES.map(country => ({
-      code: COUNTRY_CODES[country] || country.substring(0, 2).toUpperCase(),
-      name: country,
-      flag: flagMap[country] || '🌍'
-    }));
-  };
-
-  const countries = getCountriesWithFlags();
 
   const subjects = [
     { id: 'Artworks', name: 'Artworks', icon: '🎨', color: 'from-pink-500 to-rose-500', subjectId: '1' },
@@ -141,80 +95,38 @@ export default function Gallery() {
     }
 
     setIsSearching(true);
-    console.log(`🔍 Searching for works by student ID: ${searchStudentId}`);
 
     try {
-      const results = [];
-      
-      // Ищем во всех странах
-      for (const countryOption of countries) {
-        // Ищем художественные работы (категории 5-7)
-        const artCategoryIds = [5, 6, 7];
-        for (const categoryId of artCategoryIds) {
-          try {
-            const artWorks = await getArtWorksByCountryAndCategory(countryOption.name, categoryId);
-            if (artWorks && Array.isArray(artWorks)) {
-              const studentWorks = artWorks.filter(work => 
-                work.student_id && work.student_id.toString() === searchStudentId.trim()
-              );
-              if (studentWorks.length > 0) {
-                results.push(...studentWorks.map(work => ({
-                  ...work,
-                  subject: 'Artworks',
-                  country: countryOption.name
-                })));
-              }
-            }
-          } catch (error) {
-            // Игнорируем ошибки для стран/категорий без данных
-          }
-        }
+      const [artWorks, mathWorks] = await Promise.all([
+        getAllArtWorks().catch(() => []),
+        getAllMathWorks().catch(() => []),
+      ]);
 
-        // Ищем математические работы (категории 1-4)
-        const mathCategoryIds = [1, 2, 3, 4];
-        for (const categoryId of mathCategoryIds) {
-          try {
-            const mathWorks = await getMathWorksByCountryAndCategory(countryOption.name, categoryId);
-            if (mathWorks && Array.isArray(mathWorks)) {
-              const studentWorks = mathWorks.filter(work => 
-                work.student_id && work.student_id.toString() === searchStudentId.trim()
-              );
-              if (studentWorks.length > 0) {
-                results.push(...studentWorks.map(work => ({
-                  ...work,
-                  subject: 'Math',
-                  country: countryOption.name
-                })));
-              }
-            }
-          } catch (error) {
-            // Игнорируем ошибки для стран/категорий без данных
-          }
-        }
-      }
+      const results = [
+        ...(Array.isArray(artWorks) ? artWorks : [])
+          .filter(work => work.student_id && work.student_id.toString() === searchStudentId.trim())
+          .map(work => ({ ...work, subject: 'Artworks' })),
+        ...(Array.isArray(mathWorks) ? mathWorks : [])
+          .filter(work => work.student_id && work.student_id.toString() === searchStudentId.trim())
+          .map(work => ({ ...work, subject: 'Math' })),
+      ];
 
-      // Загружаем данные студента для всех найденных работ
       const worksWithStudents = await Promise.all(
         results.map(async (work) => {
           if (work.student_id) {
             const student = await fetchStudentData(work.student_id);
-            return {
-              ...work,
-              student: student
-            };
+            return { ...work, student };
           }
           return work;
         })
       );
 
       setSearchResults(worksWithStudents);
-      console.log(`📊 Found ${worksWithStudents.length} works for student ID ${searchStudentId}`);
-      
     } catch (error) {
       console.error('Error searching by student ID:', error);
       alert('Error occurred while searching');
     }
-    
+
     setIsSearching(false);
   };
 
@@ -226,37 +138,21 @@ export default function Gallery() {
 
   // Загрузка данных при изменении фильтров
   useEffect(() => {
-    if (country && category && subject && !searchResults.length) {
+    if (category && subject && !searchResults.length) {
       setLoading(true);
-      console.log(`🔍 Loading ${subject} for ${country}, category ${category}`);
 
-      let fetchData;
-      if (subject === "Artworks") {
-        fetchData = getArtWorksByCountryAndCategory(country, category);
-      } else if (subject === "Math") {
-        fetchData = getMathWorksByCountryAndCategory(country, category);
-      }
+      const fetchData = subject === "Artworks" ? getAllArtWorks() : getAllMathWorks();
 
       fetchData
         .then(async (data) => {
-          // Обеспечиваем, что data всегда массив
-          const works = data && Array.isArray(data) ? data : [];
-          console.log(`📊 API returned:`, data);
-          console.log(`📊 Found ${works.length} ${subject.toLowerCase()} for category ${category}`);
-          
-          if (works.length === 0) {
-            console.log(`⚠️ No works found for ${country}, category ${category}, subject ${subject}`);
-          }
-          
-          // Загружаем данные студентов для всех работ
+          const allWorks = data && Array.isArray(data) ? data : [];
+          const works = allWorks.filter(work => work.category_id === category);
+
           const worksWithStudents = await Promise.all(
             works.map(async (work) => {
               if (work.student_id) {
                 const student = await fetchStudentData(work.student_id);
-                return {
-                  ...work,
-                  student: student
-                };
+                return { ...work, student };
               }
               return work;
             })
@@ -270,7 +166,7 @@ export default function Gallery() {
         })
         .finally(() => setLoading(false));
     }
-  }, [country, category, subject, searchResults.length]);
+  }, [category, subject, searchResults.length]);
 
   // Получаем название текущей категории
   const getCurrentCategoryName = () => {
@@ -310,7 +206,7 @@ export default function Gallery() {
               </h1>
               <p className="text-lg text-gray-600 max-w-xl mx-auto">
                 Explore amazing artworks and math achievements from Tigers participants around the world.
-                Filter by country, age category, and subject or search by student ID.
+                Filter by age category and subject or search by student ID.
               </p>
             </div>
             
@@ -383,25 +279,7 @@ export default function Gallery() {
                 )}
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Country Filter */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    🌍 Country
-                  </label>
-                  <select
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all text-gray-800 bg-white shadow-sm hover:shadow-md"
-                  >
-                    {countries.map(countryOption => (
-                      <option key={countryOption.code} value={countryOption.name}>
-                        {countryOption.flag} {countryOption.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Subject Filter */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -442,7 +320,7 @@ export default function Gallery() {
               {/* Current Selection Display */}
               <div className="mt-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
                 <p className="text-center text-gray-700">
-                  <span className="font-semibold">Currently viewing:</span> {subject} from <span className="text-orange-600 font-semibold">{country}</span> 
+                  <span className="font-semibold">Currently viewing:</span> {subject}
                   {' '}• Category: <span className="text-orange-600 font-semibold">{getCurrentCategoryName()}</span>
                   {items.length > 0 && (
                     <span> • <span className="text-green-600 font-semibold">{items.length}</span> {items.length === 1 ? 'result' : 'results'} found</span>
@@ -469,7 +347,7 @@ export default function Gallery() {
                 {isSearching ? 'Searching for works...' : 'Loading incredible works...'}
               </p>
               <p className="text-gray-500 text-sm mt-2">
-                {isSearching ? `Looking for Student ID ${searchStudentId}` : `Discovering talent from ${country}`}
+                {isSearching ? `Looking for Student ID ${searchStudentId}` : `Discovering talent from around the world`}
               </p>
             </div>
           ) : displayItems.length === 0 ? (
@@ -481,7 +359,7 @@ export default function Gallery() {
               <p className="text-gray-600 mb-8 text-lg">
                 {isShowingSearchResults 
                   ? `No works found for Student ID: ${searchStudentId}. They may not have submitted any works yet, or the ID may not exist.`
-                  : `No ${subject.toLowerCase()} found for ${country} in the ${getCurrentCategoryName()} category.`
+                  : `No ${subject.toLowerCase()} found in the ${getCurrentCategoryName()} category.`
                 }
               </p>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 max-w-lg mx-auto">
@@ -489,7 +367,7 @@ export default function Gallery() {
                 <p className="text-yellow-800 font-medium">
                   <strong>Tip:</strong> {isShowingSearchResults 
                     ? 'Double-check the Student ID, or try browsing by country and category instead.'
-                    : 'Try different combinations of country, subject, and category, or contact your representative to submit works!'
+                    : 'Try different combinations of subject and category, or contact your representative to submit works!'
                   }
                 </p>
                 {!isShowingSearchResults && (
@@ -511,8 +389,8 @@ export default function Gallery() {
                 </h3>
                 <p className="text-xl text-gray-600">
                   {isShowingSearchResults 
-                    ? `Found ${displayItems.length} work(s) • Multiple subjects & countries`
-                    : `${getCurrentCategoryName()} • ${country} • ${displayItems.length} amazing ${displayItems.length === 1 ? 'work' : 'works'}`
+                    ? `Found ${displayItems.length} work(s)`
+                    : `${getCurrentCategoryName()} • ${displayItems.length} amazing ${displayItems.length === 1 ? 'work' : 'works'}`
                   }
                 </p>
                 {/* Back to Gallery Button when showing search results */}
@@ -609,11 +487,7 @@ export default function Gallery() {
                         </div>
                       )}
                       
-                      <div className="flex items-center justify-between text-sm text-gray-600">
-                        <span className="flex items-center bg-gray-100 px-3 py-1 rounded-full">
-                          <span className="mr-1">🌍</span>
-                          {item.country || country}
-                        </span>
+                      <div className="flex items-center justify-end text-sm text-gray-600">
                         <span className={`flex items-center px-3 py-1 rounded-full ${
                           getAvailableCategories().find(c => c.id === item.category_id)?.color || 'bg-gray-100 text-gray-800'
                         }`}>

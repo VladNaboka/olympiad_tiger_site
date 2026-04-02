@@ -49,9 +49,6 @@ export default function Navbar() {
             <Link href="/rules" className={isActive('/rules') ? activeStyle : defaultStyle}>
               Regulations
             </Link>
-            <Link href="/register" className={isActive('/register') ? activeStyle : defaultStyle}>
-              Results
-            </Link>
             <Link href="/gallery" className={isActive('/gallery') ? activeStyle : defaultStyle}>
               Gallery
             </Link>
@@ -145,13 +142,6 @@ export default function Navbar() {
               Regulations
             </Link>
             <Link
-              href="/register"
-              className={`px-3 py-2 rounded ${isActive('/register') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Results
-            </Link>
-            <Link 
               href="/gallery" 
               className={`px-3 py-2 rounded ${isActive('/gallery') ? 'bg-orange-100 text-orange-500 font-semibold' : 'hover:bg-gray-100 transition-colors font-medium'}`}
               onClick={() => setMobileMenuOpen(false)}

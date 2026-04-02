@@ -132,9 +132,29 @@ export function getArtWorkById(id) {
 }
 
 /**
+ * Получить все художественные работы без фильтра по стране
+ */
+export function getAllArtWorks() {
+    return fetch(`${API_URL}/artworks/all`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((response) => {
+        if (!response.ok) {
+            throw new Error(`Get all artworks failed: ${response.status} ${response.statusText}`);
+        }
+        return response.json();
+    }).catch((error) => {
+        console.error('❌ Get all artworks error:', error);
+        throw error;
+    });
+}
+
+/**
  * Получить художественные работы по стране и категории
- * @param {string} country 
- * @param {number} category_id 
+ * @param {string} country
+ * @param {number} category_id
  */
 export function getArtWorksByCountryAndCategory(country, category_id) {
     console.log('🔄 getArtWorksByCountryAndCategory called with:', { country, category_id });

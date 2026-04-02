@@ -99,9 +99,23 @@ export function getMathWorkById(id) {
 }
 
 /**
+ * Получить все математические работы без фильтра по стране
+ */
+export function getAllMathWorks() {
+    return apiRequest("/mathworks/all", "GET")
+        .then(response => {
+            return response;
+        })
+        .catch(error => {
+            console.error('❌ Get all math works error:', error);
+            throw error;
+        });
+}
+
+/**
  * Получить математические работы по стране и категории
- * @param {string} country 
- * @param {number} category_id 
+ * @param {string} country
+ * @param {number} category_id
  */
 export function getMathWorksByCountryAndCategory(country, category_id) {
     console.log('🔄 getMathWorksByCountryAndCategory called with:', { country, category_id });
