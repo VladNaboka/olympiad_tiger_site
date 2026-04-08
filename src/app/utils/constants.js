@@ -86,7 +86,8 @@ export const COUNTRIES = [
   'Kyrgyzstan',
   'Tajikistan',
   'Turkmenistan',
-  'Mongolia'
+  'Mongolia',
+  'Malawi'
 ];
 
 // Карта стран для сокращений (добавьте в constants.js)
@@ -121,7 +122,8 @@ export const COUNTRY_CODES = {
   'Uzbekistan': 'UZ',
   'Tajikistan': 'TJ',
   'Turkmenistan': 'TM',
-  'Mongolia': 'MN'
+  'Mongolia': 'MN',
+  'Malawi': 'MW'
 };
 
 // Функция для генерации уникального ID студента

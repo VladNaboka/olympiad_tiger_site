@@ -413,88 +413,25 @@ export default function Gallery() {
                     key={`${item.id}-${item.subject || subject}`}
                     className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
                   >
-                    <div className="relative">
-                      {(item.subject === "Artworks" || subject === "Artworks") ? (
-                        <div className="relative">
-                          <img
-                            src={item.file_path || "/image/artwork-sample.png"}
-                            alt={item.title}
-                            className="w-full h-56 object-cover"
-                            onError={(e) => {
-                              e.target.src = "/image/artwork-placeholder.png";
-                            }}
-                          />
-                          {/* Art badge */}
-                          <div className="absolute top-4 left-4">
-                            <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-pink-500 text-white shadow-lg backdrop-blur-sm">
-                              🎨 Artwork
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="relative">
-                          <div className="w-full h-56 bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-100 flex items-center justify-center">
-                            <div className="text-center">
-                              <div className="text-6xl mb-3">📐</div>
-                              <p className="text-gray-700 font-semibold text-lg px-4">{item.title}</p>
-                            </div>
-                          </div>
-                          {/* Math badge */}
-                          <div className="absolute top-4 left-4">
-                            <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-blue-500 text-white shadow-lg backdrop-blur-sm">
-                              📐 Math
-                            </span>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Score badge */}
-                      {item.score && (
-                        <div className="absolute top-4 right-4">
-                          <span className="inline-block px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-800 shadow-lg backdrop-blur-sm">
-                            ⭐ {item.score} pts
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="p-6">
-                      <h4 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">{item.title}</h4>
-                      
-                      {/* Student Information */}
-                      {item.student ? (
-                        <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                          <p className="font-semibold text-gray-800 mb-2">{item.student.name || item.student.full_name}</p>
-                          <div className="flex items-center justify-between text-sm text-gray-600">
-                            <span className="flex items-center">
-                              <span className="mr-1">👤</span>
-                              ID: {item.student_id}
-                            </span>
-                            {item.student.school && (
-                              <span className="flex items-center">
-                                <span className="mr-1">🏫</span>
-                                {item.student.school}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                          <p className="text-sm text-gray-500 flex items-center">
-                            <span className="mr-1">👤</span>
-                            Student ID: {item.student_id || 'Unknown'}
-                          </p>
-                        </div>
-                      )}
-                      
-                      <div className="flex items-center justify-end text-sm text-gray-600">
-                        <span className={`flex items-center px-3 py-1 rounded-full ${
-                          getAvailableCategories().find(c => c.id === item.category_id)?.color || 'bg-gray-100 text-gray-800'
-                        }`}>
-                          <span className="mr-1">{getAvailableCategories().find(c => c.id === item.category_id)?.icon}</span>
-                          {getCategoryName(item.category_id)}
-                        </span>
+                    {(item.subject === "Artworks" || subject === "Artworks") ? (
+                      <img
+                        src={item.file_path || "/image/artwork-sample.png"}
+                        alt={item.title}
+                        className="w-full h-56 object-cover"
+                        onError={(e) => {
+                          e.target.src = "/image/artwork-placeholder.png";
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-56 bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-100 flex items-center justify-center">
+                        <div className="text-6xl">📐</div>
                       </div>
+                    )}
+
+                    <div className="p-4 text-center">
+                      <p className="text-sm text-gray-600">
+                        ID: {item.student_id || 'Unknown'}
+                      </p>
                     </div>
                   </div>
                 ))}
