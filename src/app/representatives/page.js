@@ -81,7 +81,7 @@ const representativesData = [
     country: "Kazakhstan",
     name: "Yuliya Ovdiichuk",
     role: "National Coordinator",
-    email: "yuliya@tigersedu.com",
+    email: "info@tigersedu.com",
     phone: "+7 700 595 1000",
     isMain: true
   },

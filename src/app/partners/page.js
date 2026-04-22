@@ -227,7 +227,7 @@ export default function OurPartners() {
                 Contact Us
               </Link>
               <a
-                href="mailto:yuliya@tigersedu.com"
+                href="mailto:info@tigersedu.com"
                 className="inline-block bg-gray-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-gray-600 transition-colors"
               >
                 Email Partnership Team

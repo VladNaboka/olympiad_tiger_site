@@ -137,7 +137,7 @@ The jury is formed by the organizer. Jury decisions are final and not subject to
     title: "📞 Contacts",
     content: `For all inquiries, contact:
 
-📧 Email: yuliya@tigersedu.com
+📧 Email: info@tigersedu.com
 📱 WhatsApp: +7 700 595 1000
 📸 Instagram: @tigers.olympiad`
   }
@@ -252,7 +252,7 @@ TIGERS operates under the umbrella of Owlwin, a trusted international educationa
     title: "📞 Contact Information",
     content: `For all inquiries, contact:
 
-📧 Email: yuliya@tigersedu.com
+📧 Email: info@tigersedu.com
 📱 WhatsApp: +7 700 595 1000
 📸 Instagram: @tigers.olympiad`
   }
