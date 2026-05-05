@@ -46,6 +46,14 @@ const partners = [
   },
   {
     id: 6,
+    name: "Aji Naiman",
+    description: "International teacher recruitment, English education, and media production.",
+    category: "Educational Partner",
+    website: "https://ajinaiman.com/",
+    logo: "/aji logo.jpg"
+  },
+  {
+    id: 7,
     name: "Youth Development Initiative",
     description: "Dedicated to fostering creativity and innovation in young minds across borders.",
     category: "Development Partner",
@@ -53,7 +61,7 @@ const partners = [
     logo: "/image/partner-placeholder.png"
   },
   {
-    id: 7,
+    id: 8,
     name: "Digital Art Academy",
     description: "Leading provider of digital art education and technological innovation in creative fields.",
     category: "Technology Partner",
