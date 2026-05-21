@@ -54,6 +54,14 @@ const partners = [
   },
   {
     id: 7,
+    name: "JOS Financial Lyceum",
+    description: "A leading financial lyceum in Kazakhstan focused on quality education and student excellence.",
+    category: "Educational Partner",
+    website: "https://joslyceum.edu.kz",
+    logo: "/image/JOS.PNG"
+  },
+  {
+    id: 9,
     name: "Youth Development Initiative",
     description: "Dedicated to fostering creativity and innovation in young minds across borders.",
     category: "Development Partner",
@@ -61,7 +69,7 @@ const partners = [
     logo: "/image/partner-placeholder.png"
   },
   {
-    id: 8,
+    id: 10,
     name: "Digital Art Academy",
     description: "Leading provider of digital art education and technological innovation in creative fields.",
     category: "Technology Partner",
