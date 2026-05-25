@@ -29,14 +29,6 @@ const partners = [
     logo: "/image/NGS_logo.png"
   },
   {
-    id: 5,
-    name: "Art studio Safi",
-    description: "A modern creative workshop that unites artists, designers and art lovers.",
-    category: "Art Partner",
-    website: "https://wa.me/87077051404",
-    logo: "/image/art_studio_safi.jpeg"
-  },
-  {
     id: 6,
     name: "Aji Naiman",
     description: "International teacher recruitment, English education, and media production.",
