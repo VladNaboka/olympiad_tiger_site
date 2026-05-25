@@ -10,7 +10,7 @@ const partners = [
     description: "A trusted international educational company with over 10 years of experience in organizing academic camps and Olympiads abroad.",
     category: "Agency",
     website: "https://www.owlwinexchange.com",
-    logo: "/image/logo-owlwin.jpeg"
+    logo: "/image/Owlwin Logobook-11.jpeg"
   },
   {
     id: 2,
@@ -19,14 +19,6 @@ const partners = [
     category: "Art Partner",
     website: "https://sharingislearning.com/",
     logo: "/image/sil-olympiad.jpeg"
-  },
-  {
-    id: 3,
-    name: "HIPPO the contest",
-    description: "English without borders",
-    category: "English Contest Partner",
-    website: "https://hippo-thecontest.org/",
-    logo: "/image/logo-hippo.png"
   },
   {
     id: 4,
@@ -54,27 +46,19 @@ const partners = [
   },
   {
     id: 7,
+    name: "Danyshpan School",
+    description: "An educational school dedicated to nurturing students through quality learning and academic development in Kazakhstan.",
+    category: "Educational Partner",
+    website: "https://www.instagram.com/danyshpan.school?igsh=MWU5eTlhdHh6ZXQ5Ng==",
+    logo: "/image/Danyshpan.school.png"
+  },
+  {
+    id: 8,
     name: "JOS Financial Lyceum",
     description: "A leading financial lyceum in Kazakhstan focused on quality education and student excellence.",
     category: "Educational Partner",
     website: "https://joslyceum.edu.kz",
     logo: "/image/JOS.PNG"
-  },
-  {
-    id: 9,
-    name: "Youth Development Initiative",
-    description: "Dedicated to fostering creativity and innovation in young minds across borders.",
-    category: "Development Partner",
-    website: "#",
-    logo: "/image/partner-placeholder.png"
-  },
-  {
-    id: 10,
-    name: "Digital Art Academy",
-    description: "Leading provider of digital art education and technological innovation in creative fields.",
-    category: "Technology Partner",
-    website: "#",
-    logo: "/image/partner-placeholder.png"
   },
 ];
 

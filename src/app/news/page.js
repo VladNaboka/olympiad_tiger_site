@@ -48,17 +48,8 @@ export default function News() {
                 <h3 className="text-3xl font-bold text-black mb-4 underline decoration-2">MATH</h3>
                 <div className="space-y-2">
                   <p className="text-xl font-semibold text-black">Registration Deadline</p>
-                  <p className="text-lg text-gray-800">first intake - December 8, 2025</p>
-                  <p className="text-lg text-gray-800">second intake - February 9, 2026</p>
-                </div>
-              </div>
-
-              {/* STEM Section */}
-              <div>
-                <h3 className="text-3xl font-bold text-black mb-4 underline decoration-2">STEM</h3>
-                <div className="space-y-2">
-                  <p className="text-xl font-semibold text-black">Registration Deadline</p>
-                  <p className="text-lg text-gray-800">March 1, 2026</p>
+                  <p className="text-lg text-gray-800">first intake - October 31, 2026</p>
+                  <p className="text-lg text-gray-800">second intake - January 31, 2027</p>
                 </div>
               </div>
 
@@ -67,7 +58,12 @@ export default function News() {
                 <h3 className="text-3xl font-bold text-black mb-4 underline decoration-2">ART</h3>
                 <div className="space-y-2">
                   <p className="text-xl font-semibold text-black">Registration Deadline</p>
-                  <p className="text-lg text-gray-800">April 1, 2026</p>
+                  <p className="text-lg text-gray-800">Cape Town, South Africa</p>
+                  <p className="text-lg text-gray-800">September 5, 2026</p>
+                  <p className="text-lg text-gray-800 mt-5">Epsom, England</p>
+                  <p className="text-lg text-gray-800">February 1, 2027</p>
+                  <p className="text-lg text-gray-800 mt-5">Athens, Greece</p>
+                  <p className="text-lg text-gray-800">June 15, 2027</p>
                 </div>
               </div>
             </div>
@@ -89,18 +85,14 @@ export default function News() {
             {/* Row 1, Col 1: Math Text */}
             <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 flex flex-col justify-center items-center text-center">
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">MATH final in China</h3>
-              <div className="relative h-20 md:h-24 w-full mb-4 md:mb-6">
+              <div className="relative h-40 md:h-48 w-full mb-4">
                 <Image
-                  src="/image/news/mycombe_logo.png"
-                  alt="Wycombe Abbey International"
+                  src="/image/Chinaflag.png"
+                  alt="China Flag"
                   fill
                   className="object-contain"
                 />
               </div>
-              <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-2 md:mb-3">WYCOMBE ABBEY INTERNATIONAL</h4>
-              <a href="http://www.wycombeabbeyasia.com" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
-                www.wycombeabbeyasia.com
-              </a>
               <a
                 href="/files_download/MATH 2026.pdf"
                 download
@@ -136,21 +128,81 @@ export default function News() {
 
             {/* Row 2, Col 2: Art Text */}
             <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 flex flex-col justify-center items-center text-center">
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">ART final in Great Britain</h3>
-              <div className="relative h-20 md:h-24 w-full mb-4 md:mb-6">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">ART Final in South Africa</h3>
+              <div className="relative h-40 md:h-48 w-full mb-4">
                 <Image
-                  src="/image/news/qe_logo.jpeg"
-                  alt="Queen Ethelburga's"
+                  src="/image/SouthAfrica.png"
+                  alt="South Africa"
                   fill
                   className="object-contain"
                 />
               </div>
-              <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-2 md:mb-3">Queen Ethelburga's</h4>
-              <a href="http://www.qe.org" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
-                www.qe.org
-              </a>
               <a
-                href="/files_download/ART 2026.pdf"
+                href="/files_download/ART SA 2026.pdf"
+                download
+                className="text-sm md:text-base text-gray-600 mt-2 hover:text-purple-600 cursor-pointer underline block"
+              >
+                download the brochure
+              </a>
+            </div>
+
+            {/* Row 3, Col 1: Art England Text */}
+            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 flex flex-col justify-center items-center text-center min-h-64 md:min-h-80 lg:min-h-96">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">ART Final in England</h3>
+              <div className="relative h-40 md:h-48 w-full mb-4">
+                <Image
+                  src="/image/GreatBritainflag.png"
+                  alt="Great Britain Flag"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <a
+                href="/files_download/ART UK 2027.pdf"
+                download
+                className="text-sm md:text-base text-gray-600 mt-2 hover:text-purple-600 cursor-pointer underline block"
+              >
+                download the brochure
+              </a>
+            </div>
+
+            {/* Row 3, Col 2: Art England Image */}
+            <div className="rounded-xl overflow-hidden">
+              <div className="relative h-64 md:h-80 lg:h-96">
+                <Image
+                  src="/image/news/tiger_stem.png"
+                  alt="Art Final in England"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+
+            {/* Row 4, Col 1: Art Greece Image */}
+            <div className="rounded-xl overflow-hidden">
+              <div className="relative h-64 md:h-80 lg:h-96">
+                <Image
+                  src="/image/news/look_head.png"
+                  alt="Art Final in Greece"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+
+            {/* Row 4, Col 2: Art Greece Text */}
+            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 flex flex-col justify-center items-center text-center min-h-64 md:min-h-80 lg:min-h-96">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">ART Final in Greece</h3>
+              <div className="relative h-40 md:h-48 w-full mb-4">
+                <Image
+                  src="/image/Greeceflag.png"
+                  alt="Greece Flag"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <a
+                href="/files_download/ART Greece 2027.pdf"
                 download
                 className="text-sm md:text-base text-gray-600 mt-2 hover:text-purple-600 cursor-pointer underline block"
               >
@@ -302,79 +354,6 @@ export default function News() {
         </div>
       </div>
 
-      {/* STEM competition USA Section */}
-      <div className="px-4 pb-12">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-red-600 mb-6">
-              STEM COMPETITION USA
-            </h2>
-          </div>
-
-          {/* 2x2 Grid Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {/* Row 1, Col 1: STEM Text */}
-            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 flex flex-col justify-center items-center text-center">
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">LASELL UNIVERSITY</h3>
-              <div className="relative h-20 md:h-24 w-full mb-4 md:mb-6">
-                <Image
-                  src="/image/news/lasell_logo.png"
-                  alt="LASELL UNIVERSITY"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <a href="http://www.lasell.edu" className="text-purple-600 underline hover:text-purple-800 text-base md:text-lg">
-                www.lasell.edu
-              </a>
-              <a
-                href="/files_download/STEM 2026.pdf"
-                download
-                className="text-sm md:text-base text-gray-600 mt-2 hover:text-purple-600 cursor-pointer underline block"
-              >
-                download the brochure
-              </a>
-            </div>
-
-            {/* Row 1, Col 2: Prize */}
-            <div className="flex items-center justify-center">
-              <div className="flex items-center gap-4 md:gap-6">
-                <div className="text-7xl md:text-8xl">💰</div>
-                <div className="text-center">
-                  <h3 className="text-3xl md:text-5xl font-bold text-green-600 mb-2">PRIZE</h3>
-                  <h3 className="text-3xl md:text-5xl font-bold text-green-600">5000$</h3>
-                </div>
-                <div className="text-7xl md:text-8xl">💰</div>
-              </div>
-            </div>
-
-            {/* Row 2, Col 1: Look Ahead Image */}
-            <div className="rounded-xl overflow-hidden flex items-center justify-center">
-              <div className="relative w-full h-64 md:h-80 lg:h-full">
-                <Image
-                  src="/image/news/tiger_stem.png"
-                  alt="Look Ahead"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </div>
-
-            {/* Row 2, Col 2: MATH Categories */}
-            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 text-center">
-              <h3 className="text-3xl font-bold text-orange-500 mb-6 md:mb-8">CATEGORIES</h3>
-              <div className="space-y-3 md:space-y-4 text-gray-800">
-                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                  <p className="text-lg md:text-xl"><strong>Category I</strong> — Grades 5-8</p>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                  <p className="text-lg md:text-xl"><strong>Category II</strong> — Grades 9-12</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <Footer />
     </div>
