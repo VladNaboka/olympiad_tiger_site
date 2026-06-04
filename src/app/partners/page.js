@@ -52,6 +52,22 @@ const partners = [
     website: "https://joslyceum.edu.kz",
     logo: "/image/JOS.PNG"
   },
+  {
+    id: 9,
+    name: "Dana School",
+    description: "A private school in Kazakhstan offering quality education and a nurturing environment for student growth.",
+    category: "Private School",
+    website: "https://danaschool.edu.kz",
+    logo: "/image/Danaschool.edu.kz.svg"
+  },
+  {
+    id: 10,
+    name: "Miras School",
+    description: "An international school in Kazakhstan dedicated to academic excellence and holistic student development.",
+    category: "Private School",
+    website: "https://miras.kz",
+    logo: "/image/Miras-logo.jpg"
+  },
 ];
 
 // Category colors
