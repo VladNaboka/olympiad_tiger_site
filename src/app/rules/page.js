@@ -48,34 +48,35 @@ Participation is possible individually or through schools, studios, and clubs.`
   {
     id: 5,
     title: "🏆 Olympiad Stages",
-    content: `The Olympiad takes place in two stages:
+    content: `1. Olympiad Structure and Stages
+The "ART" Olympiad is conducted in two stages:
+• Stage 1 — Preliminary Round (Online format): remote submission and expert evaluation of portfolios/contest entries.
+• Stage 2 — Final Round (In-person format): a week-long art camp hosted in [Specify country/location, if static, or write "the host country of the current season's Finals"] with the final announcement of the winners.
 
-5.1. Preliminary Round (remote)
-• Format: online
-• Deadline: by April 1, 2026
-• Participants create an artwork on the theme "NeoWorld – The World of the Future"
-• Works are submitted digitally via Tigers representative
-• All participants receive certificates of participation
-• Winners and prizewinners are invited to the finals
+2. Preliminary (Online) Round Procedure
+• Application Submission: Participants register on the official Olympiad website and upload their creative work via their personal account in accordance with the technical requirements (file formats, sizes, etc.).
+• Expert Commission Evaluation: The Evaluation Commission (Jury) conducts a "blind" or multi-stage online review of the submitted entries based on approved criteria (creativity, technique, composition).
+• Publication of Results: Based on the results of the Preliminary Round, a shortlist of Finalists who scored the highest points is formed. The list will be published on the website on [Date], and the selected participants will receive official invitations to the Finals.
 
-5.2. Final Round (in-person)
-• Location: QE has a prime location at the heart of the Yorkshire countryside in the North of England.
-• Dates: July 2026
-• Includes international exhibition and cultural program
-• Finalists' works are evaluated by an international jury`
+3. Final Round (Art Camp) Procedure
+• Format: The Olympiad Finals are held as an in-person, week-long art intensive (camp) in [Country].
+• Camp Program: Throughout the week, Finalists complete final competition tasks, attend masterclasses from leading industry experts, and work on their final projects.
+• Determining the Winners: Final projects are evaluated directly during the camp. The announcement of winners and runners-up, along with the official award ceremony, takes place on the final day of the art camp.`
   },
   {
     id: 6,
     title: "🎨 Olympiad Theme",
-    content: `Competition theme: "NeoWorld – The World of the Future"
+    content: `Theme for the Finals in South Africa
+A Glimpse into Tomorrow (Window to the Future)
+Unleash your imagination and present a visual forecast of the world 100 years from now—ranging from high-tech civilizations to new forms of harmony between humanity and nature.
 
-Participants are invited to artistically express their vision of the future:
-• How will the world change?
-• What new cities, technologies, nature, or culture will emerge?
-• What will be the core values of future humanity?
+Theme for the Finals in England
+Reflections
+Explore the world through the play of light, distortions in water and mirrors, or the otherwise hidden essence of familiar things through metaphorical imagery.
 
-Any genre is welcome: utopia, dystopia, dreams, ecology, digital reality, etc.
-All types of techniques are accepted.`
+Theme for the Finals in Greece
+Rhythms of the City
+Capture the pulse and energy of a modern metropolis through the dynamics of movement, the contrast of neon lights, or the unique atmosphere of everyday urban life.`
   },
   {
     id: 7,
@@ -95,17 +96,6 @@ All types of techniques are accepted.`
 • Composition
 • Expressiveness and depth
 • Technical proficiency`
-  },
-  {
-    id: 9,
-    title: "🏅 Awards",
-    content: `Based on the final results, winners and prizewinners receive:
-
-🏆 1st place: 2 weeks summer camp, 2027 (US or UK)
-🥈 2nd place: 2 weeks summer camp, 2027 (Europe or Asia)
-🥉 3rd place: graphic tablet
-
-All finalists receive international certificates and invitations to future Tigers exhibitions.`
   },
   {
     id: 10,

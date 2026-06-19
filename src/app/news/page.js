@@ -55,12 +55,12 @@ export default function News() {
 
             {/* Center: Image */}
             <div className="flex items-center justify-center">
-              <div className="relative w-full h-48 md:h-56">
+              <div className="relative w-full h-48 md:h-56 rounded-xl overflow-hidden shadow-lg border-4 border-white ring-1 ring-orange-300">
                 <Image
-                  src="/image/news/math_final_in_china.png"
-                  alt="Math Final"
+                  src="/image/news/singapore_math_final.webp"
+                  alt="Singapore"
                   fill
-                  className="object-contain"
+                  className="object-cover"
                 />
               </div>
             </div>
@@ -175,21 +175,21 @@ export default function News() {
 
             <div className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-blue-400">
               <p className="font-bold text-lg mb-4">Category 1 (6-9 years)</p>
-              <p className="text-gray-700 mb-2">1st place – trip to the next final</p>
+              <p className="text-gray-700 mb-2">1st place – Free Art Camp for 1 week</p>
               <p className="text-gray-700 mb-2">2nd place – iPad</p>
               <p className="text-gray-700">3rd place – apple watch</p>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-blue-400">
               <p className="font-bold text-lg mb-4">Category 2 (10-13 years)</p>
-              <p className="text-gray-700 mb-2">1st place – trip to the next final</p>
+              <p className="text-gray-700 mb-2">1st place – Free Art Camp for 1 week</p>
               <p className="text-gray-700 mb-2">2nd place – iPad</p>
               <p className="text-gray-700">3rd place – apple watch</p>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-blue-400">
               <p className="font-bold text-lg mb-4">Category 3 (14-17 years)</p>
-              <p className="text-gray-700 mb-2">1st place – 100% scholarship</p>
+              <p className="text-gray-700 mb-2">1st place – Free Art Camp for 1 week</p>
               <p className="text-gray-700 mb-2">2nd place – iPad</p>
               <p className="text-gray-700">3rd place – apple watch</p>
             </div>
