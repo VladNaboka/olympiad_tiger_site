@@ -5,6 +5,7 @@ import { addStudent } from '../../api/students_api';
 import { uploadArtWork } from '../../api/student_art_works';
 import { createMathWork } from '../../api/student_math_works';
 import { COUNTRIES, SUBJECTS, getCategoriesBySubject, calculateCategory, calculateAge, generateStudentId, getCategoryName } from '../../utils/constants';
+import { validateImageFile, IMAGE_ACCEPT_ATTR } from '../../utils/fileValidation';
 import DateSelector from './DateSelector';
 
 export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
@@ -29,40 +30,13 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
   const [ageValidation, setAgeValidation] = useState({ isValid: false, message: '', age: null, categoryName: '' });
   const [fileError, setFileError] = useState('');
 
-  // Валидация файла изображения
-  const validateFile = (file) => {
-    if (!file) {
-      return { isValid: false, error: 'Please select a file' };
-    }
-
-    // Проверка типа файла
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-    if (!allowedTypes.includes(file.type.toLowerCase())) {
-      return { 
-        isValid: false, 
-        error: 'Invalid file format. Only JPG, PNG, and GIF files are allowed.' 
-      };
-    }
-
-    // Проверка размера файла (10MB = 10 * 1024 * 1024 bytes)
-    const maxSize = 10 * 1024 * 1024;
-    if (file.size > maxSize) {
-      return { 
-        isValid: false, 
-        error: `File is too large. Maximum size is 10MB. Your file is ${(file.size / (1024 * 1024)).toFixed(1)}MB.` 
-      };
-    }
-
-    return { isValid: true, error: '' };
-  };
-
   // Обработчик выбора файла с валидацией
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     setFileError('');
-    
+
     if (file) {
-      const validation = validateFile(file);
+      const validation = validateImageFile(file);
       if (validation.isValid) {
         setArtworkFile(file);
         setFileError('');
@@ -220,7 +194,7 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
     e.preventDefault();
     
     if (formData.course_id === '1' && !isStep2Valid()) {
-      alert('Please select a valid artwork file (JPG, PNG, or GIF, max 10MB)');
+      alert('Please select a valid artwork file (JPG or PNG, max 5MB)');
       return;
     }
     
@@ -235,7 +209,7 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
         }
 
         // Дополнительная проверка файла перед отправкой
-        const validation = validateFile(artworkFile);
+        const validation = validateImageFile(artworkFile);
         if (!validation.isValid) {
           alert(validation.error);
           setLoading(false);
@@ -509,7 +483,7 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
                     <div className="relative">
                       <input
                         type="file"
-                        accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif"
+                        accept={IMAGE_ACCEPT_ATTR}
                         onChange={handleFileSelect}
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         required
@@ -537,7 +511,7 @@ export default function AddStudentForm({ onClose, onSuccess, userCountry }) {
                       </p>
                     ) : (
                       <p className="text-sm text-gray-500 mt-1">
-                        Supported formats: JPG, PNG, GIF (max 10MB)
+                        Supported formats: JPG, PNG (max 5MB)
                       </p>
                     )}
 

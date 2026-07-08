@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { registerUser } from '../../api/auth_api';
+import { registerUser, MIN_PASSWORD_LENGTH } from '../../api/auth_api';
 import { COUNTRIES } from '../../utils/constants';
 
 export default function AddRepresentativeForm({ onClose, onSuccess }) {
@@ -35,17 +35,15 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
       return;
     }
 
-    // Проверяем длину пароля
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
+    // Проверяем длину пароля (согласовано с бэкендом)
+    if (formData.password.length < MIN_PASSWORD_LENGTH) {
+      setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
       setLoading(false);
       return;
     }
 
     try {
-      console.log('🔄 Creating representative with data:', formData);
-
-      // Подготавливаем данные согласно новой API структуре
+      // Подготавливаем данные согласно API структуре (role назначает бэкенд)
       const userData = {
         full_name: formData.full_name,
         email: formData.email,
@@ -54,10 +52,7 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
         phone: formData.phone
       };
 
-      console.log('📤 Sending to API:', userData);
-
       const response = await registerUser(userData);
-      console.log('✅ Representative created successfully:', response);
 
       // Проверяем успешность создания
       if (response && (response.id || response.user_id)) {
@@ -68,8 +63,6 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
 
 
     } catch (error) {
-      console.error('❌ Error creating representative:', error);
-
       // Обрабатываем различные типы ошибок
       let errorMessage = 'Failed to create representative';
 
@@ -157,12 +150,12 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                placeholder="Create password (min 6 characters)"
-                minLength={6}
+                placeholder={`Create password (min ${MIN_PASSWORD_LENGTH} characters)`}
+                minLength={MIN_PASSWORD_LENGTH}
                 required
                 disabled={loading}
               />
-              <p className="text-xs text-gray-500 mt-1">Minimum 6 characters required</p>
+              <p className="text-xs text-gray-500 mt-1">Minimum {MIN_PASSWORD_LENGTH} characters required</p>
             </div>
 
             <div>
@@ -210,8 +203,7 @@ export default function AddRepresentativeForm({ onClose, onSuccess }) {
                   email: formData.email,
                   password: '***hidden***',
                   country: formData.country,
-                  phone: formData.phone,
-                  role_id: 2
+                  phone: formData.phone
                 }, null, 2)}
               </pre>
             </div>

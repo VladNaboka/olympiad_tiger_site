@@ -8,6 +8,7 @@ import { getAllArtWorks } from '../api/student_art_works';
 import { getAllMathWorks } from '../api/student_math_works';
 import { getStudentById } from '../api/students_api';
 import { ART_CATEGORIES, MATH_CATEGORIES, getCategoryName, getCategoriesBySubject } from '../utils/constants';
+import { safeImageUrl } from '../utils/safeUrl';
 
 export default function Gallery() {
   // Устанавливаем значения по умолчанию
@@ -415,7 +416,7 @@ export default function Gallery() {
                   >
                     {(item.subject === "Artworks" || subject === "Artworks") ? (
                       <img
-                        src={item.file_path || "/image/artwork-sample.png"}
+                        src={safeImageUrl(item.file_path)}
                         alt={item.title}
                         className="w-full h-56 object-cover"
                         onError={(e) => {

@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getArtWorksByCountryAndCategory, deleteArtWork, setArtWorkScore } from '../../api/student_art_works';
+import { getArtWorksByCountryAndCategory, deleteArtWork, setArtWorkScore, uploadArtWork } from '../../api/student_art_works';
 import { COUNTRIES, CATEGORIES, getCategoryName } from '../../utils/constants';
+import { validateImageFile, IMAGE_ACCEPT_ATTR } from '../../utils/fileValidation';
+import { safeImageUrl } from '../../utils/safeUrl';
 
 export default function GlobalGalleryTab({ filters }) {
   const [allArtworks, setAllArtworks] = useState([]);
@@ -56,6 +58,12 @@ export default function GlobalGalleryTab({ filters }) {
       return;
     }
 
+    const validation = validateImageFile(newWork.file);
+    if (!validation.isValid) {
+      alert(validation.error);
+      return;
+    }
+
     try {
       setUploading(true);
       const formData = new FormData();
@@ -65,20 +73,13 @@ export default function GlobalGalleryTab({ filters }) {
       formData.append('category_id', newWork.category_id);
       formData.append('file', newWork.file);
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/artworks`, {
-        method: 'POST',
-        body: formData
-      });
+      await uploadArtWork(formData);
 
-      if (!res.ok) throw new Error(`Upload failed: ${res.statusText}`);
-
-      await res.json();
       setShowAddModal(false);
       setNewWork({ student_id: '', title: '', country: '', category_id: '', file: null });
       loadGlobalArtworks();
     } catch (err) {
-      console.error('Error uploading artwork:', err);
-      alert('Failed to upload artwork');
+      alert(err.message || 'Failed to upload artwork');
     } finally {
       setUploading(false);
     }
@@ -173,7 +174,7 @@ export default function GlobalGalleryTab({ filters }) {
                       onClick={() => setSelectedArtwork(artwork)}
                     >
                       <img
-                        src={artwork.file_path}
+                        src={safeImageUrl(artwork.file_path)}
                         alt={artwork.title}
                         className="w-full h-48 object-cover"
                       />
@@ -236,6 +237,7 @@ export default function GlobalGalleryTab({ filters }) {
               </select>
               <input
                 type="file"
+                accept={IMAGE_ACCEPT_ATTR}
                 onChange={(e) => setNewWork({ ...newWork, file: e.target.files[0] })}
                 className="border p-2 w-full rounded"
               />

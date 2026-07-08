@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { loginUser } from '../../api/auth_api';
+import { setToken } from '../../api/auth_token';
 
 export default function AuthForm({ onLogin }) {
   const [formData, setFormData] = useState({
@@ -17,41 +18,24 @@ export default function AuthForm({ onLogin }) {
     setLoading(true);
     setError('');
 
-    console.log('🔐 Попытка авторизации:', { email: formData.email, password: '***' });
-
     try {
       const response = await loginUser({
         email: formData.email,
         password: formData.password
       });
 
-      console.log('📥 Ответ от API:', response);
-
       // Проверяем разные варианты структуры ответа
       if (response && response.token) {
-        console.log('✅ Токен найден:', response.token);
-        localStorage.setItem('admin_token', response.token);
-
-        // Проверяем где находится пользователь
+        setToken(response.token);
         const user = response.user || response.data || response;
-        console.log('👤 Данные пользователя:', user);
-
         onLogin(user);
-      } else if (response && response.success && response.data) {
-        // Альтернативная структура ответа
-        console.log('✅ Успешный ответ, но другая структура:', response);
-        if (response.data.token) {
-          localStorage.setItem('admin_token', response.data.token);
-          onLogin(response.data.user || response.data);
-        } else {
-          setError('Токен не найден в ответе сервера');
-        }
+      } else if (response && response.success && response.data && response.data.token) {
+        setToken(response.data.token);
+        onLogin(response.data.user || response.data);
       } else {
-        console.error('❌ Неожиданная структура ответа:', response);
         setError('Неверные учетные данные или ошибка сервера');
       }
     } catch (error) {
-      console.error('❌ Ошибка авторизации:', error);
       setError(error.message || 'Ошибка авторизации');
     }
 

@@ -1,13 +1,11 @@
 import { apiRequest } from "./base_api";
 
 /**
- * Создать новый фидбек
- * @param {Object} feedback - { name: string, email: string, subject: string, message: string }
+ * Создать новый фидбек. Публичный эндпоинт (форма обратной связи).
+ * @param {Object} feedback - { name, email, subject, message }
  * @returns {Promise<Object>}
  */
 export async function createFeedback(feedback) {
-  console.log("[API] Creating feedback:", feedback);
-
   if (!feedback?.name || !feedback?.email || !feedback?.message) {
     throw new Error("Name, email, and message are required");
   }
@@ -16,17 +14,16 @@ export async function createFeedback(feedback) {
 }
 
 /**
- * Получить список всех фидбеков
+ * Получить список всех фидбеков. Требует авторизации.
  * @returns {Promise<Array>}
  */
 export async function getAllFeedback() {
-  console.log("[API] Fetching all feedback...");
   const data = await apiRequest("/feedback", "GET");
   return Array.isArray(data) ? data : [];
 }
 
 /**
- * Получить фидбек по ID
+ * Получить фидбек по ID. Требует авторизации.
  * @param {number|string} id
  * @returns {Promise<Object>}
  */
@@ -35,21 +32,19 @@ export async function getFeedbackById(id) {
   if (isNaN(feedbackId)) {
     throw new Error("Feedback ID must be a number");
   }
-  console.log(`[API] Fetching feedback by ID: ${feedbackId}`);
   return await apiRequest(`/feedback/${feedbackId}`, "GET");
 }
 
 /**
- * Удалить фидбек по ID
+ * Удалить фидбек по ID. Требует авторизации.
  * @param {number|string} id
- * @returns {Promise<boolean>} - true если удалено
+ * @returns {Promise<boolean>}
  */
 export async function deleteFeedback(id) {
   const feedbackId = parseInt(id, 10);
   if (isNaN(feedbackId)) {
     throw new Error("Feedback ID must be a number");
   }
-  console.log(`[API] Deleting feedback ID: ${feedbackId}`);
   await apiRequest(`/feedback/${feedbackId}`, "DELETE");
   return true;
 }

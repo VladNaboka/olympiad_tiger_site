@@ -2,8 +2,22 @@
 
 import { useState, useEffect } from 'react';
 import { authWithToken } from '../api/auth_api';
+import { getToken, clearToken, onForceLogout } from '../api/auth_token';
 import AuthForm from '../components/admin/AuthForm';
 import AdminDashboard from '../components/admin/AdminDashboard';
+
+// Нормализуем role_id из строковой роли, если сервер прислал только role.
+function normalizeUser(userData) {
+  if (!userData) return userData;
+  if (!userData.role_id && userData.role) {
+    if (userData.role === 'owner') {
+      userData.role_id = 1;
+    } else if (userData.role === 'admin') {
+      userData.role_id = 2;
+    }
+  }
+  return userData;
+}
 
 export default function AdminPage() {
   const [user, setUser] = useState(null);
@@ -11,62 +25,36 @@ export default function AdminPage() {
 
   // Проверка авторизации при загрузке
   useEffect(() => {
-    const token = localStorage.getItem('admin_token');
-    console.log('🔑 Проверка токена при загрузке:', token);
-    
+    const token = getToken();
+
     if (token) {
       authWithToken(token)
         .then(response => {
-          console.log('✅ Ответ authWithToken:', response);
-          
-          // Попробуем разные варианты структуры ответа
-          const userData = response.user || response.data || response;
-          console.log('👤 Извлеченные данные пользователя:', userData);
-
-          // Убедимся, что у пользователя есть role_id
-          if (!userData.role_id && userData.role) {
-            // Преобразуем строковую роль в числовую
-            if (userData.role === 'owner') {
-              userData.role_id = 1;
-            } else if (userData.role === 'admin') {
-              userData.role_id = 2;
-            }
-          }
-
-          console.log('👤 Финальные данные пользователя:', userData);
+          const userData = normalizeUser(response.user || response.data || response);
           setUser(userData);
         })
-        .catch((error) => {
-          console.error('❌ Ошибка проверки токена:', error);
-          localStorage.removeItem('admin_token');
+        .catch(() => {
+          clearToken();
         })
         .finally(() => {
           setLoading(false);
         });
     } else {
-      console.log('🚫 Токен не найден');
       setLoading(false);
     }
   }, []);
 
+  // Централизованный разлогин при 401 из любого запроса.
+  useEffect(() => {
+    return onForceLogout(() => setUser(null));
+  }, []);
+
   const handleLogin = (userData) => {
-    console.log('✅ Успешная авторизация:', userData);
-    
-    // Убедимся, что у пользователя есть role_id
-    if (!userData.role_id && userData.role) {
-      if (userData.role === 'owner') {
-        userData.role_id = 1;
-      } else if (userData.role === 'admin') {
-        userData.role_id = 2;
-      }
-    }
-    
-    setUser(userData);
+    setUser(normalizeUser(userData));
   };
 
   const handleLogout = () => {
-    console.log('🚪 Выход из системы');
-    localStorage.removeItem('admin_token');
+    clearToken();
     setUser(null);
   };
 
@@ -82,10 +70,8 @@ export default function AdminPage() {
   }
 
   if (!user) {
-    console.log('🔐 Показываем форму авторизации');
     return <AuthForm onLogin={handleLogin} />;
   }
 
-  console.log('✅ Пользователь авторизован, показываем дашборд:', user);
   return <AdminDashboard user={user} onLogout={handleLogout} />;
 }

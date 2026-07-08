@@ -256,6 +256,40 @@ export const formatDate = (dateString) => {
   return `${day}.${month}.${year}`;
 };
 
+// Устойчивый разбор даты из разных форматов бэкенда.
+// Возвращает валидный Date или null (не «Invalid Date»).
+export const parseDateSafe = (value) => {
+  if (!value) return null;
+
+  // Разные возможные имена поля с датой.
+  const raw = typeof value === 'object'
+    ? (value.created_at ?? value.CreatedAt ?? value.date ?? value.created)
+    : value;
+  if (!raw) return null;
+
+  // «Нулевое» время Go — считаем отсутствующим.
+  if (typeof raw === 'string' && raw.startsWith('0001-01-01')) return null;
+
+  let date = new Date(raw);
+  // Формат Go с пробелом («2006-01-02 15:04:05») — заменяем пробел на 'T'.
+  if (isNaN(date.getTime()) && typeof raw === 'string') {
+    date = new Date(raw.replace(' ', 'T'));
+  }
+  return isNaN(date.getTime()) ? null : date;
+};
+
+// Дата+время для отображения; при невалидной дате — «—».
+export const formatDateTimeSafe = (value) => {
+  const date = parseDateSafe(value);
+  return date ? date.toLocaleString('en-GB') : '—';
+};
+
+// Только дата для отображения; при невалидной дате — «—».
+export const formatDateSafe = (value) => {
+  const date = parseDateSafe(value);
+  return date ? date.toLocaleDateString('en-GB') : '—';
+};
+
 // Статусы работ
 export const WORK_STATUSES = {
   PENDING: 'pending',

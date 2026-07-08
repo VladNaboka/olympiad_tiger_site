@@ -2,7 +2,8 @@
 import { apiRequest } from "./base_api";
 
 /**
- * Получить всех пользователей, кроме владельцев (role !== 'owner')
+ * Получить всех пользователей, кроме владельцев (role !== 'owner').
+ * Содержит ПДн — требует авторизации.
  * @returns {Promise<object[]>} Массив пользователей
  */
 export async function getAdminsAndTeachers() {
@@ -10,19 +11,18 @@ export async function getAdminsAndTeachers() {
     const data = await apiRequest("/users", "GET");
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error("Ошибка при получении админов и учителей:", error);
+    console.error("Ошибка при получении админов и учителей:", error.message);
     return [];
   }
 }
 
 /**
- * Получить всех учителей по стране
- * @param {string} country - Название страны (например, "Kazakhstan")
- * @returns {Promise<object[]>} Массив учителей из указанной страны
+ * Получить всех учителей по стране. Требует авторизации.
+ * @param {string} country
+ * @returns {Promise<object[]>}
  */
 export async function getTeachersByCountry(country) {
   if (!country) {
-    console.warn("getTeachersByCountry: страна не указана");
     return [];
   }
 
@@ -30,26 +30,15 @@ export async function getTeachersByCountry(country) {
     const data = await apiRequest("/users/country", "POST", { country });
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error(`Ошибка при получении учителей из страны ${country}:`, error);
+    console.error("Ошибка при получении учителей:", error.message);
     return [];
   }
 }
 
 /**
- * Получить общее количество пользователей
+ * Получить общее количество пользователей. Публичный агрегат.
  * @returns {Promise<{total_users: number}>}
  */
 export function getUsersCount() {
-    console.log('🔄 getUsersCount called');
-
-    return apiRequest("/users/count")
-        .then(response => {
-            console.log('✅ Get users count API response:', response);
-            return response;
-        })
-        .catch(error => {
-            console.error('❌ Get users count API error:', error);
-            throw error;
-        });
+    return apiRequest("/users/count");
 }
-

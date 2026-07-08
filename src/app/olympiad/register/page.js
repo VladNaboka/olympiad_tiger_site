@@ -5,6 +5,10 @@ import Navbar from '../../../components/navbar';
 import Footer from '../../../components/footer';
 import { registerOlympiad } from '../../api/olympiad_api';
 
+// Временно скрываем форму регистрации/оплаты олимпиады.
+// Чтобы снова включить — поставить true (весь код формы ниже сохранён).
+const REGISTRATION_ENABLED = false;
+
 // Basic client-side format checks
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Phone: optional + and 10–15 digits (spaces/brackets/dashes are stripped before checking)
@@ -90,6 +94,33 @@ export default function OlympiadRegister() {
     `w-full px-4 py-3 border rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-orange-500 ${
       errors[field] ? 'border-red-400' : 'border-gray-300'
     }`;
+
+  // Пока регистрация выключена — показываем заглушку вместо формы и оплаты.
+  if (!REGISTRATION_ENABLED) {
+    return (
+      <div
+        className="min-h-screen flex flex-col bg-[#fffbf2] relative"
+        style={{ backgroundImage: 'url("/image/fonmain1.png")' }}
+      >
+        <Navbar />
+
+        <div className="flex-1 flex items-center justify-center py-40 md:py-48 px-4">
+          <div className="text-center max-w-2xl">
+            <h1 className="text-4xl md:text-5xl font-bold text-orange-600 mb-6">
+              Coming Soon
+            </h1>
+            <p className="text-lg text-gray-600">
+              Olympiad registration is temporarily unavailable. Please check back later.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-auto">
+          <Footer />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

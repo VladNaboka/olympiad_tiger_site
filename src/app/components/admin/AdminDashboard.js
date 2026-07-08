@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { getArtWorksByCountryAndCategory } from '../../api/student_art_works';
 import { getMathWorksByCountryAndCategory } from '../../api/student_math_works';
 import { getAdminsAndTeachers } from '../../api/users_api';
-import { registerUser, deleteUser, updateUser } from '../../api/auth_api';
+import { registerUser, deleteUser, updateUser, MIN_PASSWORD_LENGTH } from '../../api/auth_api';
 import { CATEGORIES, SUBJECTS, COUNTRIES, getCategoryName, isMainAdmin, isRegionalAdmin, getUserRoleName, formatDate } from '../../utils/constants';
 import GalleryTab from './GalleryTab';
 import ResultsTab from './ResultsTab';
@@ -38,12 +38,16 @@ function AddRepresentativeForm({ onClose, onSuccess }) {
     setLoading(true);
     setError('');
 
+    if (formData.password.length < MIN_PASSWORD_LENGTH) {
+      setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await registerUser(formData);
-      console.log('✅ Representative added:', response);
+      await registerUser(formData);
       onSuccess();
     } catch (error) {
-      console.error('❌ Error adding representative:', error);
       setError(error.message || 'Failed to add representative');
     }
 
@@ -107,7 +111,7 @@ function AddRepresentativeForm({ onClose, onSuccess }) {
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
-                minLength="6"
+                minLength={MIN_PASSWORD_LENGTH}
               />
             </div>
 
@@ -1364,8 +1368,8 @@ function MainAdminDashboard({ user, onLogout }) {
 
               // Проверяем пароль если он введен
               if (password && password.length > 0) {
-                if (password.length < 6) {
-                  alert('Password must be at least 6 characters long!');
+                if (password.length < MIN_PASSWORD_LENGTH) {
+                  alert(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long!`);
                   return;
                 }
               }
@@ -1422,7 +1426,7 @@ function MainAdminDashboard({ user, onLogout }) {
                       id="passwordField"
                       placeholder="Enter new password (optional)"
                       className="w-full px-3 py-2 pr-12 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      minLength="6"
+                      minLength={MIN_PASSWORD_LENGTH}
                     />
                     <button
                       type="button"

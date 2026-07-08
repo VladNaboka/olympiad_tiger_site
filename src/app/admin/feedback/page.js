@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getAllFeedback, deleteFeedback } from '@/app/api/feedback_api';
+import { formatDateSafe, formatDateTimeSafe, parseDateSafe } from '@/app/utils/constants';
 import { Trash2, Mail, User, Calendar, MessageSquare } from 'lucide-react';
 
 export default function AdminFeedbackPage() {
@@ -18,7 +19,7 @@ export default function AdminFeedbackPage() {
       setLoading(true);
       const data = await getAllFeedback();
       // Сортируем по дате, новые сначала
-      const sorted = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const sorted = data.sort((a, b) => (parseDateSafe(b.created_at)?.getTime() || 0) - (parseDateSafe(a.created_at)?.getTime() || 0));
       setFeedbacks(sorted);
     } catch (error) {
       console.error('Error loading feedbacks:', error);
@@ -82,7 +83,7 @@ export default function AdminFeedbackPage() {
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-semibold text-gray-800">{feedback.name}</h3>
                       <span className="text-xs text-gray-500">
-                        {new Date(feedback.created_at).toLocaleDateString()}
+                        {formatDateSafe(feedback.created_at)}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 mb-1">{feedback.email}</p>
@@ -152,7 +153,7 @@ export default function AdminFeedbackPage() {
                     <div>
                       <p className="text-sm text-gray-500 mb-1">Date</p>
                       <p className="font-semibold text-gray-800">
-                        {new Date(selectedFeedback.created_at).toLocaleString()}
+                        {formatDateTimeSafe(selectedFeedback.created_at)}
                       </p>
                     </div>
                   </div>

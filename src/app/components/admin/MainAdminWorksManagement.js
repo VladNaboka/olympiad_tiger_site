@@ -7,6 +7,8 @@ import { getStudentsByCountry } from '../../api/students_api';
 import { getArtWorksByCountryAndCategory, uploadArtWork, setArtWorkScore } from '../../api/student_art_works';
 import { getMathWorksByCountryAndCategory, createMathWork, setMathWorkScore } from '../../api/student_math_works';
 import { CATEGORIES, COUNTRIES, getCategoryName } from '../../utils/constants';
+import { validateImageFile, IMAGE_ACCEPT_ATTR } from '../../utils/fileValidation';
+import { safeImageUrl } from '../../utils/safeUrl';
 
 export default function MainAdminWorksManagement({ user, filters, setFilters }) {
   const [activeTab, setActiveTab] = useState('art'); // 'art' or 'math'
@@ -99,32 +101,8 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
     setLoading(false);
   };
 
-  // Функция для валидации файлов
-  const validateFile = (file) => {
-    if (!file) {
-      return { isValid: false, error: 'Please select a file' };
-    }
-
-    // Проверка типа файла
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-    if (!allowedTypes.includes(file.type.toLowerCase())) {
-      return { 
-        isValid: false, 
-        error: 'Invalid file format. Only JPG, PNG, and GIF files are allowed.' 
-      };
-    }
-
-    // Проверка размера файла (10MB = 10 * 1024 * 1024 bytes)
-    const maxSize = 10 * 1024 * 1024;
-    if (file.size > maxSize) {
-      return { 
-        isValid: false, 
-        error: `File is too large. Maximum size is 10MB. Your file is ${(file.size / (1024 * 1024)).toFixed(1)}MB.` 
-      };
-    }
-
-    return { isValid: true, error: '' };
-  };
+  // Валидация файлов — общий валидатор (JPG/PNG, ≤5MB)
+  const validateFile = validateImageFile;
 
   return (
     <div>
@@ -327,7 +305,7 @@ export default function MainAdminWorksManagement({ user, filters, setFilters }) 
                   {activeTab === 'art' ? (
                     <div className="relative">
                       <img
-                        src={work.file_path || "/image/artwork-sample.png"}
+                        src={safeImageUrl(work.file_path)}
                         alt={work.title}
                         className="w-full h-48 object-cover"
                         onError={(e) => {
@@ -618,7 +596,7 @@ function UploadWorkModal({ user, students, activeTab, userCountry, validateFile,
               <div className="relative">
                 <input
                   type="file"
-                  accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif"
+                  accept={IMAGE_ACCEPT_ATTR}
                   onChange={handleFileSelect}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   required
@@ -646,7 +624,7 @@ function UploadWorkModal({ user, students, activeTab, userCountry, validateFile,
                 </p>
               ) : (
                 <p className="text-sm text-gray-500 mt-1">
-                  Supported formats: JPG, PNG, GIF (max 10MB)
+                  Supported formats: JPG, PNG (max 5MB)
                 </p>
               )}
 

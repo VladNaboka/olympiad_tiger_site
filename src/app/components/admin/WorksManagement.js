@@ -5,6 +5,8 @@ import { getStudentsByCountry } from '../../api/students_api';
 import { getArtWorksByCountryAndCategory, uploadArtWork, setArtWorkScore } from '../../api/student_art_works';
 import { getMathWorksByCountryAndCategory, createMathWork, setMathWorkScore } from '../../api/student_math_works';
 import { CATEGORIES, ART_CATEGORIES, MATH_CATEGORIES, getCategoryName } from '../../utils/constants';
+import { validateImageFile, IMAGE_ACCEPT_ATTR } from '../../utils/fileValidation';
+import { safeImageUrl } from '../../utils/safeUrl';
 
 export default function WorksManagement({ user }) {
   const [activeTab, setActiveTab] = useState('art'); // 'art' or 'math'
@@ -233,7 +235,7 @@ export default function WorksManagement({ user }) {
               {activeTab === 'art' ? (
                 <div className="relative">
                   <img
-                    src={work.file_path || "/image/artwork-sample.png"}
+                    src={safeImageUrl(work.file_path)}
                     alt={work.title}
                     className="w-full h-48 object-cover"
                     onError={(e) => {
@@ -385,6 +387,13 @@ function UploadWorkModal({ user, students, activeTab, onClose, onSuccess }) {
           return;
         }
 
+        const validation = validateImageFile(artworkFile);
+        if (!validation.isValid) {
+          alert(validation.error);
+          setLoading(false);
+          return;
+        }
+
         const formDataToSend = new FormData();
         formDataToSend.append('student_id', formData.student_id);
         formDataToSend.append('title', formData.title);
@@ -484,7 +493,7 @@ function UploadWorkModal({ user, students, activeTab, onClose, onSuccess }) {
                     <div className="relative">
                       <input
                         type="file"
-                        accept="image/*"
+                        accept={IMAGE_ACCEPT_ATTR}
                         onChange={(e) => setArtworkFile(e.target.files[0])}
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         required
