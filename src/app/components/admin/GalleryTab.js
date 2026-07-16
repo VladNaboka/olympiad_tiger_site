@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getArtWorksByCountryAndCategory, setArtWorkScore, deleteArtWork } from '../../api/student_art_works';
 import { CATEGORIES, getCategoryName } from '../../utils/constants';
+import ArtworkImage from '../ArtworkImage';
 
 export default function GalleryTab({ userRole, userCountry, filters }) {
   const [artworks, setArtworks] = useState([]);
@@ -157,11 +158,13 @@ export default function GalleryTab({ userRole, userCountry, filters }) {
                     {/* Artwork Image */}
                     <div className="aspect-w-16 aspect-h-12 bg-gray-200">
                       {artwork.file_url ? (
-                        <img 
-                          src={artwork.file_url} 
-                          alt={artwork.title}
-                          className="w-full h-48 object-cover"
-                        />
+                        <div className="relative w-full h-48">
+                          <ArtworkImage
+                            src={artwork.file_url}
+                            alt={artwork.title}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          />
+                        </div>
                       ) : (
                         <div className="w-full h-48 bg-gradient-to-br from-purple-200 to-pink-200 flex items-center justify-center">
                           <div className="text-center text-gray-600">

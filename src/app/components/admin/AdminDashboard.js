@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { getArtWorksByCountryAndCategory } from '../../api/student_art_works';
-import { getMathWorksByCountryAndCategory } from '../../api/student_math_works';
+import { getArtWorksByCountryAndCategory, getArtWorksCount } from '../../api/student_art_works';
+import { getMathWorksByCountryAndCategory, getMathWorksCount } from '../../api/student_math_works';
 import { getAdminsAndTeachers } from '../../api/users_api';
 import { registerUser, deleteUser, updateUser, MIN_PASSWORD_LENGTH } from '../../api/auth_api';
 import { CATEGORIES, SUBJECTS, COUNTRIES, getCategoryName, isMainAdmin, isRegionalAdmin, getUserRoleName, formatDate } from '../../utils/constants';
@@ -14,7 +14,7 @@ import WorksManagement from './WorksManagement';
 import MainAdminWorksManagement from './MainAdminWorksManagement';
 import FeedbackTab from './FeedbackTab';
 import OlympiadTab from './OlympiadTab';
-import { getStudentsByCountry, updateStudent, deleteStudent } from '../../api/students_api';
+import { getStudentsByCountry, getStudentsCount, updateStudent, deleteStudent } from '../../api/students_api';
 import DateSelector from './DateSelector';
 import { getCategoriesBySubject } from '../../utils/constants';
 
@@ -169,6 +169,100 @@ function AddRepresentativeForm({ onClose, onSuccess }) {
   );
 }
 
+// Карточка метрики с анимацией счётчика от 0 до значения.
+// Объявлена на уровне модуля: внутри компонента React считал бы её новым типом
+// на каждом рендере и размонтировал бы карточку, сбрасывая анимацию.
+function AnimatedNumber({ value, label, color, icon }) {
+  const [displayValue, setDisplayValue] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  // Именно ref, а не state: флаг не должен попадать в зависимости эффекта,
+  // иначе его установка перезапускает эффект и cleanup гасит таймер.
+  const hasAnimatedRef = useRef(false);
+
+  useEffect(() => {
+    if (value === null) {
+      setIsAnimating(false);
+      return;
+    }
+
+    // Данные уже досчитались (перезагрузка статистики) — обновляем без анимации.
+    if (hasAnimatedRef.current) {
+      setDisplayValue(value);
+      setIsAnimating(false);
+      return;
+    }
+
+    if (value <= 0) {
+      hasAnimatedRef.current = true;
+      setDisplayValue(0);
+      setIsAnimating(false);
+      return;
+    }
+
+    setIsAnimating(true);
+
+    const duration = 800; // 0.8 секунды
+    const steps = 20;
+    const stepDuration = duration / steps;
+    let currentStep = 0;
+
+    const timer = setInterval(() => {
+      currentStep++;
+      setDisplayValue(Math.min(Math.round((value / steps) * currentStep), value));
+
+      if (currentStep >= steps) {
+        clearInterval(timer);
+        // Флаг поднимаем только после завершения: если ставить его до анимации,
+        // прерванный прогон (StrictMode, уход со вкладки) уходит в ветку выше и
+        // не перезапускается, оставляя isAnimating навсегда в true.
+        hasAnimatedRef.current = true;
+        setDisplayValue(value);
+        setIsAnimating(false);
+      }
+    }, stepDuration);
+
+    return () => clearInterval(timer);
+  }, [value]);
+
+  if (value === null) {
+    return (
+      <div className={`${color} p-6 rounded-lg relative overflow-hidden`}>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+        <h3 className="text-lg font-semibold mb-2">{label}</h3>
+        <div className="flex items-center space-x-2">
+          <span className="text-3xl">{icon}</span>
+          <div className="flex space-x-1">
+            <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          </div>
+        </div>
+        <p className="text-sm mt-2 opacity-75">Loading...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`${color} p-6 rounded-lg transition-all duration-300 ${isAnimating ? 'scale-105' : 'scale-100'}`}>
+      <h3 className="text-lg font-semibold mb-2">{label}</h3>
+      <div className="flex items-center space-x-3">
+        <span className="text-3xl">{icon}</span>
+        <div className="text-3xl font-bold relative">
+          <span className={`transition-all duration-200`}>
+            {displayValue.toLocaleString()}
+          </span>
+          {isAnimating && (
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse rounded"></div>
+          )}
+        </div>
+      </div>
+      <p className="text-sm mt-2 opacity-75">
+        {isAnimating ? 'Counting...' : `${displayValue.toLocaleString()} total`}
+      </p>
+    </div>
+  );
+}
+
 // Главная админ панель (role_id = 1 или role = 'owner')
 function MainAdminDashboard({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('overview');
@@ -211,173 +305,50 @@ function MainAdminDashboard({ user, onLogout }) {
     setEditingRepresentative(representative);
   };
 
-  function AnimatedNumber({ value, label, color, icon }) {
-    const [displayValue, setDisplayValue] = useState(0);
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [hasAnimated, setHasAnimated] = useState(false);
-
-    useEffect(() => {
-      if (value !== null && value !== displayValue && !hasAnimated) {
-        setIsAnimating(true);
-        setHasAnimated(true);
-
-        // Анимация счетчика от 0 до конечного значения
-        const duration = 800; // 0.8 секунды
-        const steps = 20;
-        const stepValue = value / steps;
-        const stepDuration = duration / steps;
-
-        let currentStep = 0;
-
-        const timer = setInterval(() => {
-          currentStep++;
-          const currentValue = Math.min(Math.round(stepValue * currentStep), value);
-          setDisplayValue(currentValue);
-
-          if (currentStep >= steps || currentValue >= value) {
-            clearInterval(timer);
-            setDisplayValue(value);
-            setIsAnimating(false);
-          }
-        }, stepDuration);
-
-        return () => clearInterval(timer);
-      } else if (value !== null && hasAnimated) {
-        // Если данные уже загружались, обновляем без анимации
-        setDisplayValue(value);
-      }
-    }, [value, hasAnimated]);
-
-    if (value === null) {
-      return (
-        <div className={`${color} p-6 rounded-lg relative overflow-hidden`}>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
-          <h3 className="text-lg font-semibold mb-2">{label}</h3>
-          <div className="flex items-center space-x-2">
-            <span className="text-3xl">{icon}</span>
-            <div className="flex space-x-1">
-              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-              <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-            </div>
-          </div>
-          <p className="text-sm mt-2 opacity-75">Loading...</p>
-        </div>
-      );
-    }
-
-    return (
-      <div className={`${color} p-6 rounded-lg transition-all duration-300 ${isAnimating ? 'scale-105' : 'scale-100'}`}>
-        <h3 className="text-lg font-semibold mb-2">{label}</h3>
-        <div className="flex items-center space-x-3">
-          <span className="text-3xl">{icon}</span>
-          <div className="text-3xl font-bold relative">
-            <span className={`transition-all duration-200`}>
-              {displayValue.toLocaleString()}
-            </span>
-            {isAnimating && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse rounded"></div>
-            )}
-          </div>
-        </div>
-        <p className="text-sm mt-2 opacity-75">
-          {isAnimating ? 'Counting...' : `${displayValue.toLocaleString()} total`}
-        </p>
-      </div>
-    );
-  }
-
-
   const loadOverviewStats = async () => {
-    try {
-      console.log('🔄 Loading overview statistics...');
+    console.log('🔄 Loading overview statistics...');
 
-      // Сначала устанавливаем null для показа анимации загрузки
-      setOverviewStats({
-        totalUsers: null,
-        totalStudents: null,
-        totalArtworks: null,
-        totalMathworks: null
-      });
+    // Сначала устанавливаем null для показа анимации загрузки
+    setOverviewStats({
+      totalUsers: null,
+      totalStudents: null,
+      totalArtworks: null,
+      totalMathworks: null
+    });
 
-      // Загружаем пользователей
-      const usersData = await getAdminsAndTeachers();
+    // Считать работы и участников перебором стран и категорий — это сотни
+    // последовательных запросов, которые ещё и тянут записи целиком ради длины
+    // массива. Те же числа бэкенд отдаёт одним COUNT(*) на эндпоинт.
+    // Список представителей грузим полностью — он нужен другим вкладкам.
+    const [usersRes, studentsRes, artRes, mathRes] = await Promise.allSettled([
+      getAdminsAndTeachers(),
+      getStudentsCount(),
+      getArtWorksCount(),
+      getMathWorksCount()
+    ]);
 
-      // Обновляем первую статистику
-      setOverviewStats(prev => ({
-        ...prev,
-        totalUsers: usersData?.length || 0
-      }));
+    // allSettled + fallback в 0: упавший запрос не должен оставить свою карточку
+    // в бесконечной загрузке, а остальные метрики всё равно показываем.
+    const metric = (result, pick, name) => {
+      if (result.status === 'fulfilled') {
+        return pick(result.value) ?? 0;
+      }
+      console.error(`❌ Error loading ${name}:`, result.reason);
+      return 0;
+    };
 
-      // Загружаем студентов с небольшой задержкой для эффекта
-      setTimeout(async () => {
-        const allStudents = [];
-        for (const country of COUNTRIES) {
-          try {
-            const countryStudents = await getStudentsByCountry(country);
-            if (countryStudents && countryStudents.length > 0) {
-              allStudents.push(...countryStudents);
-            }
-          } catch (error) {
-            console.warn(`No students in ${country}`);
-          }
-        }
-
-        setOverviewStats(prev => ({
-          ...prev,
-          totalStudents: allStudents.length
-        }));
-      }, 300);
-
-      // Загружаем работы с дополнительной задержкой
-      setTimeout(async () => {
-        let allArtworks = [];
-        let allMathworks = [];
-
-        for (const country of COUNTRIES) {
-          for (const category of CATEGORIES) {
-            try {
-              const artworks = await getArtWorksByCountryAndCategory(country, category.id);
-              if (artworks && artworks.length > 0) {
-                allArtworks.push(...artworks);
-              }
-            } catch (error) {
-              // Игнорируем ошибки
-            }
-
-            try {
-              const mathworks = await getMathWorksByCountryAndCategory(country, category.id);
-              if (mathworks && mathworks.length > 0) {
-                allMathworks.push(...mathworks);
-              }
-            } catch (error) {
-              // Игнорируем ошибки
-            }
-          }
-        }
-
-        setOverviewStats(prev => ({
-          ...prev,
-          totalArtworks: allArtworks.length,
-          totalMathworks: allMathworks.length
-        }));
-      }, 600);
-
-      // Также обновляем пользователей для других вкладок
-      setUsers(usersData || []);
-
-      console.log('📊 Overview stats loading initiated');
-
-    } catch (error) {
-      console.error('❌ Error loading overview stats:', error);
-      // В случае ошибки показываем 0 вместо null
-      setOverviewStats({
-        totalUsers: 0,
-        totalStudents: 0,
-        totalArtworks: 0,
-        totalMathworks: 0
-      });
+    if (usersRes.status === 'fulfilled') {
+      setUsers(usersRes.value || []);
     }
+
+    setOverviewStats({
+      totalUsers: metric(usersRes, (data) => data?.length, 'representatives'),
+      totalStudents: metric(studentsRes, (data) => data?.total_students, 'participants'),
+      totalArtworks: metric(artRes, (data) => data?.total_art_works, 'art works'),
+      totalMathworks: metric(mathRes, (data) => data?.total_math_works, 'math works')
+    });
+
+    console.log('📊 Overview stats loaded');
   };
 
   // Загрузка данных для главного админа - СТУДЕНТЫ
@@ -519,10 +490,15 @@ function MainAdminDashboard({ user, onLogout }) {
     setLoading(false);
   };
 
-  // Загружаем базовые данные при монтировании
+  // Список участников грузим только на его вкладке: без этого условия при
+  // открытии дашборда уходил перебор стран (запрос на каждую), который занимал
+  // соединения браузера и тормозил счётчики Overview. Список представителей для
+  // остальных вкладок приходит из loadOverviewStats.
   useEffect(() => {
-    loadStudentsData();
-  }, [studentsFilters]);
+    if (activeTab === 'students') {
+      loadStudentsData();
+    }
+  }, [studentsFilters, activeTab]);
 
   // Загружаем данные работ при изменении worksFilters
   useEffect(() => {

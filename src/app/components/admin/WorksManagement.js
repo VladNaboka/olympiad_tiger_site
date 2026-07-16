@@ -6,7 +6,7 @@ import { getArtWorksByCountryAndCategory, uploadArtWork, setArtWorkScore } from 
 import { getMathWorksByCountryAndCategory, createMathWork, setMathWorkScore } from '../../api/student_math_works';
 import { CATEGORIES, ART_CATEGORIES, MATH_CATEGORIES, getCategoryName } from '../../utils/constants';
 import { validateImageFile, IMAGE_ACCEPT_ATTR } from '../../utils/fileValidation';
-import { safeImageUrl } from '../../utils/safeUrl';
+import ArtworkImage from '../ArtworkImage';
 
 export default function WorksManagement({ user }) {
   const [activeTab, setActiveTab] = useState('art'); // 'art' or 'math'
@@ -234,14 +234,13 @@ export default function WorksManagement({ user }) {
             <div key={work.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
               {activeTab === 'art' ? (
                 <div className="relative">
-                  <img
-                    src={safeImageUrl(work.file_path)}
-                    alt={work.title}
-                    className="w-full h-48 object-cover"
-                    onError={(e) => {
-                      e.target.src = "/image/artwork-sample.png";
-                    }}
-                  />
+                  <div className="relative w-full h-48">
+                    <ArtworkImage
+                      src={work.file_path}
+                      alt={work.title}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
                   <div className="absolute top-2 left-2">
                     <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">🎨 Art</span>
                   </div>

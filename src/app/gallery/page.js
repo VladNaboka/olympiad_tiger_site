@@ -8,7 +8,7 @@ import { getAllArtWorks } from '../api/student_art_works';
 import { getAllMathWorks } from '../api/student_math_works';
 import { getStudentById } from '../api/students_api';
 import { ART_CATEGORIES, MATH_CATEGORIES, getCategoryName, getCategoriesBySubject } from '../utils/constants';
-import { safeImageUrl } from '../utils/safeUrl';
+import ArtworkImage from '../components/ArtworkImage';
 
 export default function Gallery() {
   // Устанавливаем значения по умолчанию
@@ -415,14 +415,13 @@ export default function Gallery() {
                     className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
                   >
                     {(item.subject === "Artworks" || subject === "Artworks") ? (
-                      <img
-                        src={safeImageUrl(item.file_path)}
-                        alt={item.title}
-                        className="w-full h-56 object-cover"
-                        onError={(e) => {
-                          e.target.src = "/image/artwork-placeholder.png";
-                        }}
-                      />
+                      <div className="relative w-full h-56">
+                        <ArtworkImage
+                          src={item.file_path}
+                          alt={item.title}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      </div>
                     ) : (
                       <div className="w-full h-56 bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-100 flex items-center justify-center">
                         <div className="text-6xl">📐</div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { getArtWorksByCountryAndCategory, deleteArtWork, setArtWorkScore, uploadArtWork } from '../../api/student_art_works';
 import { COUNTRIES, CATEGORIES, getCategoryName } from '../../utils/constants';
 import { validateImageFile, IMAGE_ACCEPT_ATTR } from '../../utils/fileValidation';
-import { safeImageUrl } from '../../utils/safeUrl';
+import ArtworkImage from '../ArtworkImage';
 
 export default function GlobalGalleryTab({ filters }) {
   const [allArtworks, setAllArtworks] = useState([]);
@@ -173,11 +173,13 @@ export default function GlobalGalleryTab({ filters }) {
                       className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
                       onClick={() => setSelectedArtwork(artwork)}
                     >
-                      <img
-                        src={safeImageUrl(artwork.file_path)}
-                        alt={artwork.title}
-                        className="w-full h-48 object-cover"
-                      />
+                      <div className="relative w-full h-48">
+                        <ArtworkImage
+                          src={artwork.file_path}
+                          alt={artwork.title}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                        />
+                      </div>
                       <div className="p-4">
                         <h4 className="font-semibold text-gray-800 mb-2 truncate">
                           {artwork.title}
