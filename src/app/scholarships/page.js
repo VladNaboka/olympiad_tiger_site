@@ -5,59 +5,10 @@ import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
 import { apiRequest } from '../api/base_api';
+import gifts from '../../data/scholarships.json';
 
 const ITEMS_PER_PAGE = 16;
 
-const placeholderCarousel = [
-  "/image/scholarships/wycome_1.jpg",
-];
-
-const gifts = [
-  {
-    id: 1,
-    companyName: "Wycombe Abbey International",
-    description: "Every Child Can Excel",
-    website: "http://www.wycombeabbeyasia.com",
-    carousel: [
-      "/image/scholarships/wycome_1.jpg",
-      "/image/scholarships/wycome_2.jpg",
-      "/image/scholarships/wycome_3.jpg",
-      "/image/scholarships/wycome_4.jpg",
-      "/image/scholarships/wycome_5.jpg"
-    ]
-  },
-  {
-    id: 2,
-    companyName: "EDUEXPLORA",
-    description: "Explore Your Potential at Top Universities",
-    website: "https://www.eduexplora.com/",
-    carousel: [
-      "/image/scholarships/eduexplora_2-1.jpg",
-      "/image/scholarships/eduexplora_1-1.jpg",
-      "/image/scholarships/eduexplora_3-1.jpg",
-      "/image/scholarships/eduexplora_0-1.jpg",
-      "/image/scholarships/eduexplora_4.png"
-    ]
-  },
-  {
-    id: 3,
-    companyName: "William Academy",
-    description: "Summer Camps in Toronto",
-    website: "https://williamacademy.ca",
-    carousel: [
-      "/image/scholarships/william_1.jpg",
-      "/image/scholarships/william_2.jpg",
-      "/image/scholarships/william_3.jpg"
-    ]
-  },
-  ...Array.from({ length: 37 }, (_, i) => ({
-    id: i + 4,
-    companyName: "School Name",
-    description: "",
-    website: "#",
-    carousel: placeholderCarousel
-  }))
-];
 
 export default function Scholarships() {
   const [currentPage, setCurrentPage] = useState(0);
@@ -264,21 +215,43 @@ export default function Scholarships() {
   );
 }
 
+function initials(name) {
+  return name
+    .replace(/^The\s+/i, '')
+    .split(/\s+/)
+    .filter(w => /[a-z0-9]/i.test(w))
+    .slice(0, 2)
+    .map(w => w[0].toUpperCase())
+    .join('');
+}
+
 function GiftCard({ gift }) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const showImage = gift.carousel.length > 0 && !imageFailed;
+
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-gray-100">
-        <img
-          src={gift.carousel[0]}
-          alt={gift.companyName}
-          className="w-full h-full object-cover"
-        />
+        {showImage ? (
+          <img
+            src={gift.carousel[0]}
+            alt={gift.companyName}
+            onError={() => setImageFailed(true)}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200">
+            <span className="text-3xl md:text-4xl font-bold text-orange-500/70 tracking-wide">
+              {initials(gift.companyName)}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Info */}
       <div className="p-3">
-        <p className="font-bold text-sm text-gray-900 truncate">{gift.companyName}</p>
+        <p className="font-bold text-sm text-gray-900 line-clamp-2">{gift.companyName}</p>
         {gift.description && (
           <p className="text-xs text-gray-500 truncate mt-0.5">{gift.description}</p>
         )}
