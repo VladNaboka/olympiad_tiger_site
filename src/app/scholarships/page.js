@@ -5,9 +5,15 @@ import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
 import { apiRequest } from '../api/base_api';
-import gifts from '../../data/scholarships.json';
+import scholarships from '../../data/scholarships.json';
 
 const ITEMS_PER_PAGE = 16;
+
+const sortKey = (name) => name.replace(/^(the|a|an)\s+/i, '');
+
+const gifts = [...scholarships].sort((a, b) =>
+  sortKey(a.companyName).localeCompare(sortKey(b.companyName), 'en', { sensitivity: 'base', numeric: true })
+);
 
 
 export default function Scholarships() {
