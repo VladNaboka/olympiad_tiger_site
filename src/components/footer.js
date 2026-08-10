@@ -1,20 +1,21 @@
 'use client';
 
 import Link from 'next/link';
+import PaymentBadges from './PaymentBadges';
 
 export default function Footer() {
   return (
     <footer className="bg-black text-white py-10">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-xl font-bold mb-4 text-orange-400">Tigers Olympiad</h3>
             <p className="text-gray-300">
-              A prestigious global event where the brightest young minds aged 6-17 meet challenge, 
+              A prestigious global event where the brightest young minds aged 6-17 meet challenge,
               creativity, and innovation, showcasing excellence in Mathematics and Art.
             </p>
           </div>
-          
+
           <div>
             <h3 className="text-xl font-bold mb-4 text-orange-400">Quick Links</h3>
             <ul className="space-y-2">
@@ -50,7 +51,34 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          
+
+          <div>
+            <h3 className="text-xl font-bold mb-4 text-orange-400">Legal</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/terms" className="text-gray-300 hover:text-pink-400 transition-colors">
+                  Public Offer / Terms
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="text-gray-300 hover:text-pink-400 transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/refund" className="text-gray-300 hover:text-pink-400 transition-colors">
+                  Refund Policy
+                </Link>
+              </li>
+            </ul>
+            <div className="mt-4 text-gray-400 text-sm space-y-1">
+              <p>IE &quot;TIGERS OLYMPIAD&quot;</p>
+              <p>BIN: 711222402000</p>
+              <p>Republic of Kazakhstan</p>
+              <p>Shymkent, 15th microdistrict, house 2, office 22</p>
+            </div>
+          </div>
+
           <div>
             <h3 className="text-xl font-bold mb-4 text-orange-400">Contact Us</h3>
             <p className="text-gray-300 mb-2">Phone: +7 700 595 1000</p>
@@ -72,8 +100,9 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="border-t border-gray-800 mt-10 pt-6 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} International Tigers Olympiad. All rights reserved.</p>
+        <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col items-center gap-4">
+          <PaymentBadges />
+          <p className="text-center text-gray-400">&copy; {new Date().getFullYear()} International Tigers Olympiad. All rights reserved.</p>
         </div>
       </div>
     </footer>

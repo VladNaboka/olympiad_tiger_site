@@ -1,13 +1,61 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import Navbar from '../../../components/navbar';
 import Footer from '../../../components/footer';
+import PaymentBadges from '../../../components/PaymentBadges';
 import { registerOlympiad } from '../../api/olympiad_api';
 
-// Временно скрываем форму регистрации/оплаты олимпиады.
-// Чтобы снова включить — поставить true (весь код формы ниже сохранён).
-const REGISTRATION_ENABLED = false;
+const PARTICIPATION_FEE_USD = 20;
+
+const HOW_IT_WORKS_STEPS = [
+  { title: 'Register & Choose an Olympiad', description: 'Fill in the participant’s name, email, and phone number, and select Math or Art as the olympiad category — all in one form.' },
+  { title: 'Pay Online', description: `Pay the ${PARTICIPATION_FEE_USD} USD registration fee securely via our payment provider.` },
+  { title: 'Get Confirmation', description: 'Receive an email confirmation with your registration code and payment receipt.' },
+];
+
+function HowItWorks() {
+  return (
+    <div className="w-full max-w-3xl mx-auto mb-10">
+      <h2 className="text-2xl font-bold text-orange-600 mb-2 text-center">How Registration Works</h2>
+      <p className="text-gray-600 mb-6 text-center">
+        There is no personal account &mdash; everything happens in one flow, and your
+        confirmation arrives by email.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {HOW_IT_WORKS_STEPS.map((step, i) => (
+          <div key={step.title} className="bg-white rounded-xl shadow p-4 text-center">
+            <div className="text-3xl font-bold text-orange-500 mb-2">{i + 1}</div>
+            <div className="font-semibold text-gray-800 mb-1">{step.title}</div>
+            <p className="text-sm text-gray-600">{step.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 bg-white rounded-xl shadow p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <div className="text-sm text-gray-500">Participation fee</div>
+          <div className="text-2xl font-bold text-orange-600">{PARTICIPATION_FEE_USD} USD</div>
+          <p className="text-xs text-gray-500 mt-1">
+            See our{' '}
+            <Link href="/terms" className="underline hover:text-orange-600">Terms</Link>,{' '}
+            <Link href="/privacy" className="underline hover:text-orange-600">Privacy Policy</Link>{' '}
+            and{' '}
+            <Link href="/refund" className="underline hover:text-orange-600">Refund Policy</Link>.
+          </p>
+        </div>
+        <div>
+          <div className="text-sm text-gray-500 mb-2 text-center sm:text-right">We accept</div>
+          <PaymentBadges />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Чтобы снова скрыть форму регистрации/оплаты олимпиады — поставить false.
+const REGISTRATION_ENABLED = true;
 
 // Basic client-side format checks
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,6 +69,7 @@ export default function OlympiadRegister() {
     phone: '',
     olympiad: 'Math',
   });
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState('');
@@ -57,6 +106,10 @@ export default function OlympiadRegister() {
 
     if (form.olympiad !== 'Math' && form.olympiad !== 'Art') {
       next.olympiad = 'Please choose an olympiad';
+    }
+
+    if (!agreedToTerms) {
+      next.agreedToTerms = 'You must accept the Public Offer to continue';
     }
 
     setErrors(next);
@@ -104,7 +157,9 @@ export default function OlympiadRegister() {
       >
         <Navbar />
 
-        <div className="flex-1 flex items-center justify-center py-40 md:py-48 px-4">
+        <div className="flex-1 flex flex-col items-center justify-center py-24 md:py-32 px-4">
+          <HowItWorks />
+
           <div className="text-center max-w-2xl">
             <h1 className="text-4xl md:text-5xl font-bold text-orange-600 mb-6">
               Coming Soon
@@ -129,7 +184,9 @@ export default function OlympiadRegister() {
     >
       <Navbar />
 
-      <div className="flex-1 flex items-center justify-center py-24 md:py-32 px-4">
+      <div className="flex-1 flex flex-col items-center justify-center py-24 md:py-32 px-4">
+        <HowItWorks />
+
         <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8">
           <h1 className="text-3xl md:text-4xl font-bold text-orange-600 mb-2 text-center">
             Olympiad Registration
@@ -232,11 +289,45 @@ export default function OlympiadRegister() {
                   <p className="text-red-600 text-sm mt-1">{errors.olympiad}</p>
                 )}
               </div>
+
+              {/* Offer agreement */}
+              <div>
+                <label className="flex items-start gap-3 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={agreedToTerms}
+                    onChange={(e) => {
+                      setAgreedToTerms(e.target.checked);
+                      setErrors((prev) => ({ ...prev, agreedToTerms: undefined }));
+                    }}
+                    disabled={loading}
+                    className="mt-1 h-4 w-4 accent-orange-500"
+                  />
+                  <span className="text-sm text-gray-700">
+                    I have read and agree to the{' '}
+                    <Link href="/terms" target="_blank" className="text-orange-600 underline">
+                      Public Offer
+                    </Link>
+                    ,{' '}
+                    <Link href="/privacy" target="_blank" className="text-orange-600 underline">
+                      Privacy Policy
+                    </Link>{' '}
+                    and{' '}
+                    <Link href="/refund" target="_blank" className="text-orange-600 underline">
+                      Refund Policy
+                    </Link>
+                    . *
+                  </span>
+                </label>
+                {errors.agreedToTerms && (
+                  <p className="text-red-600 text-sm mt-1">{errors.agreedToTerms}</p>
+                )}
+              </div>
             </div>
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !agreedToTerms}
               className="w-full mt-8 bg-orange-500 text-white py-3 px-6 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {loading ? (
