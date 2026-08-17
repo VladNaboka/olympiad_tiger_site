@@ -1,13 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import LegalLayout from '../../components/LegalLayout';
+import LangToggle from '../../components/LangToggle';
 
-export default function RefundPage() {
+function EnglishContent() {
   return (
-    <LegalLayout
-      title="Refund Policy"
-      updated="August 10, 2026"
-    >
+    <>
       <p>
         This Refund Policy applies to payments made for participation in the &quot;TIGERS
         OLYMPIAD&quot; International Olympiad through https://www.tigersedu.com and forms
@@ -17,7 +16,7 @@ export default function RefundPage() {
 
       <h2>1. Cancellation by the Organizer</h2>
       <p>
-        If the Olympiad is cancelled on the initiative of IE &quot;TIGERS OLYMPIAD&quot;
+        If the Olympiad is cancelled on the initiative of LLP &quot;WILLIAM ACADEMY&quot;
         (the &quot;Contractor&quot;), 100% of the paid participation fee will be refunded
         to the Customer within 30 banking days.
       </p>
@@ -53,10 +52,80 @@ export default function RefundPage() {
 
       <h2>5. Contact</h2>
       <ul>
-        <li>Organization Name: IE &quot;TIGERS OLYMPIAD&quot;</li>
+        <li>Organization Name: LLP &quot;WILLIAM ACADEMY&quot;</li>
         <li>Email: info@tigersedu.com</li>
         <li>Phone: +7 700 595 1000</li>
       </ul>
+    </>
+  );
+}
+
+function RussianContent() {
+  return (
+    <>
+      <p>
+        Настоящая Политика возврата денежных средств применяется к платежам за участие в
+        международной олимпиаде «TIGERS OLYMPIAD» через сайт https://www.tigersedu.com и
+        является частью нашей{' '}
+        <a href="/terms" className="text-orange-600 underline">Публичной оферты</a>.
+      </p>
+
+      <h2>1. Отмена олимпиады по инициативе организатора</h2>
+      <p>
+        В случае отмены Олимпиады по инициативе ТОО «WILLIAM ACADEMY» («Исполнитель»),
+        Заказчику возвращается 100% уплаченных денежных средств в течение 30 банковских
+        дней.
+      </p>
+
+      <h2>2. Отказ участника от участия</h2>
+      <ul>
+        <li>
+          При уведомлении более чем за 30 дней до даты проведения Олимпиады — возвращается
+          100% стоимости за вычетом фактических комиссий платежных систем.
+        </li>
+        <li>
+          При уведомлении менее чем за 30 дней до начала — денежные средства не
+          возвращаются, так как идут на покрытие фактически понесенных расходов на
+          подготовку (печать материалов, бронирование платформ/площадок, наградная
+          продукция).
+        </li>
+      </ul>
+
+      <h2>3. Как оформить возврат</h2>
+      <p>
+        Чтобы запросить возврат, напишите нам на info@tigersedu.com, указав номер
+        заказа/регистрации и причину отказа. Мы подтвердим получение запроса в течение 2
+        рабочих дней.
+      </p>
+
+      <h2>4. Способ и сроки возврата</h2>
+      <p>
+        Одобренные возвраты выполняются тем же способом и на те же реквизиты/карту, с
+        которых была произведена оплата. Возврат обычно осуществляется в течение 30
+        банковских дней, точный срок поступления средств может зависеть от вашего банка
+        или платежного провайдера.
+      </p>
+
+      <h2>5. Контакты</h2>
+      <ul>
+        <li>Наименование организации: ТОО «WILLIAM ACADEMY»</li>
+        <li>Email: info@tigersedu.com</li>
+        <li>Телефон: +7 700 595 1000</li>
+      </ul>
+    </>
+  );
+}
+
+export default function RefundPage() {
+  const [lang, setLang] = useState('en');
+
+  return (
+    <LegalLayout
+      title={lang === 'en' ? 'Refund Policy' : 'Политика возврата денежных средств'}
+      updated={lang === 'en' ? 'Last updated: August 10, 2026' : 'Дата последнего обновления: 10.08.2026'}
+      langToggle={<LangToggle lang={lang} setLang={setLang} />}
+    >
+      {lang === 'en' ? <EnglishContent /> : <RussianContent />}
     </LegalLayout>
   );
 }

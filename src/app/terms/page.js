@@ -1,13 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import LegalLayout from '../../components/LegalLayout';
+import LangToggle from '../../components/LangToggle';
 
-export default function TermsPage() {
+function EnglishContent() {
   return (
-    <LegalLayout
-      title="Public Offer Agreement"
-      updated="August 10, 2026"
-    >
+    <>
       <p>
         For the Provision of Services for Organizing and Conducting the International
         Olympiad &quot;TIGERS OLYMPIAD&quot;. Website: https://www.tigersedu.com
@@ -15,8 +14,8 @@ export default function TermsPage() {
 
       <h2>1. General Provisions</h2>
       <p>
-        1.1. This document constitutes an official offer (public offer) of the Sole
-        Proprietorship (IE) &quot;TIGERS OLYMPIAD&quot; (hereinafter referred to as the
+        1.1. This document constitutes an official offer (public offer) of LLP
+        &quot;WILLIAM ACADEMY&quot; (hereinafter referred to as the
         &quot;Contractor&quot;) and contains all essential terms of the contract for the
         provision of services for participation in the &quot;TIGERS OLYMPIAD&quot;
         International Mathematics Olympiad.
@@ -64,8 +63,8 @@ export default function TermsPage() {
       <p>
         4.1. The cost of participation (registration fee) is determined in accordance with
         the current tariffs specified on the website https://www.tigersedu.com at the time
-        of payment. The current registration fee is <strong>20 USD</strong> per
-        participant.
+        of payment. The current registration fee is <strong>10,000 KZT</strong>
+        (approximately 20 USD) per participant.
       </p>
       <p>
         4.2. Payment is made electronically via international payment systems integrated
@@ -153,14 +152,193 @@ export default function TermsPage() {
 
       <h2>10. Details and Contact Information of the Contractor</h2>
       <ul>
-        <li>Organization Name: IE &quot;TIGERS OLYMPIAD&quot;</li>
-        <li>BIN (Business Identification Number): 711222402000</li>
+        <li>Organization Name: LLP &quot;WILLIAM ACADEMY&quot;</li>
+        <li>BIN (Business Identification Number): 220840043067</li>
         <li>Country of registration: Republic of Kazakhstan</li>
-        <li>Legal Address: Shymkent, 15th microdistrict, house 2, office 22, Republic of Kazakhstan</li>
+        <li>Legal Address: Almaty, Al-Farabi Avenue, 1B, Republic of Kazakhstan</li>
         <li>Email: info@tigersedu.com</li>
         <li>Phone: +7 700 595 1000</li>
         <li>Official Website: https://www.tigersedu.com</li>
       </ul>
+      <p>Bank details:</p>
+      <ul>
+        <li>Bank: JSC &quot;Kaspi Bank&quot;</li>
+        <li>KBE: 17</li>
+        <li>BIC: CASPKZKA</li>
+        <li>Account Number: KZ23722S000018318072</li>
+      </ul>
+    </>
+  );
+}
+
+function RussianContent() {
+  return (
+    <>
+      <p>
+        На оказание услуг по организации и проведению международной олимпиады «TIGERS
+        OLYMPIAD». Ссылка на сайт: https://www.tigersedu.com
+      </p>
+
+      <h2>1. Общие положения</h2>
+      <p>
+        1.1. Настоящий документ является официальным предложением (публичной офертой)
+        компании ТОО «WILLIAM ACADEMY» (в дальнейшем — «Исполнитель») и содержит все
+        существенные условия договора по оказанию услуг по участию в международной
+        олимпиаде по математике «TIGERS OLYMPIAD».
+      </p>
+      <p>
+        1.2. В соответствии с международными стандартами торговли и законодательством
+        Республики Казахстан оплата Услуг или заполнение регистрационной формы на сайте
+        https://www.tigersedu.com является полным и безоговорочным акцептом (принятием)
+        условий настоящего Договора (далее — «Акцепт»).
+      </p>
+      <p>
+        1.3. Физическое или юридическое лицо (в том числе международный партнер, школа,
+        координатор или законный представитель участника), совершившее Акцепт оферты,
+        становится «Заказчиком».
+      </p>
+
+      <h2>2. Предмет договора</h2>
+      <p>
+        2.1. Исполнитель обязуется оказать услуги по организации, проведению и подведению
+        итогов международной олимпиады по математике «TIGERS OLYMPIAD» (далее —
+        «Олимпиада»), а Заказчик обязуется оплатить эти услуги в порядке и на условиях,
+        предусмотренных настоящей Офертой.
+      </p>
+      <p>
+        2.2. Детали проведения Олимпиады (даты проведения, возрастные категории, формат —
+        онлайн/офлайн, регламент, призовой фонд) публикуются на официальном сайте
+        Исполнителя: https://www.tigersedu.com.
+      </p>
+
+      <h2>3. Порядок заключения договора и регистрации</h2>
+      <p>
+        3.1. Для участия в Олимпиаде Заказчик оформляет заявку через сайт
+        https://www.tigersedu.com или предоставляет список участников через согласованные
+        каналы связи.
+      </p>
+      <p>
+        3.2. Договор считается заключенным в письменной форме с момента получения
+        Исполнителем подтверждения о полной или частичной (если предусмотрено) оплате
+        стоимости участия от Заказчика.
+      </p>
+
+      <h2>4. Стоимость услуг и порядок расчетов</h2>
+      <p>
+        4.1. Стоимость участия (организационный взнос) определяется в соответствии с
+        действующими тарифами, указанными на сайте https://www.tigersedu.com на момент
+        оплаты. Текущий организационный взнос — <strong>10 000 ₸</strong>
+        (примерно 20 USD) с участника.
+      </p>
+      <p>
+        4.2. Оплата производится в безналичном порядке через интегрированные на сайте
+        международные платежные системы.
+      </p>
+      <p>
+        4.3. Валюта платежа определяется на сайте, как правило, будет использован USD. В
+        случае конвертации валют комиссию банка-эмитента или платежной системы оплачивает
+        Заказчик.
+      </p>
+      <p>
+        4.4. Моментом оплаты считается зачисление денежных средств на расчетный счет
+        Исполнителя или получение подтверждения от платежного эквайринга.
+      </p>
+
+      <h2>5. Права и обязанности сторон</h2>
+      <p>5.1. Исполнитель обязуется:</p>
+      <ul>
+        <li>Обеспечить проведение Олимпиады в соответствии с заявленным регламентом и расписанием.</li>
+        <li>Предоставить необходимые методические материалы.</li>
+        <li>Обеспечить объективную проверку работ и опубликовать результаты.</li>
+        <li>Выдать сертификаты, дипломы или награды участникам по итогам Олимпиады в электронном или печатном виде (в зависимости от пакета).</li>
+      </ul>
+      <p>5.2. Заказчик обязуется:</p>
+      <ul>
+        <li>Предоставлять достоверные данные при регистрации участников.</li>
+        <li>Своевременно и в полном объеме оплачивать организационный взнос.</li>
+        <li>Обеспечить соблюдение участниками правил и регламента Олимпиады (включая правила академической честности).</li>
+      </ul>
+
+      <h2>6. Условия возврата денежных средств (Refund Policy)</h2>
+      <p>
+        6.1. В случае отмены Олимпиады по инициативе Исполнителя, Заказчику возвращается
+        100% уплаченных денежных средств в течение 30 банковских дней.
+      </p>
+      <p>6.2. В случае отказа Заказчика от участия:</p>
+      <ul>
+        <li>При уведомлении Исполнителя более чем за 30 дней до даты проведения Олимпиады — возвращается 100% стоимости за вычетом фактических комиссий платежных систем.</li>
+        <li>При уведомлении менее чем за 30 дней до начала — денежные средства не возвращаются, так как идут на покрытие фактически понесенных расходов на подготовку (печать материалов, бронирование платформ/площадок, наградная продукция).</li>
+      </ul>
+      <p>
+        6.3. Возврат денежных средств осуществляется тем же способом и на те же
+        реквизиты/карту, с которых была произведена оплата. Подробнее см. нашу{' '}
+        <a href="/refund" className="text-orange-600 underline">Политику возврата</a>.
+      </p>
+
+      <h2>7. Интеллектуальная собственность</h2>
+      <p>
+        7.1. Все олимпиадные задания, логотипы, методические материалы, дизайн сайта
+        TIGERS OLYMPIAD являются интеллектуальной собственностью Исполнителя.
+      </p>
+      <p>
+        7.2. Запрещается копирование, распространение или публикация олимпиадных заданий в
+        открытом доступе без письменного согласия Исполнителя.
+      </p>
+
+      <h2>8. Персональные данные и конфиденциальность</h2>
+      <p>
+        8.1. Заказчик дает согласие на обработку персональных данных (своих и/или
+        участников, представителем которых он является) в целях исполнения настоящего
+        Договора, а также для публикации результатов и фото/видеоотчетов Олимпиады.
+      </p>
+      <p>
+        8.2. Исполнитель обязуется не передавать персональные данные третьим лицам, за
+        исключением случаев, предусмотренных законодательством. Подробнее см. нашу{' '}
+        <a href="/privacy" className="text-orange-600 underline">Политику конфиденциальности</a>.
+      </p>
+
+      <h2>9. Форс-мажор и ответственность</h2>
+      <p>
+        9.1. Стороны освобождаются от ответственности за частичное или полное
+        неисполнение обязательств по Договору, если оно явилось следствием обстоятельств
+        непреодолимой силы (форс-мажор: технические сбои мировых интернет-магистралей,
+        стихийные бедствия, эпидемии, решения государственных органов и т.д.).
+      </p>
+      <p>
+        9.2. Ответственность Исполнителя ограничена суммой организационного взноса,
+        полученного от Заказчика за конкретную олимпиаду.
+      </p>
+
+      <h2>10. Реквизиты и контакты Исполнителя</h2>
+      <ul>
+        <li>Наименование организации: ТОО «WILLIAM ACADEMY»</li>
+        <li>БИН: 220840043067</li>
+        <li>Юридический адрес: г. Алматы, проспект Аль-Фараби, дом 1Б</li>
+        <li>Email: info@tigersedu.com</li>
+        <li>Телефон: +7 700 595 1000</li>
+        <li>Официальный сайт: https://www.tigersedu.com</li>
+      </ul>
+      <p>Банковские реквизиты:</p>
+      <ul>
+        <li>Банк: АО «Kaspi Bank»</li>
+        <li>КБе: 17</li>
+        <li>БИК: CASPKZKA</li>
+        <li>Номер счета: KZ23722S000018318072</li>
+      </ul>
+    </>
+  );
+}
+
+export default function TermsPage() {
+  const [lang, setLang] = useState('en');
+
+  return (
+    <LegalLayout
+      title={lang === 'en' ? 'Public Offer Agreement' : 'Публичная оферта'}
+      updated={lang === 'en' ? 'Last updated: August 10, 2026' : 'Дата последнего обновления: 10.08.2026'}
+      langToggle={<LangToggle lang={lang} setLang={setLang} />}
+    >
+      {lang === 'en' ? <EnglishContent /> : <RussianContent />}
     </LegalLayout>
   );
 }

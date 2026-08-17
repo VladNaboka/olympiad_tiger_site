@@ -72,10 +72,10 @@ export default function Footer() {
               </li>
             </ul>
             <div className="mt-4 text-gray-400 text-sm space-y-1">
-              <p>IE &quot;TIGERS OLYMPIAD&quot;</p>
-              <p>BIN: 711222402000</p>
+              <p>LLP &quot;WILLIAM ACADEMY&quot;</p>
+              <p>BIN: 220840043067</p>
               <p>Republic of Kazakhstan</p>
-              <p>Shymkent, 15th microdistrict, house 2, office 22</p>
+              <p>Almaty, Al-Farabi Avenue, 1B</p>
             </div>
           </div>
 

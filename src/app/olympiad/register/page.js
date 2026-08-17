@@ -5,26 +5,64 @@ import Link from 'next/link';
 import Navbar from '../../../components/navbar';
 import Footer from '../../../components/footer';
 import PaymentBadges from '../../../components/PaymentBadges';
+import LangToggle from '../../../components/LangToggle';
 import { registerOlympiad } from '../../api/olympiad_api';
 
 const PARTICIPATION_FEE_USD = 20;
+const PARTICIPATION_FEE_KZT = 10000;
 
-const HOW_IT_WORKS_STEPS = [
-  { title: 'Register & Choose an Olympiad', description: 'Fill in the participant’s name, email, and phone number, and select Math or Art as the olympiad category — all in one form.' },
-  { title: 'Pay Online', description: `Pay the ${PARTICIPATION_FEE_USD} USD registration fee securely via our payment provider.` },
-  { title: 'Get Confirmation', description: 'Receive an email confirmation with your registration code and payment receipt.' },
-];
+const HOW_IT_WORKS_CONTENT = {
+  en: {
+    heading: 'How Registration Works',
+    subheading: 'There is no personal account — everything happens in one flow, and your confirmation arrives by email.',
+    steps: [
+      { title: 'Register & Choose an Olympiad', description: 'Fill in the participant’s name, email, and phone number, and select Math or Art as the olympiad category — all in one form.' },
+      { title: 'Pay Online', description: `Pay the ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} KZT registration fee securely via our payment provider.` },
+      { title: 'Get Confirmation', description: 'Receive an email confirmation with your registration code and payment receipt.' },
+    ],
+    feeLabel: 'Participation fee',
+    seeOur: 'See our',
+    terms: 'Terms',
+    privacy: 'Privacy Policy',
+    and: 'and',
+    refund: 'Refund Policy',
+    executorLabel: 'Service provider',
+    executorValue: 'LLP "WILLIAM ACADEMY" (Republic of Kazakhstan)',
+    weAccept: 'We accept',
+  },
+  ru: {
+    heading: 'Как проходит регистрация',
+    subheading: 'Личного кабинета нет — всё происходит в один этап, а подтверждение приходит на email.',
+    steps: [
+      { title: 'Регистрация и выбор олимпиады', description: 'Укажите имя участника, email и номер телефона, выберите категорию — Math или Art — всё в одной форме.' },
+      { title: 'Оплата онлайн', description: `Оплатите организационный взнос ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸ через нашего платежного провайдера.` },
+      { title: 'Подтверждение', description: 'Получите на email подтверждение регистрации с регистрационным кодом и чеком об оплате.' },
+    ],
+    feeLabel: 'Организационный взнос',
+    seeOur: 'Ознакомьтесь с',
+    terms: 'Публичной офертой',
+    privacy: 'Политикой конфиденциальности',
+    and: 'и',
+    refund: 'Политикой возврата',
+    executorLabel: 'Исполнитель услуги',
+    executorValue: 'ТОО «WILLIAM ACADEMY» (Республика Казахстан)',
+    weAccept: 'Способы оплаты',
+  },
+};
 
 function HowItWorks() {
+  const [lang, setLang] = useState('en');
+  const t = HOW_IT_WORKS_CONTENT[lang];
+
   return (
     <div className="w-full max-w-3xl mx-auto mb-10">
-      <h2 className="text-2xl font-bold text-orange-600 mb-2 text-center">How Registration Works</h2>
-      <p className="text-gray-600 mb-6 text-center">
-        There is no personal account &mdash; everything happens in one flow, and your
-        confirmation arrives by email.
-      </p>
+      <div className="flex justify-center mb-2">
+        <LangToggle lang={lang} setLang={setLang} />
+      </div>
+      <h2 className="text-2xl font-bold text-orange-600 mb-2 text-center">{t.heading}</h2>
+      <p className="text-gray-600 mb-6 text-center">{t.subheading}</p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {HOW_IT_WORKS_STEPS.map((step, i) => (
+        {t.steps.map((step, i) => (
           <div key={step.title} className="bg-white rounded-xl shadow p-4 text-center">
             <div className="text-3xl font-bold text-orange-500 mb-2">{i + 1}</div>
             <div className="font-semibold text-gray-800 mb-1">{step.title}</div>
@@ -35,18 +73,29 @@ function HowItWorks() {
 
       <div className="mt-6 bg-white rounded-xl shadow p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <div className="text-sm text-gray-500">Participation fee</div>
-          <div className="text-2xl font-bold text-orange-600">{PARTICIPATION_FEE_USD} USD</div>
+          <div className="text-sm text-gray-500">{t.feeLabel}</div>
+          <div className="flex items-baseline gap-2 flex-wrap">
+            <div className="text-2xl font-bold text-orange-600">
+              {PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸
+            </div>
+            <div className="text-2xl font-bold text-orange-600">/</div>
+            <div className="text-2xl font-bold text-orange-600">
+              {PARTICIPATION_FEE_USD} USD
+            </div>
+          </div>
+          <div className="text-xs text-gray-500 mt-2">
+            {t.executorLabel}: {t.executorValue}
+          </div>
           <p className="text-xs text-gray-500 mt-1">
-            See our{' '}
-            <Link href="/terms" className="underline hover:text-orange-600">Terms</Link>,{' '}
-            <Link href="/privacy" className="underline hover:text-orange-600">Privacy Policy</Link>{' '}
-            and{' '}
-            <Link href="/refund" className="underline hover:text-orange-600">Refund Policy</Link>.
+            {t.seeOur}{' '}
+            <Link href="/terms" className="underline hover:text-orange-600">{t.terms}</Link>,{' '}
+            <Link href="/privacy" className="underline hover:text-orange-600">{t.privacy}</Link>{' '}
+            {t.and}{' '}
+            <Link href="/refund" className="underline hover:text-orange-600">{t.refund}</Link>.
           </p>
         </div>
         <div>
-          <div className="text-sm text-gray-500 mb-2 text-center sm:text-right">We accept</div>
+          <div className="text-sm text-gray-500 mb-2 text-center sm:text-right">{t.weAccept}</div>
           <PaymentBadges />
         </div>
       </div>
@@ -304,7 +353,9 @@ export default function OlympiadRegister() {
                     className="mt-1 h-4 w-4 accent-orange-500"
                   />
                   <span className="text-sm text-gray-700">
-                    I have read and agree to the{' '}
+                    I confirm that I am the participant&apos;s parent or legal
+                    representative, and on behalf of the participant I have read and
+                    agree to the{' '}
                     <Link href="/terms" target="_blank" className="text-orange-600 underline">
                       Public Offer
                     </Link>
@@ -316,7 +367,8 @@ export default function OlympiadRegister() {
                     <Link href="/refund" target="_blank" className="text-orange-600 underline">
                       Refund Policy
                     </Link>
-                    . *
+                    , including the processing and publication of the participant&apos;s
+                    personal data as described therein. *
                   </span>
                 </label>
                 {errors.agreedToTerms && (
