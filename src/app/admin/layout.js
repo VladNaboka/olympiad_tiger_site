@@ -12,7 +12,7 @@ export const metadata = {
   },
 };
 
-// Отключаем статическое кэширование: страница всегда рендерится динамически.
+// Отключаем статическое кэширование: страница.
 export const dynamic = "force-dynamic";
 
 export default function AdminLayout({ children }) {
