@@ -46,24 +46,6 @@ Age categories:
 Participation is possible individually or through schools, studios, and clubs.`
   },
   {
-    id: 5,
-    title: "🏆 Olympiad Stages",
-    content: `1. Olympiad Structure and Stages
-The "ART" Olympiad is conducted in two stages:
-• Stage 1 — Preliminary Round (Online format): remote submission and expert evaluation of portfolios/contest entries.
-• Stage 2 — Final Round (In-person format): a week-long art camp hosted in [Specify country/location, if static, or write "the host country of the current season's Finals"] with the final announcement of the winners.
-
-2. Preliminary (Online) Round Procedure
-• Application Submission: Participants register on the official Olympiad website and upload their creative work via their personal account in accordance with the technical requirements (file formats, sizes, etc.).
-• Expert Commission Evaluation: The Evaluation Commission (Jury) conducts a "blind" or multi-stage online review of the submitted entries based on approved criteria (creativity, technique, composition).
-• Publication of Results: Based on the results of the Preliminary Round, a shortlist of Finalists who scored the highest points is formed. The list will be published on the website on [Date], and the selected participants will receive official invitations to the Finals.
-
-3. Final Round (Art Camp) Procedure
-• Format: The Olympiad Finals are held as an in-person, week-long art intensive (camp) in [Country].
-• Camp Program: Throughout the week, Finalists complete final competition tasks, attend masterclasses from leading industry experts, and work on their final projects.
-• Determining the Winners: Final projects are evaluated directly during the camp. The announcement of winners and runners-up, along with the official award ceremony, takes place on the final day of the art camp.`
-  },
-  {
     id: 6,
     title: "🎨 Olympiad Theme",
     content: `Theme for the Finals in South Africa
