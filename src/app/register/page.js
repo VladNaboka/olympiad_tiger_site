@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
-import LangToggle from '../../components/LangToggle';
+import { useLanguage } from '../../context/LanguageContext';
 
 const T = {
   en: { title: 'Coming Soon', text: 'Results will be uploaded here after 1st national round' },
@@ -11,7 +10,7 @@ const T = {
 };
 
 export default function Registration() {
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const t = T[lang];
 
   return (
@@ -21,11 +20,7 @@ export default function Registration() {
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
-      <Navbar lang={lang} />
-
-      <div className="flex justify-center pt-8">
-        <LangToggle lang={lang} setLang={setLang} />
-      </div>
+      <Navbar />
 
       {/* Coming Soon Screen */}
       <div className="flex-1 flex items-center justify-center py-24 md:py-32 px-4">
@@ -49,7 +44,7 @@ export default function Registration() {
       </div>
 
       <div className="mt-auto">
-        <Footer lang={lang} />
+        <Footer />
       </div>
     </div>
   );

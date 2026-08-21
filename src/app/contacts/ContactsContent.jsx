@@ -2,8 +2,8 @@
 
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
-import LangToggle from '../../components/LangToggle';
 import { useState, useEffect } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { useSearchParams } from 'next/navigation';
 import { createFeedback } from '../api/feedback_api';
 
@@ -58,7 +58,7 @@ const TRANSLATIONS = {
 
 export default function ContactsContent() {
   const searchParams = useSearchParams();
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const t = TRANSLATIONS[lang];
 
   const [formData, setFormData] = useState({
@@ -118,11 +118,7 @@ export default function ContactsContent() {
         backgroundImage: 'url("/image/fonmain1.png")', 
       }}
     >
-      <Navbar lang={lang} />
-
-      <div className="flex justify-center pt-6">
-        <LangToggle lang={lang} setLang={setLang} />
-      </div>
+      <Navbar />
 
       {/* Header Section */}
       <div className="py-12 px-2 relative">
@@ -272,7 +268,7 @@ export default function ContactsContent() {
         </div>
       </div>
       
-      <Footer lang={lang} />
+      <Footer />
     </div>
   );
 }

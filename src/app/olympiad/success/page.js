@@ -1,11 +1,11 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '../../../components/navbar';
 import Footer from '../../../components/footer';
-import LangToggle from '../../../components/LangToggle';
+import { useLanguage } from '../../../context/LanguageContext';
 
 const T = {
   en: {
@@ -64,22 +64,19 @@ function SuccessContent({ lang }) {
 }
 
 export default function OlympiadSuccess() {
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
 
   return (
     <div
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
       style={{ backgroundImage: 'url("/image/fonmain1.png")' }}
     >
-      <Navbar lang={lang} />
-      <div className="flex justify-center pt-8">
-        <LangToggle lang={lang} setLang={setLang} />
-      </div>
+      <Navbar />
       <Suspense fallback={<div className="flex-1" />}>
         <SuccessContent lang={lang} />
       </Suspense>
       <div className="mt-auto">
-        <Footer lang={lang} />
+        <Footer />
       </div>
     </div>
   );

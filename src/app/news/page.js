@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Image from 'next/image';
-import LangToggle from '../../components/LangToggle';
 
 const T = {
   en: {
@@ -64,7 +64,7 @@ const T = {
 };
 
 export default function News() {
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const t = T[lang];
 
   return (
@@ -74,14 +74,11 @@ export default function News() {
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
-      <Navbar lang={lang} />
+      <Navbar />
 
       {/* Header Section */}
       <div className="py-12 px-4 relative">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex justify-center mb-4">
-            <LangToggle lang={lang} setLang={setLang} />
-          </div>
           <div className="text-center mb-10">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
               <span className="text-orange-500">{t.title1}</span> <span className="text-black">{t.title2}</span>
@@ -229,7 +226,7 @@ export default function News() {
         </div>
       </div>
 
-      <Footer lang={lang} />
+      <Footer />
     </div>
   );
 }

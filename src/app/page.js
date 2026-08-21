@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import logo from '../../public/image/logo.png';
-import LangToggle from '../components/LangToggle';
+import { useLanguage } from '../context/LanguageContext';
 
 const CONTENT = {
   en: {
@@ -70,7 +70,7 @@ const CONTENT = {
 
 export default function Home() {
   const [email, setEmail] = useState('');
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const router = useRouter();
   const t = CONTENT[lang];
 
@@ -84,7 +84,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffbf2]">
-      <Navbar lang={lang} />
+      <Navbar />
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">
@@ -99,9 +99,6 @@ export default function Home() {
 
         <div className="container mx-auto px-4 py-8 md:py-24 flex flex-col lg:flex-row items-center relative z-10">
           <div className="lg:w-1/2 mb-4 lg:mb-0">
-            <div className="mb-4">
-              <LangToggle lang={lang} setLang={setLang} />
-            </div>
             <h1 className="text-5xl font-bold mb-6 text-black">
               {t.heroTitlePrefix}<span className="text-orange-500">{t.heroTitleHighlight}</span>
               <br />
@@ -320,7 +317,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer lang={lang} />
+      <Footer />
     </div>
   );
 }

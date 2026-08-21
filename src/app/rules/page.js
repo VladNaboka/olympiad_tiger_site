@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
-import LangToggle from '../../components/LangToggle';
 
 // Art regulations data for collapsible sections
 const artRegulations = [
@@ -467,7 +467,7 @@ const RegulationItem = ({ item, isOpen, toggleSection, lang }) => {
 export default function Regulations() {
   const [openSectionId, setOpenSectionId] = useState(1);
   const [activeTab, setActiveTab] = useState('art');
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const t = UI_TEXT[lang];
 
   return (
@@ -477,14 +477,11 @@ export default function Regulations() {
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
-      <Navbar lang={lang} />
+      <Navbar />
 
       {/* Hero Section */}
       <div className="py-10 md:py-16 px-2 relative">
         <div className="container mx-auto px-2 md:px-4">
-          <div className="flex justify-center mb-6">
-            <LangToggle lang={lang} setLang={setLang} />
-          </div>
           <div className="flex flex-col md:flex-row items-center justify-between">
             {/* Left - Torch Logo */}
             <div className="md:w-1/4 flex justify-center md:justify-start">
@@ -607,7 +604,7 @@ export default function Regulations() {
       </div>
 
       <div className="mt-auto">
-        <Footer lang={lang} />
+        <Footer />
       </div>
     </div>
   );

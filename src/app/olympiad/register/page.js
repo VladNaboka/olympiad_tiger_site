@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useLanguage } from '../../../context/LanguageContext';
 import Link from 'next/link';
 import Navbar from '../../../components/navbar';
 import Footer from '../../../components/footer';
 import PaymentBadges from '../../../components/PaymentBadges';
-import LangToggle from '../../../components/LangToggle';
 import { registerOlympiad } from '../../api/olympiad_api';
 
 const PARTICIPATION_FEE_USD = 20;
@@ -141,14 +141,11 @@ const FORM_CONTENT = {
   },
 };
 
-function HowItWorks({ lang, setLang }) {
+function HowItWorks({ lang }) {
   const t = HOW_IT_WORKS_CONTENT[lang];
 
   return (
     <div className="w-full max-w-3xl mx-auto mb-10">
-      <div className="flex justify-center mb-2">
-        <LangToggle lang={lang} setLang={setLang} />
-      </div>
       <h2 className="text-2xl font-bold text-orange-600 mb-2 text-center">{t.heading}</h2>
       <p className="text-gray-600 mb-6 text-center">{t.subheading}</p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -217,7 +214,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+?\d{10,15}$/;
 
 export default function OlympiadRegister() {
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const f = FORM_CONTENT[lang];
 
   const [form, setForm] = useState({
@@ -312,10 +309,10 @@ export default function OlympiadRegister() {
         className="min-h-screen flex flex-col bg-[#fffbf2] relative"
         style={{ backgroundImage: 'url("/image/fonmain1.png")' }}
       >
-        <Navbar lang={lang} />
+        <Navbar />
 
         <div className="flex-1 flex flex-col items-center justify-center py-24 md:py-32 px-4">
-          <HowItWorks lang={lang} setLang={setLang} />
+          <HowItWorks lang={lang} />
 
           <div className="text-center max-w-2xl">
             <h1 className="text-4xl md:text-5xl font-bold text-orange-600 mb-6">
@@ -328,7 +325,7 @@ export default function OlympiadRegister() {
         </div>
 
         <div className="mt-auto">
-          <Footer lang={lang} />
+          <Footer />
         </div>
       </div>
     );
@@ -339,10 +336,10 @@ export default function OlympiadRegister() {
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
       style={{ backgroundImage: 'url("/image/fonmain1.png")' }}
     >
-      <Navbar lang={lang} />
+      <Navbar />
 
       <div className="flex-1 flex flex-col items-center justify-center py-24 md:py-32 px-4">
-        <HowItWorks lang={lang} setLang={setLang} />
+        <HowItWorks lang={lang} />
 
         <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8">
           <h1 className="text-3xl md:text-4xl font-bold text-orange-600 mb-2 text-center">
@@ -504,7 +501,7 @@ export default function OlympiadRegister() {
       </div>
 
       <div className="mt-auto">
-        <Footer lang={lang} />
+        <Footer />
       </div>
     </div>
   );

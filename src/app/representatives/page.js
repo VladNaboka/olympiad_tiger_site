@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
-import LangToggle from '../../components/LangToggle';
 
 // Representatives data - automatically sorted alphabetically by country
 const representativesData = [
@@ -226,7 +226,7 @@ const TEXT = {
 };
 
 export default function Representatives() {
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const t = TEXT[lang];
 
   // Filter out the main representative for the grid
@@ -239,15 +239,12 @@ export default function Representatives() {
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
-      <Navbar lang={lang} />
+      <Navbar />
 
       {/* Header Section with logo */}
       <div className="py-12 px-2 relative">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col items-center justify-center">
-            <div className="flex justify-center mb-4">
-              <LangToggle lang={lang} setLang={setLang} />
-            </div>
             <div className="mb-6">
               <div className="flex flex-col items-center">
                 <img
@@ -354,7 +351,7 @@ export default function Representatives() {
       </div>
 
       <div className="mt-auto">
-        <Footer lang={lang} />
+        <Footer />
       </div>
     </div>
   );

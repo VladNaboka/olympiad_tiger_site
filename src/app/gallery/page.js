@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
@@ -9,7 +10,6 @@ import { getAllMathWorks } from '../api/student_math_works';
 import { getStudentById } from '../api/students_api';
 import { ART_CATEGORIES, MATH_CATEGORIES, getCategoryName, getCategoriesBySubject, getCategoryDisplayName } from '../utils/constants';
 import ArtworkImage from '../components/ArtworkImage';
-import LangToggle from '../../components/LangToggle';
 
 const TRANSLATIONS = {
   en: {
@@ -115,7 +115,7 @@ const TRANSLATIONS = {
 };
 
 export default function Gallery() {
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const t = TRANSLATIONS[lang];
   // Устанавливаем значения по умолчанию
   const [category, setCategory] = useState(5); // Первая категория искусства
@@ -289,11 +289,7 @@ export default function Gallery() {
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
       style={{ backgroundImage: 'url("/image/fonmain1.png")' }}
     >
-      <Navbar lang={lang} />
-
-      <div className="flex justify-center pt-6">
-        <LangToggle lang={lang} setLang={setLang} />
-      </div>
+      <Navbar />
 
       {/* Hero Section */}
       <div className="py-16 px-4 relative">
@@ -580,7 +576,7 @@ export default function Gallery() {
         </div>
       )}
 
-      <Footer lang={lang} />
+      <Footer />
     </div>
   );
 }

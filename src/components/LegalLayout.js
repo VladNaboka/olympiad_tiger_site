@@ -3,17 +3,14 @@
 import Navbar from './navbar';
 import Footer from './footer';
 
-export default function LegalLayout({ title, updated, langToggle, lang = 'en', children }) {
+export default function LegalLayout({ title, updated, children }) {
   return (
     <div className="min-h-screen flex flex-col bg-[#fffbf2]">
-      <Navbar lang={lang} />
+      <Navbar />
 
       <div className="flex-1 px-4 py-16 md:py-24">
         <div className="container mx-auto max-w-3xl bg-white rounded-2xl shadow-lg p-8 md:p-12">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-2">
-            <h1 className="text-3xl md:text-4xl font-bold text-orange-600">{title}</h1>
-            {langToggle}
-          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-orange-600 mb-2">{title}</h1>
           {updated && (
             <p className="text-sm text-gray-500 mb-8">{updated}</p>
           )}
@@ -23,7 +20,7 @@ export default function LegalLayout({ title, updated, langToggle, lang = 'en', c
         </div>
       </div>
 
-      <Footer lang={lang} />
+      <Footer />
     </div>
   );
 }

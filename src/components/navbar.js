@@ -4,6 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { useLanguage } from '../context/LanguageContext';
+import LangToggle from './LangToggle';
 
 const NAV_LINKS = [
   { href: '/', en: 'Home', ru: 'Главная' },
@@ -19,9 +21,10 @@ const NAV_LINKS = [
 
 const LOGIN_LABEL = { en: 'Login', ru: 'Войти' };
 
-export default function Navbar({ lang = 'en' }) {
+export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { lang, setLang } = useLanguage();
 
   // Function to determine link activity
   const isActive = (path) => {
@@ -70,6 +73,7 @@ export default function Navbar({ lang = 'en' }) {
             >
               {LOGIN_LABEL[lang]}
             </Link>
+            <LangToggle lang={lang} setLang={setLang} />
           </div>
 
           {/* Mobile menu button */}
@@ -130,6 +134,9 @@ export default function Navbar({ lang = 'en' }) {
             >
               {LOGIN_LABEL[lang]}
             </Link>
+            <div className="flex justify-center pt-2">
+              <LangToggle lang={lang} setLang={setLang} />
+            </div>
           </div>
         </div>
       )}

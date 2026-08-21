@@ -4,7 +4,7 @@ import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
-import LangToggle from '../../components/LangToggle';
+import { useLanguage } from '../../context/LanguageContext';
 
 // Updated FAQ data according to new content
 const faqItems = [
@@ -192,7 +192,7 @@ const FaqItem = ({ item, lang, isOpen, toggleQuestion }) => {
 export default function FAQ() {
   // State for open/closed questions
   const [openQuestionId, setOpenQuestionId] = useState(1);
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const t = PAGE_TEXT[lang];
 
   return (
@@ -202,14 +202,11 @@ export default function FAQ() {
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
-      <Navbar lang={lang} />
+      <Navbar />
 
       {/* Hero Section - centered design */}
       <div className="py-24 px-4 relative">
         <div className="container mx-auto">
-          <div className="flex justify-center mb-6">
-            <LangToggle lang={lang} setLang={setLang} />
-          </div>
           <div className="flex flex-col md:flex-row items-center">
             {/* Left - Title and Description */}
             <div className="md:w-1/2 pr-8">
@@ -280,7 +277,7 @@ export default function FAQ() {
       </div>
 
       <div className="mt-auto">
-        <Footer lang={lang} />
+        <Footer />
       </div>
     </div>
   );

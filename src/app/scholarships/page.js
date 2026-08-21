@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
 import { apiRequest } from '../api/base_api';
 import scholarships from '../../data/scholarships.json';
-import LangToggle from '../../components/LangToggle';
 
 const ITEMS_PER_PAGE = 16;
 
@@ -50,7 +50,7 @@ const gifts = [...scholarships].sort((a, b) =>
 
 
 export default function Scholarships() {
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const t = T[lang];
   const [currentPage, setCurrentPage] = useState(0);
   const [showForm, setShowForm] = useState(false);
@@ -104,11 +104,7 @@ export default function Scholarships() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffbf2]">
-      <Navbar lang={lang} />
-
-      <div className="flex justify-center pt-8">
-        <LangToggle lang={lang} setLang={setLang} />
-      </div>
+      <Navbar />
 
       {/* Cards Grid */}
       <section className="container mx-auto px-4 py-12">
@@ -255,7 +251,7 @@ export default function Scholarships() {
         </div>
       )}
 
-      <Footer lang={lang} />
+      <Footer />
     </div>
   );
 }

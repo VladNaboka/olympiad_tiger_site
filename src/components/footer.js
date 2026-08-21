@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import PaymentBadges from './PaymentBadges';
+import { useLanguage } from '../context/LanguageContext';
 
 const T = {
   en: {
@@ -46,7 +47,8 @@ const T = {
   },
 };
 
-export default function Footer({ lang = 'en' }) {
+export default function Footer() {
+  const { lang } = useLanguage();
   const t = T[lang];
 
   return (

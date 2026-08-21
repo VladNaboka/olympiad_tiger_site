@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import LegalLayout from '../../components/LegalLayout';
-import LangToggle from '../../components/LangToggle';
+import { useLanguage } from '../../context/LanguageContext';
 
 function EnglishContent() {
   return (
@@ -347,14 +346,12 @@ function RussianContent() {
 }
 
 export default function TermsPage() {
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
 
   return (
     <LegalLayout
-      lang={lang}
       title={lang === 'en' ? 'Public Offer Agreement' : 'Публичная оферта'}
       updated={lang === 'en' ? 'Last updated: August 10, 2026' : 'Дата последнего обновления: 10.08.2026'}
-      langToggle={<LangToggle lang={lang} setLang={setLang} />}
     >
       {lang === 'en' ? <EnglishContent /> : <RussianContent />}
     </LegalLayout>

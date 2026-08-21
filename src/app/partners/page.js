@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
-import LangToggle from '../../components/LangToggle';
 
 // Partners data - можно будет легко добавить реальных партнеров
 const partners = [
@@ -173,7 +173,7 @@ const TEXT = {
 };
 
 export default function OurPartners() {
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
   const t = TEXT[lang];
 
   return (
@@ -183,14 +183,11 @@ export default function OurPartners() {
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
-      <Navbar lang={lang} />
+      <Navbar />
 
       {/* Hero Section */}
       <div className="py-16 px-4 relative">
         <div className="container mx-auto">
-          <div className="flex justify-center mb-6">
-            <LangToggle lang={lang} setLang={setLang} />
-          </div>
           <div className="flex flex-col md:flex-row items-center justify-between">
             {/* Left - Torch Logo */}
             <div className="md:w-1/4">
@@ -330,7 +327,7 @@ export default function OurPartners() {
       </div>
 
       <div className="mt-auto">
-        <Footer lang={lang} />
+        <Footer />
       </div>
     </div>
   );

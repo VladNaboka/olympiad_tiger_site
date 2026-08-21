@@ -1,8 +1,8 @@
 "use client"
 import { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
-import LangToggle from '../../components/LangToggle';
 
 const t = (obj, lang) => obj[lang];
 
@@ -643,7 +643,7 @@ const ASSESSMENT = {
 
 export default function Tasks() {
   const [openCategory, setOpenCategory] = useState(null);
-  const [lang, setLang] = useState('en');
+  const { lang } = useLanguage();
 
   const toggleCategory = (category) => {
     setOpenCategory(openCategory === category ? null : category);
@@ -656,16 +656,12 @@ export default function Tasks() {
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
-      <Navbar lang={lang} />
+      <Navbar />
 
       {/* Header Section */}
       <div className="py-12 px-2 relative">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col items-center justify-center">
-            <div className="flex justify-center mb-4">
-              <LangToggle lang={lang} setLang={setLang} />
-            </div>
-
             <div className="relative mb-8">
               <div className="absolute -right-4 top-0 w-64 h-64 rounded-full bg-yellow-100/60 -z-10"></div>
               <img
@@ -779,7 +775,7 @@ export default function Tasks() {
         </div>
       </div>
       <div className="mt-auto">
-        <Footer lang={lang} />
+        <Footer />
       </div>
     </div>
   );
