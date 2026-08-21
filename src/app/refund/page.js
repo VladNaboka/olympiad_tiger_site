@@ -121,6 +121,7 @@ export default function RefundPage() {
 
   return (
     <LegalLayout
+      lang={lang}
       title={lang === 'en' ? 'Refund Policy' : 'Политика возврата денежных средств'}
       updated={lang === 'en' ? 'Last updated: August 10, 2026' : 'Дата последнего обновления: 10.08.2026'}
       langToggle={<LangToggle lang={lang} setLang={setLang} />}

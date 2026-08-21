@@ -68,7 +68,15 @@ function EnglishContent() {
       </p>
       <p>
         4.2. Payment is made electronically via international payment systems integrated
-        into the website.
+        into the website. Bank card payment (Visa, Mastercard) proceeds as follows: the
+        Customer clicks &quot;Proceed to Payment&quot; and is redirected to the secure
+        payment page of the Contractor&apos;s payment provider, Freedom Pay; the Customer
+        enters their card details (cardholder name, card number, expiry date, CVC) on that
+        page; the payment is confirmed via 3-D Secure (a one-time code sent by the
+        Customer&apos;s card-issuing bank); the Customer is then redirected back to the
+        website, and a confirmation with the registration code and payment receipt is sent
+        by email. Card details are entered only on the payment provider&apos;s secure page
+        and are never transmitted to or stored by the website.
       </p>
       <p>
         4.3. The payment currency is specified on the website; as a rule, USD will be
@@ -232,7 +240,16 @@ function RussianContent() {
       </p>
       <p>
         4.2. Оплата производится в безналичном порядке через интегрированные на сайте
-        международные платежные системы.
+        международные платежные системы. Оплата банковской картой (Visa, Mastercard)
+        проходит следующим образом: Заказчик нажимает «Перейти к оплате» и
+        перенаправляется на защищённую страницу оплаты платёжного провайдера Исполнителя —
+        Freedom Pay; на этой странице Заказчик вводит данные карты (имя владельца, номер
+        карты, срок действия, CVC-код); платёж подтверждается через 3-D Secure
+        (одноразовый код, который присылает банк-эмитент карты Заказчика); после этого
+        Заказчик возвращается на сайт, а на email направляется подтверждение с
+        регистрационным кодом и чеком об оплате. Данные карты вводятся только на
+        защищённой странице платёжного провайдера и никогда не передаются на сайт и не
+        хранятся им.
       </p>
       <p>
         4.3. Валюта платежа определяется на сайте, как правило, будет использован USD. В
@@ -334,6 +351,7 @@ export default function TermsPage() {
 
   return (
     <LegalLayout
+      lang={lang}
       title={lang === 'en' ? 'Public Offer Agreement' : 'Публичная оферта'}
       updated={lang === 'en' ? 'Last updated: August 10, 2026' : 'Дата последнего обновления: 10.08.2026'}
       langToggle={<LangToggle lang={lang} setLang={setLang} />}

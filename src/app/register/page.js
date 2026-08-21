@@ -1,9 +1,19 @@
 'use client';
 
+import { useState } from 'react';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
+import LangToggle from '../../components/LangToggle';
+
+const T = {
+  en: { title: 'Coming Soon', text: 'Results will be uploaded here after 1st national round' },
+  ru: { title: 'Скоро', text: 'Результаты будут опубликованы здесь после 1-го национального тура' },
+};
 
 export default function Registration() {
+  const [lang, setLang] = useState('en');
+  const t = T[lang];
+
   return (
     <div
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
@@ -11,18 +21,22 @@ export default function Registration() {
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
-      <Navbar />
+      <Navbar lang={lang} />
+
+      <div className="flex justify-center pt-8">
+        <LangToggle lang={lang} setLang={setLang} />
+      </div>
 
       {/* Coming Soon Screen */}
-      <div className="flex-1 flex items-center justify-center py-40 md:py-48 px-4">
+      <div className="flex-1 flex items-center justify-center py-24 md:py-32 px-4">
         <div className="text-center max-w-2xl">
           {/* Coming Soon Text */}
           <h2 className="text-4xl md:text-5xl font-bold text-orange-600 mb-6">
-            Coming Soon
+            {t.title}
           </h2>
 
           <p className="text-lg text-gray-600 mb-12">
-            Results will be uploaded here after 1st national round
+            {t.text}
           </p>
 
           {/* Animated Progress Dots */}
@@ -35,7 +49,7 @@ export default function Registration() {
       </div>
 
       <div className="mt-auto">
-        <Footer />
+        <Footer lang={lang} />
       </div>
     </div>
   );

@@ -7,10 +7,116 @@ import Link from 'next/link';
 import { getAllArtWorks } from '../api/student_art_works';
 import { getAllMathWorks } from '../api/student_math_works';
 import { getStudentById } from '../api/students_api';
-import { ART_CATEGORIES, MATH_CATEGORIES, getCategoryName, getCategoriesBySubject } from '../utils/constants';
+import { ART_CATEGORIES, MATH_CATEGORIES, getCategoryName, getCategoriesBySubject, getCategoryDisplayName } from '../utils/constants';
 import ArtworkImage from '../components/ArtworkImage';
+import LangToggle from '../../components/LangToggle';
+
+const TRANSLATIONS = {
+  en: {
+    heroTitle: '📸 Tigers Gallery',
+    heroSubtitle: 'Explore amazing artworks and math achievements from Tigers participants around the world. Filter by age category and subject or search by student ID.',
+    discoverTitle: '🌟 Discover Global Talent',
+    discoverText: 'Browse through remarkable submissions from Tigers participants worldwide. Use the filters below to explore different countries, age groups, and subjects.',
+    filterGalleryTitle: '🎯 Filter Gallery',
+    searchByIdTitle: '🔍 Search by Student ID',
+    searchPlaceholder: 'Enter Student ID (e.g., 123)',
+    searchButton: '🔍 Search',
+    searchingButton: '🔍 Searching...',
+    clearButton: '❌ Clear',
+    foundWorksText: (count, id) => `Found ${count} work(s) for Student ID: ${id}`,
+    subjectLabel: '📚 Subject',
+    categoryLabel: '👶 Category',
+    currentlyViewingLabel: 'Currently viewing:',
+    categoryWord: 'Category:',
+    resultWord: 'result',
+    resultsWord: 'results',
+    foundWord: 'found',
+    searchingWorksText: 'Searching for works...',
+    loadingWorksText: 'Loading incredible works...',
+    lookingForIdText: (id) => `Looking for Student ID ${id}`,
+    discoveringTalentText: 'Discovering talent from around the world',
+    noWorksSearchTitle: 'No works found for this Student ID',
+    noWorksTitle: 'No works found',
+    noWorksSearchText: (id) => `No works found for Student ID: ${id}. They may not have submitted any works yet, or the ID may not exist.`,
+    noWorksText: (subject, category) => `No ${subject.toLowerCase()} found in the ${category} category.`,
+    tipLabel: 'Tip:',
+    tipSearchText: 'Double-check the Student ID, or try browsing by country and category instead.',
+    tipDefaultText: 'Try different combinations of subject and category, or contact your representative to submit works!',
+    forArtText: '📝 For Art: Categories are Age 6-9, Age 10-13, Age 14-17',
+    forMathText: '📊 For Math: Categories are Grade 5-6, Grade 7-8, Grade 9-10, Grade 11-12',
+    searchResultsTitle: (id) => `🔍 Search Results for Student ID: ${id}`,
+    galleryTitleFor: (icon, subject) => `${icon} ${subject} Gallery`,
+    foundCountText: (count) => `Found ${count} work(s)`,
+    amazingWorksText: (category, count, word) => `${category} • ${count} amazing ${word}`,
+    workWord: 'work',
+    worksWord: 'works',
+    backToGalleryButton: 'Back to Gallery',
+    idLabel: 'ID:',
+    unknownText: 'Unknown',
+    ctaTitle: 'Ready to Join the Tigers Experience?',
+    ctaText: 'Be part of the next generation of Tigers Olympiad participants and showcase your talent to the world.',
+    registerNowButton: 'Register Now',
+    findRepresentativeButton: 'Find Your Representative',
+    subjectNames: { Artworks: 'Artworks', Math: 'Mathematics' },
+    unknownCategory: 'Unknown Category',
+    enterStudentIdAlert: 'Please enter a Student ID',
+    searchErrorAlert: 'Error occurred while searching',
+  },
+  ru: {
+    heroTitle: '📸 Галерея Tigers',
+    heroSubtitle: 'Изучите потрясающие творческие работы и математические достижения участников Tigers со всего мира. Фильтруйте по возрастной категории и предмету или ищите по ID участника.',
+    discoverTitle: '🌟 Откройте таланты со всего мира',
+    discoverText: 'Просмотрите замечательные работы участников Tigers со всего мира. Используйте фильтры ниже, чтобы изучить работы по странам, возрастным группам и предметам.',
+    filterGalleryTitle: '🎯 Фильтр галереи',
+    searchByIdTitle: '🔍 Поиск по ID участника',
+    searchPlaceholder: 'Введите ID участника (например, 123)',
+    searchButton: '🔍 Найти',
+    searchingButton: '🔍 Поиск...',
+    clearButton: '❌ Очистить',
+    foundWorksText: (count, id) => `Найдено работ: ${count} для ID участника: ${id}`,
+    subjectLabel: '📚 Предмет',
+    categoryLabel: '👶 Категория',
+    currentlyViewingLabel: 'Сейчас просматривается:',
+    categoryWord: 'Категория:',
+    resultWord: 'результат',
+    resultsWord: 'результатов',
+    foundWord: 'найдено',
+    searchingWorksText: 'Идёт поиск работ...',
+    loadingWorksText: 'Загружаем потрясающие работы...',
+    lookingForIdText: (id) => `Ищем ID участника ${id}`,
+    discoveringTalentText: 'Открываем таланты со всего мира',
+    noWorksSearchTitle: 'По этому ID участника работы не найдены',
+    noWorksTitle: 'Работы не найдены',
+    noWorksSearchText: (id) => `Работы для ID участника ${id} не найдены. Возможно, они ещё не отправили работы, либо такого ID не существует.`,
+    noWorksText: (subject, category) => `В категории «${category}» работ по разделу «${subject}» не найдено.`,
+    tipLabel: 'Совет:',
+    tipSearchText: 'Проверьте правильность ID участника или попробуйте найти работу по стране и категории.',
+    tipDefaultText: 'Попробуйте другие сочетания предмета и категории, либо обратитесь к своему представителю, чтобы отправить работу!',
+    forArtText: '📝 Для Art: категории — возраст 6-9, 10-13, 14-17 лет',
+    forMathText: '📊 Для Math: категории — 5-6, 7-8, 9-10, 11-12 классы',
+    searchResultsTitle: (id) => `🔍 Результаты поиска по ID участника: ${id}`,
+    galleryTitleFor: (icon, subject) => `${icon} Галерея — ${subject}`,
+    foundCountText: (count) => `Найдено работ: ${count}`,
+    amazingWorksText: (category, count, word) => `${category} • ${count} потрясающих ${word}`,
+    workWord: 'работа',
+    worksWord: 'работ',
+    backToGalleryButton: 'Назад в галерею',
+    idLabel: 'ID:',
+    unknownText: 'Неизвестно',
+    ctaTitle: 'Готовы стать частью Tigers?',
+    ctaText: 'Присоединяйтесь к новому поколению участников Tigers Olympiad и покажите свой талант всему миру.',
+    registerNowButton: 'Зарегистрироваться',
+    findRepresentativeButton: 'Найти представителя',
+    subjectNames: { Artworks: 'Творческие работы', Math: 'Математика' },
+    unknownCategory: 'Неизвестная категория',
+    enterStudentIdAlert: 'Пожалуйста, введите ID участника',
+    searchErrorAlert: 'Произошла ошибка при поиске',
+  },
+};
 
 export default function Gallery() {
+  const [lang, setLang] = useState('en');
+  const t = TRANSLATIONS[lang];
   // Устанавливаем значения по умолчанию
   const [category, setCategory] = useState(5); // Первая категория искусства
   const [subject, setSubject] = useState('Artworks');
@@ -24,8 +130,8 @@ export default function Gallery() {
   const [isSearching, setIsSearching] = useState(false);
 
   const subjects = [
-    { id: 'Artworks', name: 'Artworks', icon: '🎨', color: 'from-pink-500 to-rose-500', subjectId: '1' },
-    { id: 'Math', name: 'Mathematics', icon: '📐', color: 'from-blue-500 to-indigo-500', subjectId: '2' }
+    { id: 'Artworks', name: t.subjectNames.Artworks, icon: '🎨', color: 'from-pink-500 to-rose-500', subjectId: '1' },
+    { id: 'Math', name: t.subjectNames.Math, icon: '📐', color: 'from-blue-500 to-indigo-500', subjectId: '2' }
   ];
 
   // Получаем категории в зависимости от выбранного предмета
@@ -33,7 +139,7 @@ export default function Gallery() {
     if (subject === 'Artworks') {
       return ART_CATEGORIES.map(cat => ({
         id: cat.id,
-        name: cat.name,
+        name: getCategoryDisplayName(cat.id, lang),
         icon: cat.minAge <= 9 ? '🧒' : cat.minAge <= 13 ? '👦' : '👨',
         color: cat.minAge <= 9 ? 'bg-green-100 text-green-800' : 
                cat.minAge <= 13 ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
@@ -41,7 +147,7 @@ export default function Gallery() {
     } else {
       return MATH_CATEGORIES.map(cat => ({
         id: cat.id,
-        name: cat.name,
+        name: getCategoryDisplayName(cat.id, lang),
         icon: cat.minAge <= 12 ? '📚' : cat.minAge <= 14 ? '📖' : cat.minAge <= 16 ? '📊' : '🎓',
         color: cat.minAge <= 12 ? 'bg-yellow-100 text-yellow-800' : 
                cat.minAge <= 14 ? 'bg-green-100 text-green-800' :
@@ -91,7 +197,7 @@ export default function Gallery() {
   // Функция для поиска работ по ID студента
   const searchByStudentId = async () => {
     if (!searchStudentId.trim()) {
-      alert('Please enter a Student ID');
+      alert(t.enterStudentIdAlert);
       return;
     }
 
@@ -125,7 +231,7 @@ export default function Gallery() {
       setSearchResults(worksWithStudents);
     } catch (error) {
       console.error('Error searching by student ID:', error);
-      alert('Error occurred while searching');
+      alert(t.searchErrorAlert);
     }
 
     setIsSearching(false);
@@ -171,7 +277,7 @@ export default function Gallery() {
 
   // Получаем название текущей категории
   const getCurrentCategoryName = () => {
-    return getCategoryName(category) || 'Unknown Category';
+    return getCategoryDisplayName(category, lang) || t.unknownCategory;
   };
 
   // Определяем какие данные показывать
@@ -183,7 +289,11 @@ export default function Gallery() {
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
       style={{ backgroundImage: 'url("/image/fonmain1.png")' }}
     >
-      <Navbar />
+      <Navbar lang={lang} />
+
+      <div className="flex justify-center pt-6">
+        <LangToggle lang={lang} setLang={setLang} />
+      </div>
 
       {/* Hero Section */}
       <div className="py-16 px-4 relative">
@@ -191,31 +301,30 @@ export default function Gallery() {
           <div className="flex flex-col md:flex-row items-center justify-between">
             {/* Left - Pink Torch Logo */}
             <div className="md:w-1/4">
-              <img 
-                src="/image/pinkfakel.png" 
-                alt="Tigers Olympiad Pink Torch Logo" 
+              <img
+                src="/image/pinkfakel.png"
+                alt="Tigers Olympiad Pink Torch Logo"
                 width="300"
                 height="400"
                 style={{width: "300px"}}
               />
             </div>
-            
+
             {/* Center - Title and Description */}
             <div className="md:w-2/4 text-center my-8 md:my-0">
               <h1 className="text-5xl font-bold text-orange-600 mb-6">
-                📸 Tigers Gallery
+                {t.heroTitle}
               </h1>
               <p className="text-lg text-gray-600 max-w-xl mx-auto">
-                Explore amazing artworks and math achievements from Tigers participants around the world.
-                Filter by age category and subject or search by student ID.
+                {t.heroSubtitle}
               </p>
             </div>
-            
+
             {/* Right - Tiger Eye */}
             <div className="md:w-1/4">
-              <img 
-                src="/image/tiger3.png" 
-                alt="Tiger Eye" 
+              <img
+                src="/image/tiger3.png"
+                alt="Tiger Eye"
                 width="300"
                 height="300"
                 style={{width: "300px"}}
@@ -229,10 +338,9 @@ export default function Gallery() {
       <div className="px-4 mb-12">
         <div className="container mx-auto max-w-4xl">
           <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white p-8 rounded-2xl text-center">
-            <h2 className="text-2xl font-bold mb-4">🌟 Discover Global Talent</h2>
+            <h2 className="text-2xl font-bold mb-4">{t.discoverTitle}</h2>
             <p className="text-lg">
-              Browse through remarkable submissions from Tigers participants worldwide. 
-              Use the filters below to explore different countries, age groups, and subjects.
+              {t.discoverText}
             </p>
           </div>
         </div>
@@ -243,17 +351,17 @@ export default function Gallery() {
         <div className="px-4 mb-12">
           <div className="container mx-auto max-w-6xl">
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">🎯 Filter Gallery</h3>
-              
+              <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">{t.filterGalleryTitle}</h3>
+
               {/* Search by Student ID in Filter Gallery */}
               <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">🔍 Search by Student ID</h4>
+                <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">{t.searchByIdTitle}</h4>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center items-center max-w-lg mx-auto">
                   <input
                     type="text"
                     value={searchStudentId}
                     onChange={(e) => setSearchStudentId(e.target.value)}
-                    placeholder="Enter Student ID (e.g., 123)"
+                    placeholder={t.searchPlaceholder}
                     className="flex-1 px-4 py-3 rounded-lg border-2 border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     onKeyPress={(e) => e.key === 'Enter' && searchByStudentId()}
                   />
@@ -262,20 +370,20 @@ export default function Gallery() {
                     disabled={isSearching}
                     className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors disabled:opacity-50 min-w-[100px]"
                   >
-                    {isSearching ? '🔍 Searching...' : '🔍 Search'}
+                    {isSearching ? t.searchingButton : t.searchButton}
                   </button>
                   {searchResults.length > 0 && (
                     <button
                       onClick={clearSearch}
                       className="bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600 transition-colors"
                     >
-                      ❌ Clear
+                      {t.clearButton}
                     </button>
                   )}
                 </div>
                 {searchResults.length > 0 && (
                   <p className="mt-3 text-center text-green-700 font-medium">
-                    Found {searchResults.length} work(s) for Student ID: {searchStudentId}
+                    {t.foundWorksText(searchResults.length, searchStudentId)}
                   </p>
                 )}
               </div>
@@ -321,10 +429,10 @@ export default function Gallery() {
               {/* Current Selection Display */}
               <div className="mt-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
                 <p className="text-center text-gray-700">
-                  <span className="font-semibold">Currently viewing:</span> {subject}
-                  {' '}• Category: <span className="text-orange-600 font-semibold">{getCurrentCategoryName()}</span>
+                  <span className="font-semibold">{t.currentlyViewingLabel}</span> {subject}
+                  {' '}• {t.categoryWord} <span className="text-orange-600 font-semibold">{getCurrentCategoryName()}</span>
                   {items.length > 0 && (
-                    <span> • <span className="text-green-600 font-semibold">{items.length}</span> {items.length === 1 ? 'result' : 'results'} found</span>
+                    <span> • <span className="text-green-600 font-semibold">{items.length}</span> {items.length === 1 ? t.resultWord : t.resultsWord} {t.foundWord}</span>
                   )}
                 </p>
               </div>
@@ -345,36 +453,36 @@ export default function Gallery() {
                 </div>
               </div>
               <p className="text-gray-600 text-xl font-medium">
-                {isSearching ? 'Searching for works...' : 'Loading incredible works...'}
+                {isSearching ? t.searchingWorksText : t.loadingWorksText}
               </p>
               <p className="text-gray-500 text-sm mt-2">
-                {isSearching ? `Looking for Student ID ${searchStudentId}` : `Discovering talent from around the world`}
+                {isSearching ? t.lookingForIdText(searchStudentId) : t.discoveringTalentText}
               </p>
             </div>
           ) : displayItems.length === 0 ? (
             <div className="text-center py-16">
               <div className="text-8xl mb-6">🔍</div>
               <h3 className="text-3xl font-bold text-gray-700 mb-4">
-                {isShowingSearchResults ? 'No works found for this Student ID' : 'No works found'}
+                {isShowingSearchResults ? t.noWorksSearchTitle : t.noWorksTitle}
               </h3>
               <p className="text-gray-600 mb-8 text-lg">
-                {isShowingSearchResults 
-                  ? `No works found for Student ID: ${searchStudentId}. They may not have submitted any works yet, or the ID may not exist.`
-                  : `No ${subject.toLowerCase()} found in the ${getCurrentCategoryName()} category.`
+                {isShowingSearchResults
+                  ? t.noWorksSearchText(searchStudentId)
+                  : t.noWorksText(subject, getCurrentCategoryName())
                 }
               </p>
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 max-w-lg mx-auto">
                 <div className="text-4xl mb-3">💡</div>
                 <p className="text-yellow-800 font-medium">
-                  <strong>Tip:</strong> {isShowingSearchResults 
-                    ? 'Double-check the Student ID, or try browsing by country and category instead.'
-                    : 'Try different combinations of subject and category, or contact your representative to submit works!'
+                  <strong>{t.tipLabel}</strong> {isShowingSearchResults
+                    ? t.tipSearchText
+                    : t.tipDefaultText
                   }
                 </p>
                 {!isShowingSearchResults && (
                   <div className="mt-4 text-sm text-yellow-700">
-                    <p>📝 <strong>For Art:</strong> Categories are Age 6-9, Age 10-13, Age 14-17</p>
-                    <p>📊 <strong>For Math:</strong> Categories are Grade 5-6, Grade 7-8, Grade 9-10, Grade 11-12</p>
+                    <p>{t.forArtText}</p>
+                    <p>{t.forMathText}</p>
                   </div>
                 )}
               </div>
@@ -383,15 +491,15 @@ export default function Gallery() {
             <>
               <div className="text-center mb-12">
                 <h3 className="text-4xl font-bold text-gray-800 mb-2">
-                  {isShowingSearchResults 
-                    ? `🔍 Search Results for Student ID: ${searchStudentId}` 
-                    : `${subjects.find(s => s.id === subject)?.icon} ${subject} Gallery`
+                  {isShowingSearchResults
+                    ? t.searchResultsTitle(searchStudentId)
+                    : t.galleryTitleFor(subjects.find(s => s.id === subject)?.icon, subject)
                   }
                 </h3>
                 <p className="text-xl text-gray-600">
-                  {isShowingSearchResults 
-                    ? `Found ${displayItems.length} work(s)`
-                    : `${getCurrentCategoryName()} • ${displayItems.length} amazing ${displayItems.length === 1 ? 'work' : 'works'}`
+                  {isShowingSearchResults
+                    ? t.foundCountText(displayItems.length)
+                    : t.amazingWorksText(getCurrentCategoryName(), displayItems.length, displayItems.length === 1 ? t.workWord : t.worksWord)
                   }
                 </p>
                 {/* Back to Gallery Button when showing search results */}
@@ -402,7 +510,7 @@ export default function Gallery() {
                       className="bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors inline-flex items-center"
                     >
                       <span className="mr-2">←</span>
-                      Back to Gallery
+                      {t.backToGalleryButton}
                     </button>
                   </div>
                 )}
@@ -430,7 +538,7 @@ export default function Gallery() {
 
                     <div className="p-4 text-center">
                       <p className="text-sm text-gray-600">
-                        ID: {item.student_id || 'Unknown'}
+                        {t.idLabel} {item.student_id || t.unknownText}
                       </p>
                     </div>
                   </div>
@@ -447,24 +555,24 @@ export default function Gallery() {
           <div className="container mx-auto max-w-4xl">
             <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl text-center border border-gray-200 shadow-lg">
               <div className="text-5xl mb-4">🚀</div>
-              <h3 className="text-3xl font-bold text-gray-800 mb-4">Ready to Join the Tigers Experience?</h3>
+              <h3 className="text-3xl font-bold text-gray-800 mb-4">{t.ctaTitle}</h3>
               <p className="text-gray-600 mb-8 text-lg">
-                Be part of the next generation of Tigers Olympiad participants and showcase your talent to the world.
+                {t.ctaText}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link 
-                  href="/register" 
+                <Link
+                  href="/register"
                   className="inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-pink-500 text-white py-4 px-8 rounded-full text-lg font-semibold hover:from-orange-600 hover:to-pink-600 transition-all duration-200 transform hover:scale-105 shadow-lg"
                 >
                   <span className="mr-2">🎯</span>
-                  Register Now
+                  {t.registerNowButton}
                 </Link>
-                <Link 
-                  href="/representatives" 
+                <Link
+                  href="/representatives"
                   className="inline-flex items-center justify-center bg-gradient-to-r from-gray-500 to-gray-600 text-white py-4 px-8 rounded-full text-lg font-semibold hover:from-gray-600 hover:to-gray-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
                 >
                   <span className="mr-2">🌍</span>
-                  Find Your Representative
+                  {t.findRepresentativeButton}
                 </Link>
               </div>
             </div>
@@ -472,7 +580,7 @@ export default function Gallery() {
         </div>
       )}
 
-      <Footer />
+      <Footer lang={lang} />
     </div>
   );
 }

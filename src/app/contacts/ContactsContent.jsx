@@ -2,12 +2,64 @@
 
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
+import LangToggle from '../../components/LangToggle';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { createFeedback } from '../api/feedback_api';
 
+const TRANSLATIONS = {
+  en: {
+    title: '📬 Contacts',
+    subtitle: 'For general inquiries about the International Tigers Olympiad, please contact us',
+    contactInfoTitle: 'Contact Information',
+    countryNote1: "📌 For questions related to your country's participation, please reach out to your Country Representative.",
+    countryNote2: 'Their contact details can be found in the Representatives section of our website.',
+    stayConnected: 'Stay connected:',
+    instagram: '📷 Instagram',
+    telegram: '💬 Telegram',
+    sendMessageTitle: 'Send us a message',
+    nameLabel: 'Your Name',
+    namePlaceholder: 'Enter Your Name',
+    emailLabel: 'Email',
+    emailPlaceholder: 'Enter your Email',
+    subjectLabel: 'Subject',
+    subjectPlaceholder: 'Enter your Subject',
+    messageLabel: 'Message',
+    messagePlaceholder: 'Enter your Message here...',
+    sendButton: 'Send Your Message',
+    sendingButton: 'Sending...',
+    successAlert: '✅ Message sent! We will contact you soon.',
+    errorAlert: '❌ Failed to send message. Please try again.',
+  },
+  ru: {
+    title: '📬 Контакты',
+    subtitle: 'По общим вопросам о международной олимпиаде Tigers, пожалуйста, свяжитесь с нами',
+    contactInfoTitle: 'Контактная информация',
+    countryNote1: '📌 По вопросам, связанным с участием вашей страны, пожалуйста, обратитесь к своему представителю страны.',
+    countryNote2: 'Его контактные данные можно найти в разделе «Представители» нашего сайта.',
+    stayConnected: 'Будьте на связи:',
+    instagram: '📷 Instagram',
+    telegram: '💬 Telegram',
+    sendMessageTitle: 'Отправьте нам сообщение',
+    nameLabel: 'Ваше имя',
+    namePlaceholder: 'Введите ваше имя',
+    emailLabel: 'Email',
+    emailPlaceholder: 'Введите ваш email',
+    subjectLabel: 'Тема',
+    subjectPlaceholder: 'Введите тему сообщения',
+    messageLabel: 'Сообщение',
+    messagePlaceholder: 'Введите текст сообщения...',
+    sendButton: 'Отправить сообщение',
+    sendingButton: 'Отправка...',
+    successAlert: '✅ Сообщение отправлено! Мы свяжемся с вами в ближайшее время.',
+    errorAlert: '❌ Не удалось отправить сообщение. Пожалуйста, попробуйте ещё раз.',
+  },
+};
+
 export default function ContactsContent() {
   const searchParams = useSearchParams();
+  const [lang, setLang] = useState('en');
+  const t = TRANSLATIONS[lang];
 
   const [formData, setFormData] = useState({
     name: '',
@@ -43,7 +95,7 @@ export default function ContactsContent() {
     try {
       setLoading(true);
       await createFeedback(formData);
-      alert('✅ Message sent! We will contact you soon.');
+      alert(t.successAlert);
 
       setFormData({
         name: '',
@@ -53,7 +105,7 @@ export default function ContactsContent() {
       });
     } catch (error) {
       console.error('Error sending feedback:', error);
-      alert('❌ Failed to send message. Please try again.');
+      alert(t.errorAlert);
     } finally {
       setLoading(false);
     }
@@ -66,8 +118,12 @@ export default function ContactsContent() {
         backgroundImage: 'url("/image/fonmain1.png")', 
       }}
     >
-      <Navbar />
-      
+      <Navbar lang={lang} />
+
+      <div className="flex justify-center pt-6">
+        <LangToggle lang={lang} setLang={setLang} />
+      </div>
+
       {/* Header Section */}
       <div className="py-12 px-2 relative">
         <div className="container mx-auto max-w-6xl">
@@ -81,38 +137,38 @@ export default function ContactsContent() {
                 className="mb-4"
               />
             </div>
-            
+
             <h2 className="text-4xl font-bold text-orange-600 mb-5 text-center">
-              📬 Contacts
+              {t.title}
             </h2>
-            
+
             <p className="text-lg text-gray-600 max-w-2xl text-center mb-12">
-              For general inquiries about the International Tigers Olympiad, please contact us
+              {t.subtitle}
             </p>
           </div>
         </div>
       </div>
-      
+
       {/* COO Contact Info */}
       <div className="px-4 mb-12">
         <div className="container mx-auto max-w-5xl">
           <div className="bg-orange-600 text-white p-8 rounded-2xl relative overflow-hidden mb-8">
             <div className="relative z-10 text-center">
-              <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
+              <h3 className="text-2xl font-bold mb-6">{t.contactInfoTitle}</h3>
               <div className="bg-white text-gray-800 p-6 rounded-xl max-w-md mx-auto">
                 <p className="text-gray-700">📞 +7 700 595 1000</p>
                 <p className="text-gray-700">📧 info@tigersedu.com</p>
               </div>
             </div>
           </div>
-          
+
           {/* Additional Contact Info */}
           <div className="bg-pink-400 text-white p-6 rounded-xl text-center">
             <p className="text-lg mb-2">
-              📌 For questions related to your country's participation, please reach out to your Country Representative.
+              {t.countryNote1}
             </p>
             <p className="text-base">
-              Their contact details can be found in the Representatives section of our website.
+              {t.countryNote2}
             </p>
           </div>
         </div>
@@ -126,62 +182,62 @@ export default function ContactsContent() {
               
               {/* Social Links */}
               <div className="lg:w-1/5 pr-8 flex flex-col">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Stay connected:</h3>
-                <a href="https://instagram.com/tigers.olympiad" className="text-orange-500 hover:underline mb-2">📷 Instagram</a>
-                <a href="https://t.me/+esmA1x17nyI0OGMy" className="text-orange-500 hover:underline">💬 Telegram</a>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">{t.stayConnected}</h3>
+                <a href="https://instagram.com/tigers.olympiad" className="text-orange-500 hover:underline mb-2">{t.instagram}</a>
+                <a href="https://t.me/+esmA1x17nyI0OGMy" className="text-orange-500 hover:underline">{t.telegram}</a>
               </div>
-              
+
               {/* Contact Form */}
               <div id="contact-form" className="lg:w-2/5 lg:px-8 lg:border-l lg:border-r border-gray-200">
-                <h3 className="text-xl font-bold text-gray-800 mb-6">Send us a message</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-6">{t.sendMessageTitle}</h3>
                 <form onSubmit={handleSubmit}>
                   <div className="mb-6">
-                    <label className="block text-gray-700 mb-2">Your Name</label>
+                    <label className="block text-gray-700 mb-2">{t.nameLabel}</label>
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md text-black"
-                      placeholder="Enter Your Name"
+                      placeholder={t.namePlaceholder}
                       required
                     />
                   </div>
 
                   <div className="mb-6">
-                    <label className="block text-gray-700 mb-2">Email</label>
+                    <label className="block text-gray-700 mb-2">{t.emailLabel}</label>
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md text-black"
-                      placeholder="Enter your Email"
+                      placeholder={t.emailPlaceholder}
                       required
                     />
                   </div>
 
                   <div className="mb-6">
-                    <label className="block text-gray-700 mb-2">Subject</label>
+                    <label className="block text-gray-700 mb-2">{t.subjectLabel}</label>
                     <input
                       type="text"
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md text-black"
-                      placeholder="Enter your Subject"
+                      placeholder={t.subjectPlaceholder}
                     />
                   </div>
 
                   <div className="mb-6">
-                    <label className="block text-gray-700 mb-2">Message</label>
+                    <label className="block text-gray-700 mb-2">{t.messageLabel}</label>
                     <textarea
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       rows="5"
                       className="w-full px-4 py-2 border border-gray-300 rounded-md text-black"
-                      placeholder="Enter your Message here..."
+                      placeholder={t.messagePlaceholder}
                       required
                     ></textarea>
                   </div>
@@ -194,7 +250,7 @@ export default function ContactsContent() {
                         loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-orange-600'
                       }`}
                     >
-                      {loading ? 'Sending...' : 'Send Your Message'}
+                      {loading ? t.sendingButton : t.sendButton}
                     </button>
                   </div>
                 </form>
@@ -216,7 +272,7 @@ export default function ContactsContent() {
         </div>
       </div>
       
-      <Footer />
+      <Footer lang={lang} />
     </div>
   );
 }

@@ -1,30 +1,48 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '../../../components/navbar';
 import Footer from '../../../components/footer';
+import LangToggle from '../../../components/LangToggle';
 
-function FailureContent() {
+const T = {
+  en: {
+    title: 'Payment failed',
+    body: 'The payment was not completed or was declined. You have not been charged. You can try submitting your registration again.',
+    orderNumber: 'Order number:',
+    tryAgain: 'Try Again',
+    backHome: 'Back to Home',
+  },
+  ru: {
+    title: 'Оплата не прошла',
+    body: 'Платёж не завершён или был отклонён. Списание средств не производилось. Вы можете попробовать зарегистрироваться ещё раз.',
+    orderNumber: 'Номер заказа:',
+    tryAgain: 'Попробовать снова',
+    backHome: 'На главную',
+  },
+};
+
+function FailureContent({ lang }) {
   const searchParams = useSearchParams();
   const orderId = searchParams.get('order_id');
+  const t = T[lang];
 
   return (
-    <div className="flex-1 flex items-center justify-center py-24 md:py-32 px-4">
+    <div className="flex-1 flex items-center justify-center py-16 px-4">
       <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8 text-center">
         <div className="text-6xl mb-6">⚠️</div>
         <h1 className="text-3xl md:text-4xl font-bold text-red-600 mb-4">
-          Payment failed
+          {t.title}
         </h1>
         <p className="text-lg text-gray-700 mb-6">
-          The payment was not completed or was declined. You have not been
-          charged. You can try submitting your registration again.
+          {t.body}
         </p>
 
         {orderId && (
           <p className="text-sm text-gray-500 mb-8">
-            Order number: <span className="font-mono">{orderId}</span>
+            {t.orderNumber} <span className="font-mono">{orderId}</span>
           </p>
         )}
 
@@ -33,13 +51,13 @@ function FailureContent() {
             href="/olympiad/register"
             className="inline-block bg-orange-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors"
           >
-            Try Again
+            {t.tryAgain}
           </Link>
           <Link
             href="/"
             className="inline-block bg-gray-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-gray-600 transition-colors"
           >
-            Back to Home
+            {t.backHome}
           </Link>
         </div>
       </div>
@@ -48,17 +66,22 @@ function FailureContent() {
 }
 
 export default function OlympiadFailure() {
+  const [lang, setLang] = useState('en');
+
   return (
     <div
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
       style={{ backgroundImage: 'url("/image/fonmain1.png")' }}
     >
-      <Navbar />
+      <Navbar lang={lang} />
+      <div className="flex justify-center pt-8">
+        <LangToggle lang={lang} setLang={setLang} />
+      </div>
       <Suspense fallback={<div className="flex-1" />}>
-        <FailureContent />
+        <FailureContent lang={lang} />
       </Suspense>
       <div className="mt-auto">
-        <Footer />
+        <Footer lang={lang} />
       </div>
     </div>
   );

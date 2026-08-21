@@ -42,6 +42,24 @@ export const ART_CATEGORIES = [
   { id: 7, name: 'Age 14-17', minAge: 14, maxAge: 17, subject: 'art' }
 ];
 
+// Русские названия категорий для публичных страниц (не используется в админке)
+export const CATEGORY_NAMES_RU = {
+  1: 'Класс 5-6',
+  2: 'Класс 7-8',
+  3: 'Класс 9-10',
+  4: 'Класс 11-12',
+  5: 'Возраст 6-9',
+  6: 'Возраст 10-13',
+  7: 'Возраст 14-17',
+};
+
+// Название категории с учётом языка (для публичных страниц)
+export const getCategoryDisplayName = (categoryId, lang = 'en') => {
+  const category = ALL_CATEGORIES.find(cat => cat.id === parseInt(categoryId));
+  if (!category) return lang === 'ru' ? 'Неизвестная категория' : 'Unknown Category';
+  return lang === 'ru' ? (CATEGORY_NAMES_RU[category.id] || category.name) : category.name;
+};
+
 // Все категории вместе
 export const ALL_CATEGORIES = [...MATH_CATEGORIES, ...ART_CATEGORIES];
 

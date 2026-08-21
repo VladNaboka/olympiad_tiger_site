@@ -29,6 +29,14 @@ const HOW_IT_WORKS_CONTENT = {
     executorLabel: 'Service provider',
     executorValue: 'LLP "WILLIAM ACADEMY" (Republic of Kazakhstan)',
     weAccept: 'We accept',
+    cardPaymentHeading: 'How Card Payment Works',
+    cardPaymentSteps: [
+      'Click "Proceed to Payment" — you will be redirected to the secure payment page of our provider, Freedom Pay.',
+      'Enter your Visa or Mastercard details on that page (name, card number, expiry date, CVC).',
+      'Confirm the payment via 3-D Secure — a one-time code (SMS/push) sent by your card-issuing bank.',
+      'You are redirected back to our site, and a confirmation with your registration code and payment receipt is sent to your email.',
+    ],
+    cardPaymentNote: 'The website never sees or stores your card number — card data is entered only on the payment provider\'s secure page.',
   },
   ru: {
     heading: 'Как проходит регистрация',
@@ -47,11 +55,93 @@ const HOW_IT_WORKS_CONTENT = {
     executorLabel: 'Исполнитель услуги',
     executorValue: 'ТОО «WILLIAM ACADEMY» (Республика Казахстан)',
     weAccept: 'Способы оплаты',
+    cardPaymentHeading: 'Порядок оплаты банковской картой',
+    cardPaymentSteps: [
+      'Нажмите «Перейти к оплате» — вы будете перенаправлены на защищённую страницу оплаты нашего провайдера Freedom Pay.',
+      'Введите данные карты Visa или Mastercard (имя владельца, номер карты, срок действия, CVC-код).',
+      'Подтвердите платёж через 3-D Secure — одноразовый код (SMS/push), который присылает банк-эмитент вашей карты.',
+      'Вы возвращаетесь на наш сайт, а на email приходит подтверждение с регистрационным кодом и чеком об оплате.',
+    ],
+    cardPaymentNote: 'Сайт не видит и не хранит номер вашей карты — данные карты вводятся только на защищённой странице платёжного провайдера.',
   },
 };
 
-function HowItWorks() {
-  const [lang, setLang] = useState('en');
+const FORM_CONTENT = {
+  en: {
+    formTitle: 'Olympiad Registration',
+    formSubtitle: 'Fill in the participant details. After payment, you will receive an email with your registration code (TIG-...).',
+    fullNameLabel: 'Full Name *',
+    fullNamePlaceholder: 'John Smith',
+    emailLabel: 'Email *',
+    emailPlaceholder: 'user@example.com',
+    phoneLabel: 'Phone *',
+    phonePlaceholder: '+77011234567',
+    olympiadLabel: 'Olympiad *',
+    mathLabel: '📐 Math',
+    artLabel: '🎨 Art',
+    agreementPrefix: "I confirm that I am the participant's parent or legal representative, and on behalf of the participant I have read and agree to the",
+    termsLink: 'Public Offer',
+    privacyLink: 'Privacy Policy',
+    and: 'and',
+    refundLink: 'Refund Policy',
+    agreementSuffix: ", including the processing and publication of the participant's personal data as described therein. *",
+    submitLoading: 'Redirecting to payment...',
+    submit: 'Proceed to Payment',
+    footerNote: 'Payment is processed on the secure FreedomPay page. We do not store or handle your card details.',
+    comingSoonTitle: 'Coming Soon',
+    comingSoonText: 'Olympiad registration is temporarily unavailable. Please check back later.',
+    errors: {
+      fullNameRequired: 'Please enter your full name',
+      fullNameShort: 'Full name is too short',
+      emailRequired: 'Please enter your email',
+      emailInvalid: 'Invalid email format',
+      phoneRequired: 'Please enter your phone number',
+      phoneInvalid: 'Invalid phone format (e.g. +77011234567)',
+      olympiadRequired: 'Please choose an olympiad',
+      agreementRequired: 'You must accept the Public Offer to continue',
+      noRedirectUrl: 'Payment link was not received. Please try again later.',
+      submitFailed: 'Failed to submit registration',
+    },
+  },
+  ru: {
+    formTitle: 'Регистрация на олимпиаду',
+    formSubtitle: 'Укажите данные участника. После оплаты на почту придёт письмо с регистрационным кодом (TIG-...).',
+    fullNameLabel: 'ФИО *',
+    fullNamePlaceholder: 'Иван Иванов',
+    emailLabel: 'Email *',
+    emailPlaceholder: 'user@example.com',
+    phoneLabel: 'Телефон *',
+    phonePlaceholder: '+77011234567',
+    olympiadLabel: 'Олимпиада *',
+    mathLabel: '📐 Math',
+    artLabel: '🎨 Art',
+    agreementPrefix: 'Я подтверждаю, что являюсь родителем или законным представителем участника, и от его имени ознакомлен(а) и согласен(на) с',
+    termsLink: 'Публичной офертой',
+    privacyLink: 'Политикой конфиденциальности',
+    and: 'и',
+    refundLink: 'Политикой возврата',
+    agreementSuffix: ', включая обработку и публикацию персональных данных участника, как описано в этих документах. *',
+    submitLoading: 'Переходим к оплате...',
+    submit: 'Перейти к оплате',
+    footerNote: 'Оплата проходит на защищённой странице FreedomPay. Мы не храним и не обрабатываем данные вашей карты.',
+    comingSoonTitle: 'Скоро откроется',
+    comingSoonText: 'Регистрация на олимпиаду временно недоступна. Пожалуйста, загляните позже.',
+    errors: {
+      fullNameRequired: 'Пожалуйста, укажите ФИО',
+      fullNameShort: 'ФИО слишком короткое',
+      emailRequired: 'Пожалуйста, укажите email',
+      emailInvalid: 'Неверный формат email',
+      phoneRequired: 'Пожалуйста, укажите номер телефона',
+      phoneInvalid: 'Неверный формат телефона (например, +77011234567)',
+      olympiadRequired: 'Пожалуйста, выберите олимпиаду',
+      agreementRequired: 'Необходимо принять условия Публичной оферты',
+      noRedirectUrl: 'Не удалось получить ссылку на оплату. Пожалуйста, попробуйте позже.',
+      submitFailed: 'Не удалось отправить регистрацию',
+    },
+  },
+};
+
+function HowItWorks({ lang, setLang }) {
   const t = HOW_IT_WORKS_CONTENT[lang];
 
   return (
@@ -99,6 +189,21 @@ function HowItWorks() {
           <PaymentBadges />
         </div>
       </div>
+
+      <div className="mt-4 bg-white rounded-xl shadow p-6">
+        <h3 className="font-semibold text-gray-800 mb-3">{t.cardPaymentHeading}</h3>
+        <ol className="space-y-2">
+          {t.cardPaymentSteps.map((step, i) => (
+            <li key={i} className="flex gap-3 text-sm text-gray-600">
+              <span className="shrink-0 w-5 h-5 rounded-full bg-orange-100 text-orange-600 text-xs font-bold flex items-center justify-center">
+                {i + 1}
+              </span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+        <p className="text-xs text-gray-500 mt-3">{t.cardPaymentNote}</p>
+      </div>
     </div>
   );
 }
@@ -112,6 +217,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+?\d{10,15}$/;
 
 export default function OlympiadRegister() {
+  const [lang, setLang] = useState('en');
+  const f = FORM_CONTENT[lang];
+
   const [form, setForm] = useState({
     full_name: '',
     email: '',
@@ -136,29 +244,29 @@ export default function OlympiadRegister() {
     const phone = form.phone.replace(/[\s()-]/g, '');
 
     if (!fullName) {
-      next.full_name = 'Please enter your full name';
+      next.full_name = f.errors.fullNameRequired;
     } else if (fullName.length < 3) {
-      next.full_name = 'Full name is too short';
+      next.full_name = f.errors.fullNameShort;
     }
 
     if (!email) {
-      next.email = 'Please enter your email';
+      next.email = f.errors.emailRequired;
     } else if (!EMAIL_RE.test(email)) {
-      next.email = 'Invalid email format';
+      next.email = f.errors.emailInvalid;
     }
 
     if (!phone) {
-      next.phone = 'Please enter your phone number';
+      next.phone = f.errors.phoneRequired;
     } else if (!PHONE_RE.test(phone)) {
-      next.phone = 'Invalid phone format (e.g. +77011234567)';
+      next.phone = f.errors.phoneInvalid;
     }
 
     if (form.olympiad !== 'Math' && form.olympiad !== 'Art') {
-      next.olympiad = 'Please choose an olympiad';
+      next.olympiad = f.errors.olympiadRequired;
     }
 
     if (!agreedToTerms) {
-      next.agreedToTerms = 'You must accept the Public Offer to continue';
+      next.agreedToTerms = f.errors.agreementRequired;
     }
 
     setErrors(next);
@@ -181,13 +289,13 @@ export default function OlympiadRegister() {
       });
 
       if (!redirect_url) {
-        throw new Error('Payment link was not received. Please try again later.');
+        throw new Error(f.errors.noRedirectUrl);
       }
 
       // Redirect to the FreedomPay payment page
       window.location.href = redirect_url;
     } catch (err) {
-      setServerError(err.message || 'Failed to submit registration');
+      setServerError(err.message || f.errors.submitFailed);
       setLoading(false);
     }
   };
@@ -204,23 +312,23 @@ export default function OlympiadRegister() {
         className="min-h-screen flex flex-col bg-[#fffbf2] relative"
         style={{ backgroundImage: 'url("/image/fonmain1.png")' }}
       >
-        <Navbar />
+        <Navbar lang={lang} />
 
         <div className="flex-1 flex flex-col items-center justify-center py-24 md:py-32 px-4">
-          <HowItWorks />
+          <HowItWorks lang={lang} setLang={setLang} />
 
           <div className="text-center max-w-2xl">
             <h1 className="text-4xl md:text-5xl font-bold text-orange-600 mb-6">
-              Coming Soon
+              {f.comingSoonTitle}
             </h1>
             <p className="text-lg text-gray-600">
-              Olympiad registration is temporarily unavailable. Please check back later.
+              {f.comingSoonText}
             </p>
           </div>
         </div>
 
         <div className="mt-auto">
-          <Footer />
+          <Footer lang={lang} />
         </div>
       </div>
     );
@@ -231,18 +339,17 @@ export default function OlympiadRegister() {
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
       style={{ backgroundImage: 'url("/image/fonmain1.png")' }}
     >
-      <Navbar />
+      <Navbar lang={lang} />
 
       <div className="flex-1 flex flex-col items-center justify-center py-24 md:py-32 px-4">
-        <HowItWorks />
+        <HowItWorks lang={lang} setLang={setLang} />
 
         <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8">
           <h1 className="text-3xl md:text-4xl font-bold text-orange-600 mb-2 text-center">
-            Olympiad Registration
+            {f.formTitle}
           </h1>
           <p className="text-gray-600 mb-8 text-center">
-            Fill in the participant details. After payment, you will receive an
-            email with your registration code (TIG-...).
+            {f.formSubtitle}
           </p>
 
           {serverError && (
@@ -256,14 +363,14 @@ export default function OlympiadRegister() {
               {/* Full name */}
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Full Name *
+                  {f.fullNameLabel}
                 </label>
                 <input
                   type="text"
                   value={form.full_name}
                   onChange={handleChange('full_name')}
                   className={inputClass('full_name')}
-                  placeholder="John Smith"
+                  placeholder={f.fullNamePlaceholder}
                   disabled={loading}
                 />
                 {errors.full_name && (
@@ -274,14 +381,14 @@ export default function OlympiadRegister() {
               {/* Email */}
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Email *
+                  {f.emailLabel}
                 </label>
                 <input
                   type="email"
                   value={form.email}
                   onChange={handleChange('email')}
                   className={inputClass('email')}
-                  placeholder="user@example.com"
+                  placeholder={f.emailPlaceholder}
                   disabled={loading}
                 />
                 {errors.email && (
@@ -292,14 +399,14 @@ export default function OlympiadRegister() {
               {/* Phone */}
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Phone *
+                  {f.phoneLabel}
                 </label>
                 <input
                   type="tel"
                   value={form.phone}
                   onChange={handleChange('phone')}
                   className={inputClass('phone')}
-                  placeholder="+77011234567"
+                  placeholder={f.phonePlaceholder}
                   disabled={loading}
                 />
                 {errors.phone && (
@@ -310,12 +417,12 @@ export default function OlympiadRegister() {
               {/* Olympiad */}
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Olympiad *
+                  {f.olympiadLabel}
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { value: 'Math', label: '📐 Math' },
-                    { value: 'Art', label: '🎨 Art' },
+                    { value: 'Math', label: f.mathLabel },
+                    { value: 'Art', label: f.artLabel },
                   ].map((opt) => (
                     <button
                       type="button"
@@ -353,22 +460,19 @@ export default function OlympiadRegister() {
                     className="mt-1 h-4 w-4 accent-orange-500"
                   />
                   <span className="text-sm text-gray-700">
-                    I confirm that I am the participant&apos;s parent or legal
-                    representative, and on behalf of the participant I have read and
-                    agree to the{' '}
+                    {f.agreementPrefix}{' '}
                     <Link href="/terms" target="_blank" className="text-orange-600 underline">
-                      Public Offer
+                      {f.termsLink}
                     </Link>
                     ,{' '}
                     <Link href="/privacy" target="_blank" className="text-orange-600 underline">
-                      Privacy Policy
+                      {f.privacyLink}
                     </Link>{' '}
-                    and{' '}
+                    {f.and}{' '}
                     <Link href="/refund" target="_blank" className="text-orange-600 underline">
-                      Refund Policy
+                      {f.refundLink}
                     </Link>
-                    , including the processing and publication of the participant&apos;s
-                    personal data as described therein. *
+                    {f.agreementSuffix}
                   </span>
                 </label>
                 {errors.agreedToTerms && (
@@ -385,23 +489,22 @@ export default function OlympiadRegister() {
               {loading ? (
                 <>
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-                  Redirecting to payment...
+                  {f.submitLoading}
                 </>
               ) : (
-                'Proceed to Payment'
+                f.submit
               )}
             </button>
 
             <p className="text-xs text-gray-500 mt-4 text-center">
-              Payment is processed on the secure FreedomPay page. We do not store
-              or handle your card details.
+              {f.footerNote}
             </p>
           </form>
         </div>
       </div>
 
       <div className="mt-auto">
-        <Footer />
+        <Footer lang={lang} />
       </div>
     </div>
   );

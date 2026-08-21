@@ -1,6 +1,10 @@
+'use client';
+
+import { useState } from 'react';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Link from 'next/link';
+import LangToggle from '../../components/LangToggle';
 
 // Representatives data - automatically sorted alphabetically by country
 const representativesData = [
@@ -196,10 +200,37 @@ const representatives = representativesData.sort((a, b) =>
   a.country.localeCompare(b.country)
 );
 
+const TEXT = {
+  en: {
+    heading: 'REPRESENTATIVES',
+    subheading: 'Connect with the Tigers Olympiad representatives in your country',
+    infoP1: 'The Tigers Olympiad is supported by a global team of passionate coordinators and educators who guide students in their home countries.',
+    infoP2: 'These representatives are your personal connection to everything Tigers — from registration to local events and support.',
+    gridTitle: 'Country Representatives',
+    becomeTitle: 'Become a Representative',
+    becomeText: "If your country is not listed and you're interested in becoming a Tigers Olympiad representative, we'd love to hear from you! Help us bring this enriching experience to students in your region.",
+    getInTouch: 'Get in Touch',
+    finalMessage: "Through this network of representatives and brilliant participants like you, we're building a global community of dreamers, thinkers, and creators. Connect with your representative today — and start your Tigers journey!",
+  },
+  ru: {
+    heading: 'ПРЕДСТАВИТЕЛИ',
+    subheading: 'Свяжитесь с представителем Tigers Olympiad в вашей стране',
+    infoP1: 'Олимпиаду Tigers поддерживает международная команда увлечённых координаторов и педагогов, которые сопровождают учеников в своих странах.',
+    infoP2: 'Эти представители — ваша личная связь со всем, что связано с Tigers: от регистрации до локальных мероприятий и поддержки.',
+    gridTitle: 'Представители по странам',
+    becomeTitle: 'Стать представителем',
+    becomeText: 'Если вашей страны нет в списке и вы хотите стать представителем Tigers Olympiad, будем рады услышать вас! Помогите нам принести этот опыт ученикам в вашем регионе.',
+    getInTouch: 'Связаться с нами',
+    finalMessage: 'Благодаря этой сети представителей и таким талантливым участникам, как вы, мы строим глобальное сообщество мечтателей, мыслителей и творцов. Свяжитесь со своим представителем уже сегодня — и начните свой путь с Tigers!',
+  },
+};
+
 export default function Representatives() {
+  const [lang, setLang] = useState('en');
+  const t = TEXT[lang];
+
   // Filter out the main representative for the grid
   const otherReps = representatives.filter(rep => !rep.isMain);
-  const mainRep = representatives.find(rep => rep.isMain);
 
   return (
     <div
@@ -208,12 +239,15 @@ export default function Representatives() {
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
-      <Navbar />
+      <Navbar lang={lang} />
 
       {/* Header Section with logo */}
       <div className="py-12 px-2 relative">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col items-center justify-center">
+            <div className="flex justify-center mb-4">
+              <LangToggle lang={lang} setLang={setLang} />
+            </div>
             <div className="mb-6">
               <div className="flex flex-col items-center">
                 <img
@@ -227,11 +261,11 @@ export default function Representatives() {
             </div>
 
             <h2 className="text-4xl font-bold text-orange-600 mb-5 text-center">
-              REPRESENTATIVES
+              {t.heading}
             </h2>
 
             <p className="text-lg text-gray-600 max-w-2xl text-center mb-8">
-              Connect with the Tigers Olympiad representatives in your country
+              {t.subheading}
             </p>
           </div>
         </div>
@@ -247,14 +281,8 @@ export default function Representatives() {
             <div className="absolute bottom-0 right-0 w-32 h-32 border-2 border-white rounded-full opacity-20 translate-x-1/2 translate-y-1/2"></div>
 
             <div className="relative z-10 text-center">
-              <p className="text-lg mb-4">
-                The Tigers Olympiad is supported by a global team of passionate coordinators and educators
-                who guide students in their home countries.
-              </p>
-              <p className="text-lg">
-                These representatives are your personal connection to everything Tigers — from registration
-                to local events and support.
-              </p>
+              <p className="text-lg mb-4">{t.infoP1}</p>
+              <p className="text-lg">{t.infoP2}</p>
             </div>
           </div>
         </div>
@@ -264,7 +292,7 @@ export default function Representatives() {
       <div className="px-4 mb-16">
         <div className="container mx-auto max-w-6xl">
           <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">
-            Country Representatives
+            {t.gridTitle}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {otherReps.map((rep) => (
@@ -300,16 +328,15 @@ export default function Representatives() {
       <div className="px-4 mb-16">
         <div className="container mx-auto max-w-4xl">
           <div className="bg-white p-8 rounded-xl shadow-sm text-center">
-            <h2 className="text-3xl font-bold text-orange-600 mb-6">Become a Representative</h2>
+            <h2 className="text-3xl font-bold text-orange-600 mb-6">{t.becomeTitle}</h2>
             <p className="text-gray-700 mb-8 max-w-3xl mx-auto">
-              If your country is not listed and you're interested in becoming a Tigers Olympiad representative,
-              we'd love to hear from you! Help us bring this enriching experience to students in your region.
+              {t.becomeText}
             </p>
             <Link
               href="/contacts"
               className="inline-block bg-orange-500 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors"
             >
-              Get in Touch
+              {t.getInTouch}
             </Link>
           </div>
         </div>
@@ -320,16 +347,14 @@ export default function Representatives() {
         <div className="container mx-auto max-w-4xl">
           <div className="bg-yellow-50 p-8 rounded-xl text-center">
             <p className="text-gray-700 text-lg">
-              Through this network of representatives and brilliant participants like you, we're building
-              a global community of dreamers, thinkers, and creators. Connect with your representative
-              today — and start your Tigers journey!
+              {t.finalMessage}
             </p>
           </div>
         </div>
       </div>
 
       <div className="mt-auto">
-        <Footer />
+        <Footer lang={lang} />
       </div>
     </div>
   );

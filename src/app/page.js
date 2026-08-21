@@ -3,18 +3,80 @@
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import Image from 'next/image';
-import Link from 'next/link'; 
+import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import logo from '../../public/image/logo.png';
+import LangToggle from '../components/LangToggle';
+
+const CONTENT = {
+  en: {
+    heroTitlePrefix: 'International ',
+    heroTitleHighlight: 'Tigers',
+    heroTitleSuffix: 'Olympiad',
+    heroSubtitle: "Where the world's brightest young minds meet innovation, creativity, and challenge.",
+    register: 'Register',
+    welcomeHeading: 'Welcome to the International Tigers Olympiad',
+    welcomeText:
+      'A prestigious global event where the brightest young minds meet challenge, creativity, and innovation. Open to students aged 6 to 17 from all countries, the Olympiad offers a unique opportunity to shine in Mathematics and Art — two disciplines that together reflect the full spectrum of human intelligence and expression.',
+    empowermentHeadingPrefix: 'At Tigers every student',
+    empowermentHeadingHighlight: 'chooses their own path',
+    empowermentList: ['Compete in Mathematics', 'Compete in Art', 'Or embrace both!'],
+    empowermentText:
+      "Participation in either or both categories is entirely optional — and warmly encouraged. This flexible format lets students build on their strengths, try something new, and experience the Olympiad in a way that's truly their own.",
+    joinUs: 'Join Us',
+    globalHeadingLine1: 'But Tigers is more than',
+    globalHeadingLine2: 'just a competition —',
+    globalHeadingHighlight: "it's a global stage",
+    globalText:
+      'for discovery and connection. Held entirely in English, the Olympiad brings together ambitious students from every corner of the world — to think, create, and grow together.',
+    joinMovementLink: 'Join the Movement',
+    joinMovementHeading: 'Join the movement',
+    joinMovementText:
+      'Challenge your mind. Express your vision. And become part of a global community that celebrates your creativity — and showcases your talent to the world.',
+    emailPlaceholder: 'Email Address',
+    send: 'Send',
+    alertEmail: 'Please enter your email address.',
+  },
+  ru: {
+    heroTitlePrefix: 'Международная ',
+    heroTitleHighlight: 'олимпиада',
+    heroTitleSuffix: 'Tigers',
+    heroSubtitle: 'Место, где самые яркие юные умы мира встречают инновации, творчество и вызов.',
+    register: 'Регистрация',
+    welcomeHeading: 'Добро пожаловать в Международную олимпиаду Tigers',
+    welcomeText:
+      'Престижное международное событие, где самые способные юные умы встречают вызов, творчество и инновации. Олимпиада открыта для учащихся от 6 до 17 лет из всех стран и даёт уникальную возможность проявить себя в математике и искусстве — двух дисциплинах, которые вместе отражают весь спектр человеческого интеллекта и самовыражения.',
+    empowermentHeadingPrefix: 'В Tigers каждый ученик',
+    empowermentHeadingHighlight: 'выбирает свой путь',
+    empowermentList: ['Соревнование по математике', 'Соревнование по искусству', 'Или сразу оба направления!'],
+    empowermentText:
+      'Участие в одной или обеих категориях полностью добровольно — и мы это только приветствуем. Гибкий формат позволяет ученикам опираться на свои сильные стороны, пробовать новое и пройти олимпиаду по-своему.',
+    joinUs: 'Присоединиться',
+    globalHeadingLine1: 'Но Tigers — это больше,',
+    globalHeadingLine2: 'чем просто соревнование —',
+    globalHeadingHighlight: 'это международная площадка',
+    globalText:
+      'для открытий и общения. Олимпиада проводится полностью на английском языке и объединяет амбициозных учеников со всего мира — чтобы думать, творить и расти вместе.',
+    joinMovementLink: 'Присоединиться к движению',
+    joinMovementHeading: 'Присоединяйтесь к движению',
+    joinMovementText:
+      'Бросьте вызов своему разуму. Выразите своё видение. Станьте частью мирового сообщества, которое ценит вашу креативность — и покажите свой талант всему миру.',
+    emailPlaceholder: 'Email адрес',
+    send: 'Отправить',
+    alertEmail: 'Пожалуйста, введите ваш email адрес.',
+  },
+};
 
 export default function Home() {
   const [email, setEmail] = useState('');
+  const [lang, setLang] = useState('en');
   const router = useRouter();
+  const t = CONTENT[lang];
 
   const handleSendClick = () => {
     if (!email.trim()) {
-      alert('Please enter your email address.');
+      alert(t.alertEmail);
       return;
     }
     router.push(`/contacts?email=${encodeURIComponent(email)}`);
@@ -22,7 +84,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffbf2]">
-      <Navbar />
+      <Navbar lang={lang} />
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">
@@ -37,20 +99,22 @@ export default function Home() {
 
         <div className="container mx-auto px-4 py-8 md:py-24 flex flex-col lg:flex-row items-center relative z-10">
           <div className="lg:w-1/2 mb-4 lg:mb-0">
+            <div className="mb-4">
+              <LangToggle lang={lang} setLang={setLang} />
+            </div>
             <h1 className="text-5xl font-bold mb-6 text-black">
-              International <span className="text-orange-500">Tigers</span>
+              {t.heroTitlePrefix}<span className="text-orange-500">{t.heroTitleHighlight}</span>
               <br />
-              Olympiad
+              {t.heroTitleSuffix}
             </h1>
             <p className="text-lg mb-8 text-gray-700">
-              Where the world's brightest young minds meet innovation,
-              creativity, and challenge.
+              {t.heroSubtitle}
             </p>
             <Link
               href="/olympiad/register"
               className="inline-block bg-orange-500 text-white py-2 px-16 rounded-full text-lg font-semibold hover:bg-orange-600 transition-colors"
             >
-              Register
+              {t.register}
             </Link>
           </div>
           <div className="lg:w-1/2 hidden lg:flex justify-center items-center">
@@ -70,14 +134,10 @@ export default function Home() {
       <div className="px-4 pb-8">
         <div className="container mx-auto max-w-6xl bg-orange-600 text-white py-12 px-8 rounded-lg">
           <h2 className="text-3xl font-bold mb-6 text-center">
-            Welcome to the International Tigers Olympiad
+            {t.welcomeHeading}
           </h2>
           <p className="text-2xl text-center">
-            A prestigious global event where the brightest young minds meet
-            challenge, creativity, and innovation. Open to students aged 6 to
-            17 from all countries, the Olympiad offers a unique opportunity to
-            shine in Mathematics and Art — two disciplines that together
-            reflect the full spectrum of human intelligence and expression.
+            {t.welcomeText}
           </p>
         </div>
       </div>
@@ -101,7 +161,7 @@ export default function Home() {
             width={120}
             height={120}
             className="-rotate-12"
-          /> 
+          />
         </div>
         <div className="absolute top-20 left-0 opacity-20 pointer-events-none hidden lg:block">
           <Image
@@ -154,26 +214,23 @@ export default function Home() {
 
           <div className="lg:w-1/2 order-1 lg:order-2">
             <h2 className="text-4xl font-bold mb-4 text-black">
-              At Tigers every student
+              {t.empowermentHeadingPrefix}
               <br />
-              <span className="text-orange-500">chooses their own path</span>
+              <span className="text-orange-500">{t.empowermentHeadingHighlight}</span>
             </h2>
             <ul className="text-lg text-gray-700 mb-8 list-disc pl-6">
-              <li>Compete in Mathematics</li>
-              <li>Compete in Art</li>
-              <li>Or embrace both!</li>
+              {t.empowermentList.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
             <p className="text-lg text-gray-700 mb-8">
-              Participation in either or both categories is entirely optional —
-              and warmly encouraged. This flexible format lets students build
-              on their strengths, try something new, and experience the
-              Olympiad in a way that's truly their own.
+              {t.empowermentText}
             </p>
             <Link
               href="/olympiad/register"
               className="inline-block bg-amber-400 text-white py-3 px-12 rounded-full text-lg font-semibold hover:bg-amber-500 transition-colors"
             >
-              Join Us
+              {t.joinUs}
             </Link>
           </div>
         </div>
@@ -184,22 +241,20 @@ export default function Home() {
         <div className="flex flex-col lg:flex-row items-center gap-8">
           <div className="lg:w-1/2">
             <h2 className="text-4xl font-bold mb-4 text-black">
-              But Tigers is more than
+              {t.globalHeadingLine1}
               <br />
-              just a competition —
+              {t.globalHeadingLine2}
               <br />
-              <span className="text-orange-500">it's a global stage</span>
+              <span className="text-orange-500">{t.globalHeadingHighlight}</span>
             </h2>
             <p className="text-lg text-gray-700 mb-8">
-              for discovery and connection. Held entirely in English, the
-              Olympiad brings together ambitious students from every corner of
-              the world — to think, create, and grow together.
+              {t.globalText}
             </p>
             <Link
               href="/olympiad/register"
               className="inline-block bg-amber-400 text-white py-3 px-12 rounded-full text-lg font-semibold hover:bg-amber-500 transition-colors"
             >
-              Join the Movement
+              {t.joinMovementLink}
             </Link>
           </div>
 
@@ -239,18 +294,16 @@ export default function Home() {
           <div className="relative bg-pink-400 py-16 px-8 rounded-2xl overflow-hidden">
             <div className="max-w-3xl mx-auto text-center relative z-10">
               <h2 className="text-4xl font-bold text-white mb-6">
-                Join the movement
+                {t.joinMovementHeading}
               </h2>
               <p className="text-xl text-white mb-8">
-                Challenge your mind. Express your vision. And become part of a
-                global community that celebrates your creativity — and showcases
-                your talent to the world.
+                {t.joinMovementText}
               </p>
 
               <div className="flex bg-white rounded-full overflow-hidden max-w-lg mx-auto text-black shadow-lg">
                 <input
                   type="email"
-                  placeholder="Email Address"
+                  placeholder={t.emailPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="flex-grow py-3 md:py-4 px-5 md:px-6 focus:outline-none text-gray-800 placeholder-gray-500 text-base md:text-lg"
@@ -259,7 +312,7 @@ export default function Home() {
                   onClick={handleSendClick}
                   className="bg-orange-500 text-white py-3 md:py-4 pl-5 pr-9 md:pl-8 md:pr-8 font-semibold hover:bg-orange-600 transition-colors text-base md:text-lg flex items-center justify-center"
                 >
-                  Send
+                  {t.send}
                 </button>
               </div>
             </div>
@@ -267,7 +320,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer />
+      <Footer lang={lang} />
     </div>
   );
 }

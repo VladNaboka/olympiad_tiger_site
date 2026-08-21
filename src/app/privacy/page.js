@@ -294,6 +294,7 @@ export default function PrivacyPage() {
 
   return (
     <LegalLayout
+      lang={lang}
       title={lang === 'en' ? 'Privacy Policy' : 'Политика конфиденциальности'}
       updated={lang === 'en' ? 'Last updated: August 11, 2026' : 'Дата последнего обновления: 11.08.2026'}
       langToggle={<LangToggle lang={lang} setLang={setLang} />}

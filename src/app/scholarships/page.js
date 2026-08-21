@@ -6,8 +6,41 @@ import Footer from '../../components/footer';
 import Link from 'next/link';
 import { apiRequest } from '../api/base_api';
 import scholarships from '../../data/scholarships.json';
+import LangToggle from '../../components/LangToggle';
 
 const ITEMS_PER_PAGE = 16;
+
+// Переводы кратких описаний партнёров из scholarships.json (companyName оставляем как есть — это бренды)
+const DESCRIPTION_RU = {
+  'Every Child Can Excel': 'Каждый ребёнок может преуспеть',
+  'Explore Your Potential at Top Universities': 'Раскройте свой потенциал в ведущих университетах',
+  'Summer Camps in Toronto': 'Летние лагеря в Торонто',
+};
+
+const T = {
+  en: {
+    prev: '← Prev', next: 'Next →',
+    applyNow: 'Apply Now',
+    firstName: 'First Name', lastName: 'Last Name', phone: 'Phone Number', email: 'Email',
+    olympiadParticipant: 'Olympiad participant',
+    selectError: 'Please select Math or Art.',
+    genericError: 'Something went wrong. Please try again.',
+    sending: 'Sending...', submit: 'Submit',
+    thankYou: 'Thank you!', willContact: 'We will contact you soon.', close: 'Close',
+    visitWebsite: 'Visit Website →', comingSoon: 'Coming Soon',
+  },
+  ru: {
+    prev: '← Назад', next: 'Далее →',
+    applyNow: 'Подать заявку',
+    firstName: 'Имя', lastName: 'Фамилия', phone: 'Номер телефона', email: 'Email',
+    olympiadParticipant: 'Участник олимпиады',
+    selectError: 'Пожалуйста, выберите Math или Art.',
+    genericError: 'Что-то пошло не так. Попробуйте ещё раз.',
+    sending: 'Отправка...', submit: 'Отправить',
+    thankYou: 'Спасибо!', willContact: 'Мы скоро свяжемся с вами.', close: 'Закрыть',
+    visitWebsite: 'Перейти на сайт →', comingSoon: 'Скоро',
+  },
+};
 
 const sortKey = (name) => name.replace(/^(the|a|an)\s+/i, '');
 
@@ -17,6 +50,8 @@ const gifts = [...scholarships].sort((a, b) =>
 
 
 export default function Scholarships() {
+  const [lang, setLang] = useState('en');
+  const t = T[lang];
   const [currentPage, setCurrentPage] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -44,7 +79,7 @@ export default function Scholarships() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.olympiad) {
-      setError('Please select Math or Art.');
+      setError(t.selectError);
       return;
     }
     setError('');
@@ -53,7 +88,7 @@ export default function Scholarships() {
       await apiRequest('/claim-award', 'POST', formData);
       setSubmitted(true);
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError(t.genericError);
     } finally {
       setSending(false);
     }
@@ -69,13 +104,17 @@ export default function Scholarships() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffbf2]">
-      <Navbar />
+      <Navbar lang={lang} />
+
+      <div className="flex justify-center pt-8">
+        <LangToggle lang={lang} setLang={setLang} />
+      </div>
 
       {/* Cards Grid */}
       <section className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {currentGifts.map((gift) => (
-            <GiftCard key={gift.id} gift={gift} />
+            <GiftCard key={gift.id} gift={gift} t={t} lang={lang} />
           ))}
         </div>
 
@@ -86,7 +125,7 @@ export default function Scholarships() {
             disabled={currentPage === 0}
             className="px-6 py-2 rounded-full bg-orange-500 text-white font-semibold hover:bg-orange-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
-            ← Prev
+            {t.prev}
           </button>
           <span className="text-gray-700 font-medium">
             {currentPage + 1} / {totalPages}
@@ -96,7 +135,7 @@ export default function Scholarships() {
             disabled={currentPage === totalPages - 1}
             className="px-6 py-2 rounded-full bg-orange-500 text-white font-semibold hover:bg-orange-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
-            Next →
+            {t.next}
           </button>
         </div>
       </section>
@@ -107,7 +146,7 @@ export default function Scholarships() {
           onClick={() => setShowForm(true)}
           className="bg-orange-500 text-white py-4 px-16 rounded-full text-2xl font-bold hover:bg-orange-600 transition-colors shadow-lg"
         >
-          Apply Now
+          {t.applyNow}
         </button>
       </div>
 
@@ -118,14 +157,14 @@ export default function Scholarships() {
             {!submitted ? (
               <>
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">Apply Now</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">{t.applyNow}</h2>
                   <button onClick={closeForm} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">×</button>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <input
                     type="text"
                     name="firstName"
-                    placeholder="First Name"
+                    placeholder={t.firstName}
                     required
                     value={formData.firstName}
                     onChange={handleFormChange}
@@ -134,7 +173,7 @@ export default function Scholarships() {
                   <input
                     type="text"
                     name="lastName"
-                    placeholder="Last Name"
+                    placeholder={t.lastName}
                     required
                     value={formData.lastName}
                     onChange={handleFormChange}
@@ -143,7 +182,7 @@ export default function Scholarships() {
                   <input
                     type="tel"
                     name="phone"
-                    placeholder="Phone Number"
+                    placeholder={t.phone}
                     required
                     value={formData.phone}
                     onChange={handleFormChange}
@@ -152,7 +191,7 @@ export default function Scholarships() {
                   <input
                     type="email"
                     name="email"
-                    placeholder="Email"
+                    placeholder={t.email}
                     required
                     value={formData.email}
                     onChange={handleFormChange}
@@ -164,7 +203,7 @@ export default function Scholarships() {
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                       className={`w-full text-left border border-gray-300 rounded-lg px-4 py-3 flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-orange-400 ${formData.olympiad === '' ? 'text-gray-400' : 'text-gray-900'}`}
                     >
-                      <span>{formData.olympiad === '' ? 'Olympiad participant' : formData.olympiad}</span>
+                      <span>{formData.olympiad === '' ? t.olympiadParticipant : formData.olympiad}</span>
                       <svg className={`w-4 h-4 text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
@@ -195,20 +234,20 @@ export default function Scholarships() {
                     disabled={sending}
                     className="w-full bg-orange-500 text-white py-3 rounded-lg font-bold text-lg hover:bg-orange-600 transition-colors mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {sending ? 'Sending...' : 'Submit'}
+                    {sending ? t.sending : t.submit}
                   </button>
                 </form>
               </>
             ) : (
               <div className="text-center py-8">
                 <div className="text-5xl mb-4">✓</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Thank you!</h2>
-                <p className="text-gray-600 mb-6">We will contact you soon.</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.thankYou}</h2>
+                <p className="text-gray-600 mb-6">{t.willContact}</p>
                 <button
                   onClick={closeForm}
                   className="bg-orange-500 text-white py-3 px-8 rounded-full font-bold hover:bg-orange-600 transition-colors"
                 >
-                  Close
+                  {t.close}
                 </button>
               </div>
             )}
@@ -216,7 +255,7 @@ export default function Scholarships() {
         </div>
       )}
 
-      <Footer />
+      <Footer lang={lang} />
     </div>
   );
 }
@@ -231,7 +270,7 @@ function initials(name) {
     .join('');
 }
 
-function GiftCard({ gift }) {
+function GiftCard({ gift, t, lang }) {
   const [imageFailed, setImageFailed] = useState(false);
   const showImage = gift.carousel.length > 0 && !imageFailed;
 
@@ -259,7 +298,9 @@ function GiftCard({ gift }) {
       <div className="p-3">
         <p className="font-bold text-sm text-gray-900 line-clamp-2">{gift.companyName}</p>
         {gift.description && (
-          <p className="text-xs text-gray-500 truncate mt-0.5">{gift.description}</p>
+          <p className="text-xs text-gray-500 truncate mt-0.5">
+            {lang === 'ru' ? (DESCRIPTION_RU[gift.description] || gift.description) : gift.description}
+          </p>
         )}
       </div>
 
@@ -272,11 +313,11 @@ function GiftCard({ gift }) {
             rel="noopener noreferrer"
             className="inline-block text-orange-500 hover:text-orange-600 font-semibold transition-colors"
           >
-            Visit Website →
+            {t.visitWebsite}
           </Link>
         ) : (
           <span className="inline-block text-gray-400 font-semibold">
-            Coming Soon
+            {t.comingSoon}
           </span>
         )}
       </div>

@@ -3,10 +3,10 @@
 import Navbar from './navbar';
 import Footer from './footer';
 
-export default function LegalLayout({ title, updated, langToggle, children }) {
+export default function LegalLayout({ title, updated, langToggle, lang = 'en', children }) {
   return (
     <div className="min-h-screen flex flex-col bg-[#fffbf2]">
-      <Navbar />
+      <Navbar lang={lang} />
 
       <div className="flex-1 px-4 py-16 md:py-24">
         <div className="container mx-auto max-w-3xl bg-white rounded-2xl shadow-lg p-8 md:p-12">
@@ -23,7 +23,7 @@ export default function LegalLayout({ title, updated, langToggle, children }) {
         </div>
       </div>
 
-      <Footer />
+      <Footer lang={lang} />
     </div>
   );
 }

@@ -1,10 +1,72 @@
 "use client";
 
+import { useState } from 'react';
 import Navbar from '../../components/navbar';
 import Footer from '../../components/footer';
 import Image from 'next/image';
+import LangToggle from '../../components/LangToggle';
+
+const T = {
+  en: {
+    title1: 'TIGERS', title2: 'NEWS', subtitle: 'OLYMPIAD DEADLINES',
+    math: 'MATH', art: 'ART',
+    finalDates: 'FINAL ROUND DATES', nationalDates: 'NATIONAL ROUND DATES',
+    regDeadline: 'Registration Deadline',
+    intake1: (<>1<sup>st</sup> intake – October 31, 2026</>),
+    intake2: (<>2<sup>nd</sup> intake – January 31, 2027</>),
+    download: '⬇️ Download brochure',
+    prizes: 'Prizes',
+    mathSingapore: 'Singapore, 27 JUNE – 3 JULY 2027',
+    mathCats: [
+      { name: 'Category 1 (5-6 grade)', p1: '1st place – trip to the next final', p2: '2nd place – iPad', p3: '3rd place – apple watch' },
+      { name: 'Category 2 (7-8 grade)', p1: '1st place – trip to the next final', p2: '2nd place – iPad', p3: '3rd place – apple watch' },
+      { name: 'Category 3 (9-10 grade)', p1: '1st place – 100% scholarship UK school', p2: '2nd place – trip to the next final', p3: '3rd place – iPad' },
+      { name: 'Category 4 (11-12 grade)', p1: '1st place – Laptop', p2: '2nd place – iPad', p3: '3rd place – apple watch' },
+    ],
+    artLocations: [
+      { place: 'Cape Town, South Africa 25 OCT – 1 NOV 2026', file: '/files_download/ART SA 2026.pdf' },
+      { place: 'Epsom, England 2 – 9 APR 2027', file: '/files_download/ART UK 2027.pdf' },
+      { place: 'Athens, Greece 1 – 7 AUG 2027', file: '/files_download/ART Greece 2027.pdf' },
+    ],
+    artCats: [
+      { name: 'Category 1 (6-9 years)', p1: '1st place – Free Art Camp for 1 week', p2: '2nd place – iPad', p3: '3rd place – apple watch' },
+      { name: 'Category 2 (10-13 years)', p1: '1st place – Free Art Camp for 1 week', p2: '2nd place – iPad', p3: '3rd place – apple watch' },
+      { name: 'Category 3 (14-17 years)', p1: '1st place – Free Art Camp for 1 week', p2: '2nd place – iPad', p3: '3rd place – apple watch' },
+    ],
+  },
+  ru: {
+    title1: 'TIGERS', title2: 'НОВОСТИ', subtitle: 'СРОКИ ОЛИМПИАДЫ',
+    math: 'MATH', art: 'ART',
+    finalDates: 'ДАТЫ ФИНАЛЬНОГО РАУНДА', nationalDates: 'ДАТЫ НАЦИОНАЛЬНОГО РАУНДА',
+    regDeadline: 'Крайний срок регистрации',
+    intake1: (<>1-й поток – 31 октября 2026</>),
+    intake2: (<>2-й поток – 31 января 2027</>),
+    download: '⬇️ Скачать брошюру',
+    prizes: 'Призы',
+    mathSingapore: 'Сингапур, 27 июня – 3 июля 2027',
+    mathCats: [
+      { name: 'Категория 1 (5-6 класс)', p1: '1 место – поездка на следующий финал', p2: '2 место – iPad', p3: '3 место – Apple Watch' },
+      { name: 'Категория 2 (7-8 класс)', p1: '1 место – поездка на следующий финал', p2: '2 место – iPad', p3: '3 место – Apple Watch' },
+      { name: 'Категория 3 (9-10 класс)', p1: '1 место – 100% стипендия в школе Великобритании', p2: '2 место – поездка на следующий финал', p3: '3 место – iPad' },
+      { name: 'Категория 4 (11-12 класс)', p1: '1 место – Ноутбук', p2: '2 место – iPad', p3: '3 место – Apple Watch' },
+    ],
+    artLocations: [
+      { place: 'Кейптаун, ЮАР, 25 окт. – 1 нояб. 2026', file: '/files_download/ART SA 2026.pdf' },
+      { place: 'Эпсом, Англия, 2 – 9 апр. 2027', file: '/files_download/ART UK 2027.pdf' },
+      { place: 'Афины, Греция, 1 – 7 авг. 2027', file: '/files_download/ART Greece 2027.pdf' },
+    ],
+    artCats: [
+      { name: 'Категория 1 (6-9 лет)', p1: '1 место – бесплатный арт-кэмп на 1 неделю', p2: '2 место – iPad', p3: '3 место – Apple Watch' },
+      { name: 'Категория 2 (10-13 лет)', p1: '1 место – бесплатный арт-кэмп на 1 неделю', p2: '2 место – iPad', p3: '3 место – Apple Watch' },
+      { name: 'Категория 3 (14-17 лет)', p1: '1 место – бесплатный арт-кэмп на 1 неделю', p2: '2 место – iPad', p3: '3 место – Apple Watch' },
+    ],
+  },
+};
 
 export default function News() {
+  const [lang, setLang] = useState('en');
+  const t = T[lang];
+
   return (
     <div
       className="min-h-screen flex flex-col bg-[#fffbf2] relative"
@@ -12,17 +74,20 @@ export default function News() {
         backgroundImage: 'url("/image/fonmain1.png")',
       }}
     >
-      <Navbar />
+      <Navbar lang={lang} />
 
       {/* Header Section */}
       <div className="py-12 px-4 relative">
         <div className="container mx-auto max-w-6xl">
+          <div className="flex justify-center mb-4">
+            <LangToggle lang={lang} setLang={setLang} />
+          </div>
           <div className="text-center mb-10">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              <span className="text-orange-500">TIGERS</span> <span className="text-black">NEWS</span>
+              <span className="text-orange-500">{t.title1}</span> <span className="text-black">{t.title2}</span>
             </h1>
             <h2 className="text-3xl md:text-4xl font-bold text-red-500">
-              OLYMPIAD DEADLINES
+              {t.subtitle}
             </h2>
           </div>
         </div>
@@ -34,7 +99,7 @@ export default function News() {
 
           {/* MATH Header */}
           <div className="bg-orange-500 text-white text-center py-4 mb-8 rounded-xl">
-            <h2 className="text-4xl font-bold tracking-wide">MATH</h2>
+            <h2 className="text-4xl font-bold tracking-wide">{t.math}</h2>
           </div>
 
           {/* 3 columns: Final dates | Image | National dates */}
@@ -42,14 +107,14 @@ export default function News() {
 
             {/* Left: Final Round Dates */}
             <div className="text-center">
-              <p className="text-xl font-bold mb-3">FINAL ROUND DATES</p>
-              <p className="text-lg text-gray-800 mb-4">Singapore, 27 JUNE – 3 JULY 2027</p>
+              <p className="text-xl font-bold mb-3">{t.finalDates}</p>
+              <p className="text-lg text-gray-800 mb-4">{t.mathSingapore}</p>
               <a
                 href="/files_download/MATH 2026.pdf"
                 download
                 className="inline-flex items-center gap-2 text-green-700 font-bold text-lg hover:text-green-900"
               >
-                ⬇️ Download brochure
+                {t.download}
               </a>
             </div>
 
@@ -67,44 +132,24 @@ export default function News() {
 
             {/* Right: National Round Dates */}
             <div className="text-center">
-              <p className="text-xl font-bold mb-1">NATIONAL ROUND DATES</p>
-              <p className="text-xl font-bold mb-3">Registration Deadline</p>
-              <p className="text-lg text-gray-800">1<sup>st</sup> intake – October 31, 2026</p>
-              <p className="text-lg text-gray-800">2<sup>nd</sup> intake – January 31, 2027</p>
+              <p className="text-xl font-bold mb-1">{t.nationalDates}</p>
+              <p className="text-xl font-bold mb-3">{t.regDeadline}</p>
+              <p className="text-lg text-gray-800">{t.intake1}</p>
+              <p className="text-lg text-gray-800">{t.intake2}</p>
             </div>
           </div>
 
           {/* MATH Prizes */}
-          <h3 className="text-3xl font-bold text-center mb-6">Prizes</h3>
+          <h3 className="text-3xl font-bold text-center mb-6">{t.prizes}</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-
-            <div className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-orange-400">
-              <p className="font-bold text-lg mb-4">Category 1 (5-6 grade)</p>
-              <p className="text-gray-700 mb-2">1st place – trip to the next final</p>
-              <p className="text-gray-700 mb-2">2nd place – iPad</p>
-              <p className="text-gray-700">3rd place – apple watch</p>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-orange-400">
-              <p className="font-bold text-lg mb-4">Category 2 (7-8 grade)</p>
-              <p className="text-gray-700 mb-2">1st place – trip to the next final</p>
-              <p className="text-gray-700 mb-2">2nd place – iPad</p>
-              <p className="text-gray-700">3rd place – apple watch</p>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-orange-400">
-              <p className="font-bold text-lg mb-4">Category 3 (9-10 grade)</p>
-              <p className="text-gray-700 mb-2">1st place – 100% scholarship UK school</p>
-              <p className="text-gray-700 mb-2">2nd place – trip to the next final</p>
-              <p className="text-gray-700">3rd place – iPad</p>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-orange-400">
-              <p className="font-bold text-lg mb-4">Category 4 (11-12 grade)</p>
-              <p className="text-gray-700 mb-2">1st place – Laptop</p>
-              <p className="text-gray-700 mb-2">2nd place – iPad</p>
-              <p className="text-gray-700">3rd place – apple watch</p>
-            </div>
+            {t.mathCats.map((cat) => (
+              <div key={cat.name} className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-orange-400">
+                <p className="font-bold text-lg mb-4">{cat.name}</p>
+                <p className="text-gray-700 mb-2">{cat.p1}</p>
+                <p className="text-gray-700 mb-2">{cat.p2}</p>
+                <p className="text-gray-700">{cat.p3}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -115,10 +160,10 @@ export default function News() {
 
           {/* ART Header */}
           <div className="bg-blue-500 text-white text-center py-4 mb-8 rounded-xl">
-            <h2 className="text-4xl font-bold tracking-wide">ART</h2>
+            <h2 className="text-4xl font-bold tracking-wide">{t.art}</h2>
           </div>
 
-          <p className="text-xl font-bold mb-6">FINAL ROUND DATES</p>
+          <p className="text-xl font-bold mb-6">{t.finalDates}</p>
 
           {/* 3 columns: flag + dates + brochure each */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
@@ -128,13 +173,13 @@ export default function News() {
               <div className="relative w-48 h-32 mb-4">
                 <Image src="/image/ЮАР.png" alt="South Africa" fill className="object-contain" />
               </div>
-              <p className="text-lg text-gray-800">Cape Town, South Africa 25 OCT – 1 NOV 2026</p>
+              <p className="text-lg text-gray-800">{t.artLocations[0].place}</p>
               <a
-                href="/files_download/ART SA 2026.pdf"
+                href={t.artLocations[0].file}
                 download
                 className="inline-flex items-center gap-2 text-green-700 font-bold text-lg hover:text-green-900 mt-2"
               >
-                ⬇️ Download brochure
+                {t.download}
               </a>
             </div>
 
@@ -143,13 +188,13 @@ export default function News() {
               <div className="relative w-48 h-32 mb-4">
                 <Image src="/image/Великобритания.png" alt="Great Britain" fill className="object-contain" />
               </div>
-              <p className="text-lg text-gray-800">Epsom, England 2 – 9 APR 2027</p>
+              <p className="text-lg text-gray-800">{t.artLocations[1].place}</p>
               <a
-                href="/files_download/ART UK 2027.pdf"
+                href={t.artLocations[1].file}
                 download
                 className="inline-flex items-center gap-2 text-green-700 font-bold text-lg hover:text-green-900 mt-2"
               >
-                ⬇️ Download brochure
+                {t.download}
               </a>
             </div>
 
@@ -158,46 +203,33 @@ export default function News() {
               <div className="relative w-48 h-32 mb-4">
                 <Image src="/image/Греция.png" alt="Greece" fill className="object-contain" />
               </div>
-              <p className="text-lg text-gray-800">Athens, Greece 1 – 7 AUG 2027</p>
+              <p className="text-lg text-gray-800">{t.artLocations[2].place}</p>
               <a
-                href="/files_download/ART Greece 2027.pdf"
+                href={t.artLocations[2].file}
                 download
                 className="inline-flex items-center gap-2 text-green-700 font-bold text-lg hover:text-green-900 mt-2"
               >
-                ⬇️ Download brochure
+                {t.download}
               </a>
             </div>
           </div>
 
           {/* ART Prizes */}
-          <h3 className="text-3xl font-bold text-center mb-6">Prizes</h3>
+          <h3 className="text-3xl font-bold text-center mb-6">{t.prizes}</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-
-            <div className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-blue-400">
-              <p className="font-bold text-lg mb-4">Category 1 (6-9 years)</p>
-              <p className="text-gray-700 mb-2">1st place – Free Art Camp for 1 week</p>
-              <p className="text-gray-700 mb-2">2nd place – iPad</p>
-              <p className="text-gray-700">3rd place – apple watch</p>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-blue-400">
-              <p className="font-bold text-lg mb-4">Category 2 (10-13 years)</p>
-              <p className="text-gray-700 mb-2">1st place – Free Art Camp for 1 week</p>
-              <p className="text-gray-700 mb-2">2nd place – iPad</p>
-              <p className="text-gray-700">3rd place – apple watch</p>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-blue-400">
-              <p className="font-bold text-lg mb-4">Category 3 (14-17 years)</p>
-              <p className="text-gray-700 mb-2">1st place – Free Art Camp for 1 week</p>
-              <p className="text-gray-700 mb-2">2nd place – iPad</p>
-              <p className="text-gray-700">3rd place – apple watch</p>
-            </div>
+            {t.artCats.map((cat) => (
+              <div key={cat.name} className="bg-white rounded-xl shadow-lg p-5 text-center border-t-4 border-blue-400">
+                <p className="font-bold text-lg mb-4">{cat.name}</p>
+                <p className="text-gray-700 mb-2">{cat.p1}</p>
+                <p className="text-gray-700 mb-2">{cat.p2}</p>
+                <p className="text-gray-700">{cat.p3}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <Footer />
+      <Footer lang={lang} />
     </div>
   );
 }
