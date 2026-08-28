@@ -119,6 +119,7 @@ export default function OlympiadTab() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Olympiad</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Registration Code</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
@@ -153,6 +154,9 @@ export default function OlympiadTab() {
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                         {reg.olympiad}
                       </span>
+                    </td>
+                    <td className="px-4 py-4 text-sm text-gray-900 whitespace-nowrap">
+                      {reg.amount ? `${reg.amount} ${reg.currency || ''}`.trim() : '—'}
                     </td>
                     <td className="px-4 py-4 text-sm">
                       <span

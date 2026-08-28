@@ -21,6 +21,7 @@ const HOW_IT_WORKS_CONTENT = {
       { title: 'Get Confirmation', description: 'Receive an email confirmation with your registration code and payment receipt.' },
     ],
     feeLabel: 'Participation fee',
+    chargedNote: `On the payment page you will be charged in US dollars — ${PARTICIPATION_FEE_USD} USD.`,
     seeOur: 'See our',
     terms: 'Terms',
     privacy: 'Privacy Policy',
@@ -47,6 +48,7 @@ const HOW_IT_WORKS_CONTENT = {
       { title: 'Подтверждение', description: 'Получите на email подтверждение регистрации с регистрационным кодом и чеком об оплате.' },
     ],
     feeLabel: 'Организационный взнос',
+    chargedNote: `На странице оплаты сумма спишется в тенге — ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸.`,
     seeOur: 'Ознакомьтесь с',
     terms: 'Публичной офертой',
     privacy: 'Политикой конфиденциальности',
@@ -162,14 +164,15 @@ function HowItWorks({ lang }) {
         <div>
           <div className="text-sm text-gray-500">{t.feeLabel}</div>
           <div className="flex items-baseline gap-2 flex-wrap">
-            <div className="text-2xl font-bold text-orange-600">
+            <div className={`text-2xl font-bold ${lang === 'en' ? 'text-orange-300' : 'text-orange-600'}`}>
               {PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸
             </div>
-            <div className="text-2xl font-bold text-orange-600">/</div>
-            <div className="text-2xl font-bold text-orange-600">
+            <div className="text-2xl font-bold text-orange-300">/</div>
+            <div className={`text-2xl font-bold ${lang === 'en' ? 'text-orange-600' : 'text-orange-300'}`}>
               {PARTICIPATION_FEE_USD} USD
             </div>
           </div>
+          <div className="text-xs text-gray-600 mt-1">{t.chargedNote}</div>
           <div className="text-xs text-gray-500 mt-2">
             {t.executorLabel}: {t.executorValue}
           </div>
@@ -283,6 +286,7 @@ export default function OlympiadRegister() {
         email: form.email.trim(),
         phone: form.phone.replace(/[\s()-]/g, ''),
         olympiad: form.olympiad,
+        language: lang,
       });
 
       if (!redirect_url) {

@@ -6,15 +6,17 @@ import { API_URL, apiRequest } from "./base_api";
  * Тело ответа при ошибке приходит обычным текстом (не JSON), поэтому здесь
  * используется прямой fetch вместо apiRequest, чтобы достать текст ошибки.
  *
- * @param {Object} data - { full_name, email, phone, olympiad }
+ * @param {Object} data - { full_name, email, phone, olympiad, language }
  * @param {"Math"|"Art"} data.olympiad
+ * @param {"ru"|"en"} [data.language] - язык страницы: определяет валюту оплаты
+ *   (ru → тенге, en → доллары) и язык страницы FreedomPay.
  * @returns {Promise<{ redirect_url: string, order_id: string }>}
  */
-export async function registerOlympiad({ full_name, email, phone, olympiad }) {
+export async function registerOlympiad({ full_name, email, phone, olympiad, language }) {
   const res = await fetch(`${API_URL}/olympiad/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ full_name, email, phone, olympiad }),
+    body: JSON.stringify({ full_name, email, phone, olympiad, language }),
   });
 
   if (!res.ok) {

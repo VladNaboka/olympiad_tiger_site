@@ -78,9 +78,10 @@ function EnglishContent() {
         and are never transmitted to or stored by the website.
       </p>
       <p>
-        4.3. The payment currency is specified on the website; as a rule, USD will be
-        used. In the event of currency conversion, any bank-emitter or payment system
-        conversion fees shall be borne by the Customer.
+        4.3. The payment currency is shown on the payment page. By default the fee is
+        charged in Kazakhstani tenge (KZT); on the English version of the website the
+        fee is charged in US dollars (USD). In the event of currency conversion, any
+        bank-emitter or payment system conversion fees shall be borne by the Customer.
       </p>
       <p>
         4.4. The time of payment is considered to be the crediting of funds to the
@@ -251,9 +252,10 @@ function RussianContent() {
         хранятся им.
       </p>
       <p>
-        4.3. Валюта платежа определяется на сайте, как правило, будет использован USD. В
-        случае конвертации валют комиссию банка-эмитента или платежной системы оплачивает
-        Заказчик.
+        4.3. Валюта платежа отображается на странице оплаты. По умолчанию взнос
+        списывается в казахстанских тенге (KZT); на англоязычной версии сайта — в
+        долларах США (USD). В случае конвертации валют комиссию банка-эмитента или
+        платежной системы оплачивает Заказчик.
       </p>
       <p>
         4.4. Моментом оплаты считается зачисление денежных средств на расчетный счет
