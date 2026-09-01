@@ -64,17 +64,6 @@ const partners = [
     logo: "/image/Danyshpan.school.png"
   },
   {
-    id: 8,
-    name: "JOS Financial Lyceum",
-    description: {
-      en: "A leading financial lyceum in Kazakhstan focused on quality education and student excellence.",
-      ru: "Ведущий финансовый лицей в Казахстане, ориентированный на качественное образование и успехи учеников.",
-    },
-    category: "Educational Partner",
-    website: "https://joslyceum.edu.kz",
-    logo: "/image/JOS.PNG"
-  },
-  {
     id: 9,
     name: "Dana School",
     description: {
