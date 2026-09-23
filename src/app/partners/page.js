@@ -53,17 +53,6 @@ const partners = [
     logo: "/aji logo.jpg"
   },
   {
-    id: 7,
-    name: "Danyshpan School",
-    description: {
-      en: "An educational school dedicated to nurturing students through quality learning and academic development in Kazakhstan.",
-      ru: "Образовательная школа в Казахстане, нацеленная на развитие учеников через качественное обучение и академический рост.",
-    },
-    category: "Educational Partner",
-    website: "https://www.instagram.com/danyshpan.school?igsh=MWU5eTlhdHh6ZXQ5Ng==",
-    logo: "/image/Danyshpan.school.png"
-  },
-  {
     id: 9,
     name: "Dana School",
     description: {
