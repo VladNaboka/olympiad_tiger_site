@@ -107,7 +107,7 @@ export default function News() {
               <p className="text-xl font-bold mb-3">{t.finalDates}</p>
               <p className="text-lg text-gray-800 mb-4">{t.mathSingapore}</p>
               <a
-                href="/files_download/MATH 2026.pdf"
+                href="/files_download/MATH 2027 singapore.pdf"
                 download
                 className="inline-flex items-center gap-2 text-green-700 font-bold text-lg hover:text-green-900"
               >
