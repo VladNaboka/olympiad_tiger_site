@@ -118,10 +118,10 @@ export default function Footer() {
               </li>
             </ul>
             <div className="mt-4 text-gray-400 text-sm space-y-1">
-              <p>{lang === 'ru' ? 'ТОО «WILLIAM ACADEMY»' : 'LLP "WILLIAM ACADEMY"'}</p>
-              <p>{lang === 'ru' ? 'БИН: 220840043067' : 'BIN: 220840043067'}</p>
+              <p>{lang === 'ru' ? 'ИП «TIGERS OLYMPIAD»' : 'IE "TIGERS OLYMPIAD"'}</p>
+              <p>{lang === 'ru' ? 'ИИН: 711222402000' : 'IIN: 711222402000'}</p>
               <p>{t.country}</p>
-              <p>{lang === 'ru' ? 'г. Алматы, проспект Аль-Фараби, 1Б' : 'Almaty, Al-Farabi Avenue, 1B'}</p>
+              <p>{lang === 'ru' ? 'г. Шымкент, микрорайон 15, дом 2, кв./офис 22' : 'Shymkent, Microdistrict 15, building 2, office 22'}</p>
             </div>
           </div>
 

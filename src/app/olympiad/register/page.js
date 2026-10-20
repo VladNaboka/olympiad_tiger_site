@@ -28,7 +28,7 @@ const HOW_IT_WORKS_CONTENT = {
     and: 'and',
     refund: 'Refund Policy',
     executorLabel: 'Service provider',
-    executorValue: 'LLP "WILLIAM ACADEMY" (Republic of Kazakhstan)',
+    executorValue: 'Individual Entrepreneur "TIGERS OLYMPIAD" (Republic of Kazakhstan)',
     weAccept: 'We accept',
     cardPaymentHeading: 'How Card Payment Works',
     cardPaymentSteps: [
@@ -55,7 +55,7 @@ const HOW_IT_WORKS_CONTENT = {
     and: 'и',
     refund: 'Политикой возврата',
     executorLabel: 'Исполнитель услуги',
-    executorValue: 'ТОО «WILLIAM ACADEMY» (Республика Казахстан)',
+    executorValue: 'ИП «TIGERS OLYMPIAD» (Республика Казахстан)',
     weAccept: 'Способы оплаты',
     cardPaymentHeading: 'Порядок оплаты банковской картой',
     cardPaymentSteps: [
@@ -209,7 +209,7 @@ function HowItWorks({ lang }) {
 }
 
 // Чтобы снова скрыть форму регистрации/оплаты олимпиады — поставить false.
-const REGISTRATION_ENABLED = true;
+const REGISTRATION_ENABLED = false;
 
 // Basic client-side format checks
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -316,8 +316,6 @@ export default function OlympiadRegister() {
         <Navbar />
 
         <div className="flex-1 flex flex-col items-center justify-center py-24 md:py-32 px-4">
-          <HowItWorks lang={lang} />
-
           <div className="text-center max-w-2xl">
             <h1 className="text-4xl md:text-5xl font-bold text-orange-600 mb-6">
               {f.comingSoonTitle}

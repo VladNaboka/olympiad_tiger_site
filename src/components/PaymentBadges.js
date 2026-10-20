@@ -1,8 +1,9 @@
 const BADGES = [
   { src: '/image/payments/visa.svg', alt: 'Visa', label: null },
   { src: '/image/payments/mastercard.svg', alt: 'Mastercard', label: null },
-  { src: '/image/payments/bank-logo.svg', alt: 'Freedom Bank', label: 'Freedom Bank' },
-  { src: '/image/payments/freedompay.svg', alt: 'Freedom Pay', label: 'Freedom Pay' },
+  // Пока FreedomPay отключён — бейджи скрыты. Вернуть вместе с оплатой через FreedomPay:
+  // { src: '/image/payments/bank-logo.svg', alt: 'Freedom Bank', label: 'Freedom Bank' },
+  // { src: '/image/payments/freedompay.svg', alt: 'Freedom Pay', label: 'Freedom Pay' },
 ];
 
 export default function PaymentBadges({ className = '' }) {

@@ -15,7 +15,7 @@ function EnglishContent() {
 
       <h2>1. Cancellation by the Organizer</h2>
       <p>
-        If the Olympiad is cancelled on the initiative of LLP &quot;WILLIAM ACADEMY&quot;
+        If the Olympiad is cancelled on the initiative of Individual Entrepreneur &quot;TIGERS OLYMPIAD&quot;
         (the &quot;Contractor&quot;), 100% of the paid participation fee will be refunded
         to the Customer within 30 banking days.
       </p>
@@ -51,7 +51,7 @@ function EnglishContent() {
 
       <h2>5. Contact</h2>
       <ul>
-        <li>Organization Name: LLP &quot;WILLIAM ACADEMY&quot;</li>
+        <li>Name: Individual Entrepreneur &quot;TIGERS OLYMPIAD&quot;</li>
         <li>Email: info@tigersedu.com</li>
         <li>Phone: +7 700 595 1000</li>
       </ul>
@@ -71,7 +71,7 @@ function RussianContent() {
 
       <h2>1. Отмена олимпиады по инициативе организатора</h2>
       <p>
-        В случае отмены Олимпиады по инициативе ТОО «WILLIAM ACADEMY» («Исполнитель»),
+        В случае отмены Олимпиады по инициативе ИП «TIGERS OLYMPIAD» («Исполнитель»),
         Заказчику возвращается 100% уплаченных денежных средств в течение 30 банковских
         дней.
       </p>
@@ -107,7 +107,7 @@ function RussianContent() {
 
       <h2>5. Контакты</h2>
       <ul>
-        <li>Наименование организации: ТОО «WILLIAM ACADEMY»</li>
+        <li>Наименование: ИП «TIGERS OLYMPIAD»</li>
         <li>Email: info@tigersedu.com</li>
         <li>Телефон: +7 700 595 1000</li>
       </ul>

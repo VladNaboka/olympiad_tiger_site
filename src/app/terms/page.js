@@ -13,8 +13,8 @@ function EnglishContent() {
 
       <h2>1. General Provisions</h2>
       <p>
-        1.1. This document constitutes an official offer (public offer) of LLP
-        &quot;WILLIAM ACADEMY&quot; (hereinafter referred to as the
+        1.1. This document constitutes an official offer (public offer) of Individual
+        Entrepreneur &quot;TIGERS OLYMPIAD&quot; (hereinafter referred to as the
         &quot;Contractor&quot;) and contains all essential terms of the contract for the
         provision of services for participation in the &quot;TIGERS OLYMPIAD&quot;
         International Mathematics Olympiad.
@@ -160,10 +160,10 @@ function EnglishContent() {
 
       <h2>10. Details and Contact Information of the Contractor</h2>
       <ul>
-        <li>Organization Name: LLP &quot;WILLIAM ACADEMY&quot;</li>
-        <li>BIN (Business Identification Number): 220840043067</li>
+        <li>Name: Individual Entrepreneur &quot;TIGERS OLYMPIAD&quot;</li>
+        <li>IIN (Individual Identification Number): 711222402000</li>
         <li>Country of registration: Republic of Kazakhstan</li>
-        <li>Legal Address: Almaty, Al-Farabi Avenue, 1B, Republic of Kazakhstan</li>
+        <li>Legal Address: Shymkent, Microdistrict 15, building 2, office 22, Republic of Kazakhstan</li>
         <li>Email: info@tigersedu.com</li>
         <li>Phone: +7 700 595 1000</li>
         <li>Official Website: https://www.tigersedu.com</li>
@@ -171,9 +171,9 @@ function EnglishContent() {
       <p>Bank details:</p>
       <ul>
         <li>Bank: JSC &quot;Kaspi Bank&quot;</li>
-        <li>KBE: 17</li>
+        <li>KBE: 19</li>
         <li>BIC: CASPKZKA</li>
-        <li>Account Number: KZ23722S000018318072</li>
+        <li>Account Number: KZ37722S000018000436</li>
       </ul>
     </>
   );
@@ -190,7 +190,7 @@ function RussianContent() {
       <h2>1. Общие положения</h2>
       <p>
         1.1. Настоящий документ является официальным предложением (публичной офертой)
-        компании ТОО «WILLIAM ACADEMY» (в дальнейшем — «Исполнитель») и содержит все
+        ИП «TIGERS OLYMPIAD» (в дальнейшем — «Исполнитель») и содержит все
         существенные условия договора по оказанию услуг по участию в международной
         олимпиаде по математике «TIGERS OLYMPIAD».
       </p>
@@ -329,9 +329,9 @@ function RussianContent() {
 
       <h2>10. Реквизиты и контакты Исполнителя</h2>
       <ul>
-        <li>Наименование организации: ТОО «WILLIAM ACADEMY»</li>
-        <li>БИН: 220840043067</li>
-        <li>Юридический адрес: г. Алматы, проспект Аль-Фараби, дом 1Б</li>
+        <li>Наименование: ИП «TIGERS OLYMPIAD»</li>
+        <li>ИИН: 711222402000</li>
+        <li>Юридический адрес: г. Шымкент, микрорайон 15, дом 2, кв./офис 22</li>
         <li>Email: info@tigersedu.com</li>
         <li>Телефон: +7 700 595 1000</li>
         <li>Официальный сайт: https://www.tigersedu.com</li>
@@ -339,9 +339,9 @@ function RussianContent() {
       <p>Банковские реквизиты:</p>
       <ul>
         <li>Банк: АО «Kaspi Bank»</li>
-        <li>КБе: 17</li>
+        <li>КБе: 19</li>
         <li>БИК: CASPKZKA</li>
-        <li>Номер счета: KZ23722S000018318072</li>
+        <li>Номер счета: KZ37722S000018000436</li>
       </ul>
     </>
   );

@@ -7,7 +7,7 @@ function EnglishContent() {
   return (
     <>
       <p>
-        This Privacy Policy describes how LLP &quot;WILLIAM ACADEMY&quot; (&quot;we&quot;,
+        This Privacy Policy describes how Individual Entrepreneur &quot;TIGERS OLYMPIAD&quot; (&quot;we&quot;,
         &quot;us&quot;, the &quot;Operator&quot;) collects, uses, and protects personal
         data submitted through https://www.tigersedu.com in connection with registration
         for the &quot;TIGERS OLYMPIAD&quot; International Olympiad.
@@ -15,9 +15,9 @@ function EnglishContent() {
 
       <h2>1. Data Operator</h2>
       <p>
-        The operator of personal data is LLP &quot;WILLIAM ACADEMY&quot;, BIN
-        220840043067, registered in the Republic of Kazakhstan, legal address: Almaty,
-        Al-Farabi Avenue, 1B. The Operator organizes and conducts the Olympiad itself and
+        The operator of personal data is Individual Entrepreneur &quot;TIGERS OLYMPIAD&quot;, IIN
+        711222402000, registered in the Republic of Kazakhstan, legal address: Shymkent,
+        Microdistrict 15, building 2, office 22. The Operator organizes and conducts the Olympiad itself and
         is directly responsible for the processing of personal data described in this
         Policy.
       </p>
@@ -134,10 +134,10 @@ function EnglishContent() {
 
       <h2>12. Contact Information</h2>
       <ul>
-        <li>Organization Name: LLP &quot;WILLIAM ACADEMY&quot;</li>
-        <li>BIN: 220840043067</li>
+        <li>Name: Individual Entrepreneur &quot;TIGERS OLYMPIAD&quot;</li>
+        <li>IIN: 711222402000</li>
         <li>Country of registration: Republic of Kazakhstan</li>
-        <li>Legal Address: Almaty, Al-Farabi Avenue, 1B, Republic of Kazakhstan</li>
+        <li>Legal Address: Shymkent, Microdistrict 15, building 2, office 22, Republic of Kazakhstan</li>
         <li>Email: info@tigersedu.com</li>
         <li>Phone: +7 700 595 1000</li>
       </ul>
@@ -149,7 +149,7 @@ function RussianContent() {
   return (
     <>
       <p>
-        Настоящая Политика конфиденциальности описывает, как ТОО «WILLIAM ACADEMY»
+        Настоящая Политика конфиденциальности описывает, как ИП «TIGERS OLYMPIAD»
         (далее — «мы», «Оператор») собирает, использует и защищает персональные данные,
         предоставленные через сайт https://www.tigersedu.com в связи с регистрацией на
         международную олимпиаду «TIGERS OLYMPIAD».
@@ -157,9 +157,9 @@ function RussianContent() {
 
       <h2>1. Оператор персональных данных</h2>
       <p>
-        Оператором персональных данных является ТОО «WILLIAM ACADEMY», БИН 220840043067,
-        зарегистрированное в Республике Казахстан, юридический адрес: г. Алматы, проспект
-        Аль-Фараби, дом 1Б. Оператор самостоятельно организует и проводит Олимпиаду и несёт
+        Оператором персональных данных является ИП «TIGERS OLYMPIAD», ИИН 711222402000,
+        зарегистрированный в Республике Казахстан, юридический адрес: г. Шымкент, микрорайон
+        15, дом 2, кв./офис 22. Оператор самостоятельно организует и проводит Олимпиаду и несёт
         прямую ответственность за обработку персональных данных, описанную в настоящей
         Политике.
       </p>
@@ -277,10 +277,10 @@ function RussianContent() {
 
       <h2>12. Контактная информация</h2>
       <ul>
-        <li>Наименование организации: ТОО «WILLIAM ACADEMY»</li>
-        <li>БИН: 220840043067</li>
+        <li>Наименование: ИП «TIGERS OLYMPIAD»</li>
+        <li>ИИН: 711222402000</li>
         <li>Страна регистрации: Республика Казахстан</li>
-        <li>Юридический адрес: г. Алматы, проспект Аль-Фараби, дом 1Б</li>
+        <li>Юридический адрес: г. Шымкент, микрорайон 15, дом 2, кв./офис 22</li>
         <li>Email: info@tigersedu.com</li>
         <li>Телефон: +7 700 595 1000</li>
       </ul>
