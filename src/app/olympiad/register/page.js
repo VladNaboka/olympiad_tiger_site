@@ -17,11 +17,11 @@ const HOW_IT_WORKS_CONTENT = {
     subheading: 'There is no personal account — everything happens in one flow, and your confirmation arrives by email.',
     steps: [
       { title: 'Register & Choose an Olympiad', description: 'Fill in the participant’s name, email, and phone number, and select Math or Art as the olympiad category — all in one form.' },
-      { title: 'Pay Online', description: `Pay the ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} KZT registration fee securely via our payment provider.` },
+      { title: 'Pay Online', description: `Pay the ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} KZT registration fee securely via our payment provider, TipTop Pay.` },
       { title: 'Get Confirmation', description: 'Receive an email confirmation with your registration code and payment receipt.' },
     ],
     feeLabel: 'Participation fee',
-    chargedNote: `On the payment page you will be charged in US dollars — ${PARTICIPATION_FEE_USD} USD.`,
+    chargedNote: `In the payment window you will be charged in US dollars — ${PARTICIPATION_FEE_USD} USD.`,
     seeOur: 'See our',
     terms: 'Terms',
     privacy: 'Privacy Policy',
@@ -32,23 +32,23 @@ const HOW_IT_WORKS_CONTENT = {
     weAccept: 'We accept',
     cardPaymentHeading: 'How Card Payment Works',
     cardPaymentSteps: [
-      'Click "Proceed to Payment" — you will be redirected to the secure payment page of our provider, Freedom Pay.',
-      'Enter your Visa or Mastercard details on that page (name, card number, expiry date, CVC).',
-      'Confirm the payment via 3-D Secure — a one-time code (SMS/push) sent by your card-issuing bank.',
-      'You are redirected back to our site, and a confirmation with your registration code and payment receipt is sent to your email.',
+      'Click "Proceed to Payment" — the secure payment window of our provider, TipTop Pay, opens on top of this page.',
+      'Enter your Visa or Mastercard details in that window (name, card number, expiry date, CVC).',
+      'Confirm the payment via 3-D Secure if requested — a one-time code (SMS/push) sent by your card-issuing bank.',
+      'After a successful payment you see a confirmation, and an email with your registration code is sent to you.',
     ],
-    cardPaymentNote: 'The website never sees or stores your card number — card data is entered only on the payment provider\'s secure page.',
+    cardPaymentNote: 'The website never sees or stores your card number — card data is entered only in the payment provider\'s secure window.',
   },
   ru: {
     heading: 'Как проходит регистрация',
     subheading: 'Личного кабинета нет — всё происходит в один этап, а подтверждение приходит на email.',
     steps: [
       { title: 'Регистрация и выбор олимпиады', description: 'Укажите имя участника, email и номер телефона, выберите категорию — Math или Art — всё в одной форме.' },
-      { title: 'Оплата онлайн', description: `Оплатите организационный взнос ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸ через нашего платежного провайдера.` },
+      { title: 'Оплата онлайн', description: `Оплатите организационный взнос ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸ через нашего платёжного провайдера TipTop Pay.` },
       { title: 'Подтверждение', description: 'Получите на email подтверждение регистрации с регистрационным кодом и чеком об оплате.' },
     ],
     feeLabel: 'Организационный взнос',
-    chargedNote: `На странице оплаты сумма спишется в тенге — ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸.`,
+    chargedNote: `В окне оплаты сумма спишется в тенге — ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸.`,
     seeOur: 'Ознакомьтесь с',
     terms: 'Публичной офертой',
     privacy: 'Политикой конфиденциальности',
@@ -59,12 +59,12 @@ const HOW_IT_WORKS_CONTENT = {
     weAccept: 'Способы оплаты',
     cardPaymentHeading: 'Порядок оплаты банковской картой',
     cardPaymentSteps: [
-      'Нажмите «Перейти к оплате» — вы будете перенаправлены на защищённую страницу оплаты нашего провайдера Freedom Pay.',
-      'Введите данные карты Visa или Mastercard (имя владельца, номер карты, срок действия, CVC-код).',
-      'Подтвердите платёж через 3-D Secure — одноразовый код (SMS/push), который присылает банк-эмитент вашей карты.',
-      'Вы возвращаетесь на наш сайт, а на email приходит подтверждение с регистрационным кодом и чеком об оплате.',
+      'Нажмите «Перейти к оплате» — поверх страницы откроется защищённое окно оплаты нашего провайдера TipTop Pay.',
+      'Введите в окне данные карты Visa или Mastercard (имя владельца, номер карты, срок действия, CVC-код).',
+      'При необходимости подтвердите платёж через 3-D Secure — одноразовый код (SMS/push), который присылает банк-эмитент вашей карты.',
+      'После успешной оплаты вы увидите подтверждение, а на email придёт письмо с регистрационным кодом.',
     ],
-    cardPaymentNote: 'Сайт не видит и не хранит номер вашей карты — данные карты вводятся только на защищённой странице платёжного провайдера.',
+    cardPaymentNote: 'Сайт не видит и не хранит номер вашей карты — данные карты вводятся только в защищённом окне платёжного провайдера.',
   },
 };
 
@@ -87,9 +87,9 @@ const FORM_CONTENT = {
     and: 'and',
     refundLink: 'Refund Policy',
     agreementSuffix: ", including the processing and publication of the participant's personal data as described therein. *",
-    submitLoading: 'Redirecting to payment...',
+    submitLoading: 'Opening payment...',
     submit: 'Proceed to Payment',
-    footerNote: 'Payment is processed on the secure FreedomPay page. We do not store or handle your card details.',
+    footerNote: 'Payment is processed in the secure TipTop Pay window. We do not store or handle your card details.',
     comingSoonTitle: 'Coming Soon',
     comingSoonText: 'Olympiad registration is temporarily unavailable. Please check back later.',
     errors: {
@@ -123,9 +123,9 @@ const FORM_CONTENT = {
     and: 'и',
     refundLink: 'Политикой возврата',
     agreementSuffix: ', включая обработку и публикацию персональных данных участника, как описано в этих документах. *',
-    submitLoading: 'Переходим к оплате...',
+    submitLoading: 'Открываем оплату...',
     submit: 'Перейти к оплате',
-    footerNote: 'Оплата проходит на защищённой странице FreedomPay. Мы не храним и не обрабатываем данные вашей карты.',
+    footerNote: 'Оплата проходит в защищённом окне TipTop Pay. Мы не храним и не обрабатываем данные вашей карты.',
     comingSoonTitle: 'Скоро откроется',
     comingSoonText: 'Регистрация на олимпиаду временно недоступна. Пожалуйста, загляните позже.',
     errors: {
@@ -211,6 +211,24 @@ function HowItWorks({ lang }) {
 // Чтобы снова скрыть форму регистрации/оплаты олимпиады — поставить false.
 const REGISTRATION_ENABLED = true;
 
+const TIPTOP_WIDGET_SRC = 'https://widget.tiptoppay.kz/bundles/widget.js';
+
+// Подгружает скрипт виджета TipTop Pay один раз.
+function loadTipTopWidget() {
+  if (typeof window !== 'undefined' && window.tiptop) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${TIPTOP_WIDGET_SRC}"]`);
+    const script = existing || document.createElement('script');
+    script.addEventListener('load', () => resolve(), { once: true });
+    script.addEventListener('error', () => reject(new Error('TipTop widget failed to load')), { once: true });
+    if (!existing) {
+      script.src = TIPTOP_WIDGET_SRC;
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  });
+}
+
 // Basic client-side format checks
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Phone: optional + and 10–15 digits (spaces/brackets/dashes are stripped before checking)
@@ -281,7 +299,7 @@ export default function OlympiadRegister() {
 
     setLoading(true);
     try {
-      const { redirect_url } = await registerOlympiad({
+      const pay = await registerOlympiad({
         full_name: form.full_name.trim(),
         email: form.email.trim(),
         phone: form.phone.replace(/[\s()-]/g, ''),
@@ -289,12 +307,37 @@ export default function OlympiadRegister() {
         language: lang,
       });
 
-      if (!redirect_url) {
+      if (!pay.public_id || !pay.invoice_id || !pay.amount) {
         throw new Error(f.errors.noRedirectUrl);
       }
 
-      // Redirect to the FreedomPay payment page
-      window.location.href = redirect_url;
+      await loadTipTopWidget();
+      const widget = new window.tiptop.Widget({ language: pay.culture });
+      const orderId = encodeURIComponent(pay.order_id);
+
+      widget.pay(
+        'charge',
+        {
+          publicId: pay.public_id,
+          description: pay.description,
+          amount: pay.amount,
+          currency: pay.currency,
+          invoiceId: pay.invoice_id,
+          email: pay.email,
+          skin: 'mini',
+        },
+        {
+          onSuccess: () => {
+            window.location.href = `/olympiad/success?order_id=${orderId}`;
+          },
+          onFail: () => {
+            window.location.href = `/olympiad/failure?order_id=${orderId}`;
+          },
+        },
+      );
+
+      // Окно оплаты открыто; если его закроют без оплаты — форма снова доступна.
+      setLoading(false);
     } catch (err) {
       setServerError(err.message || f.errors.submitFailed);
       setLoading(false);

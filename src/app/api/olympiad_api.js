@@ -1,7 +1,7 @@
 import { API_URL, apiRequest } from "./base_api";
 
 /**
- * Создать заявку на олимпиаду и получить ссылку на оплату FreedomPay.
+ * Создать заявку на олимпиаду и получить параметры виджета TipTop Pay.
  *
  * Тело ответа при ошибке приходит обычным текстом (не JSON), поэтому здесь
  * используется прямой fetch вместо apiRequest, чтобы достать текст ошибки.
@@ -9,8 +9,10 @@ import { API_URL, apiRequest } from "./base_api";
  * @param {Object} data - { full_name, email, phone, olympiad, language }
  * @param {"Math"|"Art"} data.olympiad
  * @param {"ru"|"en"} [data.language] - язык страницы: определяет валюту оплаты
- *   (ru → тенге, en → доллары) и язык страницы FreedomPay.
- * @returns {Promise<{ redirect_url: string, order_id: string }>}
+ *   (ru → тенге, en → доллары) и язык виджета.
+ * @returns {Promise<{ public_id: string, order_id: string, invoice_id: string,
+ *   amount: number, currency: string, description: string, email: string,
+ *   culture: string }>}
  */
 export async function registerOlympiad({ full_name, email, phone, olympiad, language }) {
   const res = await fetch(`${API_URL}/olympiad/register`, {
