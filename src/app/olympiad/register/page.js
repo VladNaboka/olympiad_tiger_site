@@ -209,7 +209,7 @@ function HowItWorks({ lang }) {
 }
 
 // Чтобы снова скрыть форму регистрации/оплаты олимпиады — поставить false.
-const REGISTRATION_ENABLED = false;
+const REGISTRATION_ENABLED = true;
 
 // Basic client-side format checks
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
