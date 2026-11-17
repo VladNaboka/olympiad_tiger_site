@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { RefreshCw, Mail } from 'lucide-react';
-import { getOlympiadRegistrations } from '../../api/olympiad_api';
+import { getOlympiadRegistrations, getOlympiadSummary } from '../../api/olympiad_api';
 
 // Human-readable statuses for registrations
 const STATUS_META = {
@@ -30,6 +30,9 @@ export default function OlympiadTab() {
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [summary, setSummary] = useState({ paid_count: 0, totals: [] });
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
 
   const loadRegistrations = async (statusFilter) => {
     setLoading(true);
@@ -50,11 +53,29 @@ export default function OlympiadTab() {
     }
   };
 
+  const loadSummary = async () => {
+    try {
+      setSummary(await getOlympiadSummary());
+    } catch (err) {
+      console.error('Error loading olympiad summary:', err);
+    }
+  };
+
   useEffect(() => {
+    setPage(1);
     loadRegistrations(status);
   }, [status]);
 
+  useEffect(() => {
+    loadSummary();
+  }, []);
+
   const paidCount = registrations.filter((r) => r.status === 'paid').length;
+
+  const totalPages = Math.max(1, Math.ceil(registrations.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const startIndex = (currentPage - 1) * pageSize;
+  const pageItems = registrations.slice(startIndex, startIndex + pageSize);
 
   return (
     <div>
@@ -69,12 +90,25 @@ export default function OlympiadTab() {
           </p>
         </div>
         <button
-          onClick={() => loadRegistrations(status)}
+          onClick={() => {
+            loadRegistrations(status);
+            loadSummary();
+          }}
           className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm"
         >
           <RefreshCw size={16} />
           Refresh
         </button>
+      </div>
+
+      {/* Paid totals */}
+      <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-3 mb-6 text-sm text-green-900">
+        <span className="font-semibold">Paid: {summary.paid_count}</span>
+        {summary.totals.map((t) => (
+          <span key={t.currency} className="ml-4">
+            Total received: <span className="font-semibold">{t.total} {t.currency}</span> ({t.count})
+          </span>
+        ))}
       </div>
 
       {/* Status filter */}
@@ -111,9 +145,10 @@ export default function OlympiadTab() {
           <p>No registrations yet</p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <>
+        <div className="overflow-auto max-h-[70vh] border border-gray-200 rounded-lg">
           <table className="min-w-full table-auto">
-            <thead>
+            <thead className="sticky top-0 z-10">
               <tr className="bg-gray-50">
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Full Name</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
@@ -126,7 +161,7 @@ export default function OlympiadTab() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {registrations.map((reg) => {
+              {pageItems.map((reg) => {
                 const meta = STATUS_META[reg.status] || {
                   label: reg.status,
                   className: 'bg-gray-100 text-gray-800',
@@ -177,6 +212,62 @@ export default function OlympiadTab() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-4 text-sm text-gray-700">
+          <div>
+            {startIndex + 1}–{Math.min(startIndex + pageSize, registrations.length)} of {registrations.length}
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="flex items-center gap-2">
+              Per page
+              <select
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                  setPage(1);
+                }}
+                className="border border-gray-300 rounded-md px-2 py-1"
+              >
+                {[10, 20, 50, 100].map((n) => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
+              </select>
+            </label>
+            <button
+              onClick={() => setPage(1)}
+              disabled={currentPage === 1}
+              className="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              «
+            </button>
+            <button
+              onClick={() => setPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              ‹ Prev
+            </button>
+            <span className="px-2">
+              Page {currentPage} / {totalPages}
+            </span>
+            <button
+              onClick={() => setPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Next ›
+            </button>
+            <button
+              onClick={() => setPage(totalPages)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              »
+            </button>
+          </div>
+        </div>
+        </>
       )}
     </div>
   );

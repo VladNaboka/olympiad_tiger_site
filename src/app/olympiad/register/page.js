@@ -8,8 +8,10 @@ import Footer from '../../../components/footer';
 import PaymentBadges from '../../../components/PaymentBadges';
 import { registerOlympiad } from '../../api/olympiad_api';
 
-const PARTICIPATION_FEE_USD = 20;
-const PARTICIPATION_FEE_KZT = 10000;
+// Сумму вводит пользователь сам; сервер повторно проверяет диапазон.
+const MIN_AMOUNT_USD = 1;
+// Положительное число, не более двух знаков после точки/запятой.
+const AMOUNT_RE = /^\d{1,7}([.,]\d{1,2})?$/;
 
 const HOW_IT_WORKS_CONTENT = {
   en: {
@@ -17,11 +19,12 @@ const HOW_IT_WORKS_CONTENT = {
     subheading: 'There is no personal account — everything happens in one flow, and your confirmation arrives by email.',
     steps: [
       { title: 'Register & Choose an Olympiad', description: 'Fill in the participant’s name, email, and phone number, and select Math or Art as the olympiad category — all in one form.' },
-      { title: 'Pay Online', description: `Pay the ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} KZT registration fee securely via our payment provider, TipTop Pay.` },
+      { title: 'Pay Online', description: `Pay the registration fee in US dollars (the amount agreed with your country representative / partner) securely via our payment provider, TipTop Pay.` },
       { title: 'Get Confirmation', description: 'Receive an email confirmation with your registration code and payment receipt.' },
     ],
     feeLabel: 'Participation fee',
-    chargedNote: `In the payment window you will be charged in US dollars — ${PARTICIPATION_FEE_USD} USD.`,
+    feeRange: 'Set by your country representative',
+    chargedNote: 'The fee depends on your country and partner. Enter the amount agreed with your representative in the registration form. Payment is made in US dollars (USD).',
     seeOur: 'See our',
     terms: 'Terms',
     privacy: 'Privacy Policy',
@@ -44,11 +47,12 @@ const HOW_IT_WORKS_CONTENT = {
     subheading: 'Личного кабинета нет — всё происходит в один этап, а подтверждение приходит на email.',
     steps: [
       { title: 'Регистрация и выбор олимпиады', description: 'Укажите имя участника, email и номер телефона, выберите категорию — Math или Art — всё в одной форме.' },
-      { title: 'Оплата онлайн', description: `Оплатите организационный взнос ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸ через нашего платёжного провайдера TipTop Pay.` },
+      { title: 'Оплата онлайн', description: `Оплатите организационный взнос в долларах США (сумму укажете вы — она согласуется с представителем вашей страны / партнёром) через нашего платёжного провайдера TipTop Pay.` },
       { title: 'Подтверждение', description: 'Получите на email подтверждение регистрации с регистрационным кодом и чеком об оплате.' },
     ],
     feeLabel: 'Организационный взнос',
-    chargedNote: `В окне оплаты сумма спишется в тенге — ${PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸.`,
+    feeRange: 'Определяется представителем вашей страны',
+    chargedNote: 'Размер взноса зависит от вашей страны и партнёра. Укажите в форме регистрации сумму, согласованную с представителем. Оплата производится в долларах США (USD).',
     seeOur: 'Ознакомьтесь с',
     terms: 'Публичной офертой',
     privacy: 'Политикой конфиденциальности',
@@ -79,6 +83,8 @@ const FORM_CONTENT = {
     phoneLabel: 'Phone *',
     phonePlaceholder: '+77011234567',
     olympiadLabel: 'Olympiad *',
+    amountLabel: 'Amount (USD) *',
+    amountHint: `Enter the amount agreed with your representative (minimum ${MIN_AMOUNT_USD} USD)`,
     mathLabel: '📐 Math',
     artLabel: '🎨 Art',
     agreementPrefix: "I confirm that I am the participant's parent or legal representative, and on behalf of the participant I have read and agree to the",
@@ -100,6 +106,7 @@ const FORM_CONTENT = {
       phoneRequired: 'Please enter your phone number',
       phoneInvalid: 'Invalid phone format (e.g. +77011234567)',
       olympiadRequired: 'Please choose an olympiad',
+      amountInvalid: `Enter an amount of at least ${MIN_AMOUNT_USD} USD (up to 2 decimal places)`,
       agreementRequired: 'You must accept the Public Offer to continue',
       noRedirectUrl: 'Payment link was not received. Please try again later.',
       submitFailed: 'Failed to submit registration',
@@ -115,6 +122,8 @@ const FORM_CONTENT = {
     phoneLabel: 'Телефон *',
     phonePlaceholder: '+77011234567',
     olympiadLabel: 'Олимпиада *',
+    amountLabel: 'Сумма (USD) *',
+    amountHint: `Укажите сумму, согласованную с представителем (минимум ${MIN_AMOUNT_USD} USD)`,
     mathLabel: '📐 Math',
     artLabel: '🎨 Art',
     agreementPrefix: 'Я подтверждаю, что являюсь родителем или законным представителем участника, и от его имени ознакомлен(а) и согласен(на) с',
@@ -136,6 +145,7 @@ const FORM_CONTENT = {
       phoneRequired: 'Пожалуйста, укажите номер телефона',
       phoneInvalid: 'Неверный формат телефона (например, +77011234567)',
       olympiadRequired: 'Пожалуйста, выберите олимпиаду',
+      amountInvalid: `Введите сумму не менее ${MIN_AMOUNT_USD} USD (не более 2 знаков после запятой)`,
       agreementRequired: 'Необходимо принять условия Публичной оферты',
       noRedirectUrl: 'Не удалось получить ссылку на оплату. Пожалуйста, попробуйте позже.',
       submitFailed: 'Не удалось отправить регистрацию',
@@ -163,15 +173,7 @@ function HowItWorks({ lang }) {
       <div className="mt-6 bg-white rounded-xl shadow p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <div className="text-sm text-gray-500">{t.feeLabel}</div>
-          <div className="flex items-baseline gap-2 flex-wrap">
-            <div className={`text-2xl font-bold ${lang === 'en' ? 'text-orange-300' : 'text-orange-600'}`}>
-              {PARTICIPATION_FEE_KZT.toLocaleString('ru-RU')} ₸
-            </div>
-            <div className="text-2xl font-bold text-orange-300">/</div>
-            <div className={`text-2xl font-bold ${lang === 'en' ? 'text-orange-600' : 'text-orange-300'}`}>
-              {PARTICIPATION_FEE_USD} USD
-            </div>
-          </div>
+          <div className="text-2xl font-bold text-orange-600">{t.feeRange}</div>
           <div className="text-xs text-gray-600 mt-1">{t.chargedNote}</div>
           <div className="text-xs text-gray-500 mt-2">
             {t.executorLabel}: {t.executorValue}
@@ -243,6 +245,7 @@ export default function OlympiadRegister() {
     email: '',
     phone: '',
     olympiad: 'Math',
+    amount: '',
   });
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [errors, setErrors] = useState({});
@@ -283,6 +286,12 @@ export default function OlympiadRegister() {
       next.olympiad = f.errors.olympiadRequired;
     }
 
+    const amountStr = String(form.amount).trim();
+    const amountNum = Number(amountStr.replace(',', '.'));
+    if (!AMOUNT_RE.test(amountStr) || amountNum < MIN_AMOUNT_USD) {
+      next.amount = f.errors.amountInvalid;
+    }
+
     if (!agreedToTerms) {
       next.agreedToTerms = f.errors.agreementRequired;
     }
@@ -305,6 +314,7 @@ export default function OlympiadRegister() {
         phone: form.phone.replace(/[\s()-]/g, ''),
         olympiad: form.olympiad,
         language: lang,
+        amount: String(form.amount).trim().replace(',', '.'),
       });
 
       if (!pay.public_id || !pay.invoice_id || !pay.amount) {
@@ -485,6 +495,26 @@ export default function OlympiadRegister() {
                 </div>
                 {errors.olympiad && (
                   <p className="text-red-600 text-sm mt-1">{errors.olympiad}</p>
+                )}
+              </div>
+
+              {/* Amount */}
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  {f.amountLabel}
+                </label>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={form.amount}
+                  onChange={handleChange('amount')}
+                  className={inputClass('amount')}
+                  placeholder="0.00"
+                  disabled={loading}
+                />
+                <p className="text-xs text-gray-500 mt-1">{f.amountHint}</p>
+                {errors.amount && (
+                  <p className="text-red-600 text-sm mt-1">{errors.amount}</p>
                 )}
               </div>
 

@@ -62,8 +62,11 @@ function EnglishContent() {
       <p>
         4.1. The cost of participation (registration fee) is determined in accordance with
         the current tariffs specified on the website https://www.tigersedu.com at the time
-        of payment. The current registration fee is <strong>10,000 KZT</strong>
-        (approximately 20 USD) per participant.
+        of payment. The amount of the registration fee depends on the
+        Customer&apos;s country and is agreed with the Contractor&apos;s representative
+        (partner) in that country. The Customer specifies the agreed amount on the
+        registration page before payment; the minimum payment amount is
+        <strong>1 USD</strong>.
       </p>
       <p>
         4.2. Payment is made electronically via international payment systems integrated
@@ -78,9 +81,8 @@ function EnglishContent() {
         and are never transmitted to or stored by the website.
       </p>
       <p>
-        4.3. The payment currency is shown on the payment page. By default the fee is
-        charged in Kazakhstani tenge (KZT); on the English version of the website the
-        fee is charged in US dollars (USD). In the event of currency conversion, any
+        4.3. The payment currency is US dollars (USD) and is shown on the payment
+        page. In the event of currency conversion, any
         bank-emitter or payment system conversion fees shall be borne by the Customer.
       </p>
       <p>
@@ -235,8 +237,10 @@ function RussianContent() {
       <p>
         4.1. Стоимость участия (организационный взнос) определяется в соответствии с
         действующими тарифами, указанными на сайте https://www.tigersedu.com на момент
-        оплаты. Текущий организационный взнос — <strong>10 000 ₸</strong>
-        (примерно 20 USD) с участника.
+        оплаты. Размер организационного взноса зависит от
+        страны Заказчика и согласовывается с представителем (партнёром) Исполнителя в
+        этой стране. Согласованную сумму Заказчик указывает на странице регистрации
+        перед оплатой; минимальная сумма платежа — <strong>1 USD</strong>.
       </p>
       <p>
         4.2. Оплата производится в безналичном порядке через интегрированные на сайте
@@ -252,9 +256,8 @@ function RussianContent() {
         хранятся им.
       </p>
       <p>
-        4.3. Валюта платежа отображается на странице оплаты. По умолчанию взнос
-        списывается в казахстанских тенге (KZT); на англоязычной версии сайта — в
-        долларах США (USD). В случае конвертации валют комиссию банка-эмитента или
+        4.3. Валюта платежа — доллары США (USD), она отображается на странице оплаты.
+        В случае конвертации валют комиссию банка-эмитента или
         платежной системы оплачивает Заказчик.
       </p>
       <p>
